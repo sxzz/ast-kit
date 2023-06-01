@@ -1,0 +1,62 @@
+{
+  "name": "ast-kit",
+  "version": "0.0.0",
+  "packageManager": "pnpm@8.6.0",
+  "description": "AST Toolkit.",
+  "license": "MIT",
+  "homepage": "https://github.com/sxzz/ast-kit#readme",
+  "bugs": {
+    "url": "https://github.com/sxzz/ast-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sxzz/ast-kit.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./*": "./*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx,.json,.md",
+    "lint:fix": "pnpm run lint --fix",
+    "build": "tsup && tsx scripts/postbuild.mts",
+    "test": "vitest",
+    "release": "bumpp && pnpm publish",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.22.4",
+    "pathe": "^1.1.0"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.22.4",
+    "@sxzz/eslint-config-prettier": "^2.4.6",
+    "@sxzz/eslint-config-ts": "^2.4.6",
+    "@types/node": "^18.16.16",
+    "bumpp": "^9.1.0",
+    "eslint": "^8.41.0",
+    "eslint-define-config": "^1.20.0",
+    "fast-glob": "^3.2.12",
+    "prettier": "^2.8.8",
+    "tsup": "^6.7.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.4",
+    "vitest": "^0.31.1"
+  },
+  "engines": {
+    "node": ">=16.14.0"
+  }
+}
