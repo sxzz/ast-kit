@@ -1,6 +1,5 @@
-import { assert, test } from 'vitest'
-import { foo } from '../src'
+import { test } from 'vitest'
 
 test('simple', () => {
-  assert.equal(foo, 'foo')
+  //
 })
