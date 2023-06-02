@@ -1,3 +1,5 @@
 export * from './lang'
 export * from './parse'
+export * from './scope'
 export * from './utils'
+export * from './walk'
