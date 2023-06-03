@@ -8,9 +8,9 @@ import type {
   Node,
 } from '@babel/types'
 
-export function walkAST<T = Node>(
+export const walkAST: <T = Node>(
   node: T,
-  options: {
+  hooks: {
     enter?: (
       this: {
         skip: () => void
@@ -34,9 +34,7 @@ export function walkAST<T = Node>(
       index: number | null | undefined
     ) => void
   }
-): T {
-  return (walk as any)(node, options)
-}
+) => T = walk as any
 
 export interface ImportBinding {
   local: string
