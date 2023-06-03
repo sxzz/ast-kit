@@ -6,6 +6,7 @@ import type {
   ImportNamespaceSpecifier,
   ImportSpecifier,
   Node,
+  Program,
 } from '@babel/types'
 
 export function walkAST<T = Node>(
@@ -51,6 +52,8 @@ export function walkImportDeclaration(
 ) {
   const source = node.source.value
   for (const specifier of node.specifiers) {
+    if (specifier.type === 'ImportSpecifier' && specifier.importKind === 'type')
+      continue
     const local = specifier.local.name
     const imported =
       specifier.type === 'ImportSpecifier'
