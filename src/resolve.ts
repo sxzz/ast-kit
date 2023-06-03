@@ -4,11 +4,13 @@ import type {
   Literal,
   MemberExpression,
   PrivateName,
+  Super,
   TemplateLiteral,
+  ThisExpression,
 } from '@babel/types'
 
 export function resolveString(
-  node: Identifier | Literal | PrivateName,
+  node: Identifier | Literal | PrivateName | ThisExpression | Super,
   computed = false
 ) {
   if (node.type === 'Identifier') {
@@ -16,6 +18,10 @@ export function resolveString(
     return node.name
   } else if (node.type === 'PrivateName') {
     return `#${node.id.name}`
+  } else if (node.type === 'ThisExpression') {
+    return 'this'
+  } else if (node.type === 'Super') {
+    return 'super'
   }
   return String(resolveLiteral(node))
 }
@@ -56,12 +62,19 @@ export function resolveTemplateLiteral(node: TemplateLiteral) {
 }
 
 export function resolveIdentifier(
-  node: Identifier | PrivateName | MemberExpression
+  node: Identifier | PrivateName | MemberExpression | ThisExpression | Super
 ): string[] {
-  if (isTypeOf(node, ['Identifier', 'PrivateName']))
+  if (isTypeOf(node, ['Identifier', 'PrivateName', 'ThisExpression', 'Super']))
     return [resolveString(node)]
 
-  if (isTypeOf(node.object, ['Identifier', 'MemberExpression'])) {
+  if (
+    isTypeOf(node.object, [
+      'Identifier',
+      'MemberExpression',
+      'ThisExpression',
+      'Super',
+    ])
+  ) {
     const keys = resolveIdentifier(node.object)
 
     if (isTypeOf(node.property, ['Identifier', 'PrivateName', 'Literal'])) {
