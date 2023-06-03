@@ -5,6 +5,15 @@ import {
   type Node,
 } from '@babel/types'
 
+export type GetNode<K extends Node['type']> = Extract<Node, { type: K }>
+
+export function isTypeOf<K extends Node['type']>(
+  node: Node,
+  types: Readonly<K[] | K>
+): node is GetNode<K> {
+  return types.includes(node?.type as any)
+}
+
 export function isCallOf(
   node: Node | null | undefined,
   test: string | string[] | ((id: string) => boolean)
@@ -35,10 +44,10 @@ export const TS_NODE_TYPES = [
   'TSNonNullExpression', // foo!
   'TSInstantiationExpression', // foo<string>
   'TSSatisfiesExpression', // foo satisfies T
-]
+] as const satisfies readonly Node['type'][]
 export function unwrapTSNode(node: Node): Node {
-  if (TS_NODE_TYPES.includes(node.type)) {
-    return unwrapTSNode((node as any).expression)
+  if (isTypeOf(node, TS_NODE_TYPES)) {
+    return unwrapTSNode(node.expression)
   } else {
     return node
   }

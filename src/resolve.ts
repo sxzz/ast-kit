@@ -1,13 +1,23 @@
-import { isLiteralType } from './utils'
+import { isLiteralType, isTypeOf } from './utils'
 import type {
   Identifier,
   Literal,
-  StringLiteral,
+  MemberExpression,
+  PrivateName,
   TemplateLiteral,
 } from '@babel/types'
 
-export function resolveString(node: Identifier | StringLiteral) {
-  return node.type === 'StringLiteral' ? node.value : node.name
+export function resolveString(
+  node: Identifier | Literal | PrivateName,
+  computed = false
+) {
+  if (node.type === 'Identifier') {
+    if (computed) throw new TypeError('Invalid Identifier')
+    return node.name
+  } else if (node.type === 'PrivateName') {
+    return `#${node.id.name}`
+  }
+  return String(resolveLiteral(node))
 }
 
 export function resolveLiteral(
@@ -43,4 +53,27 @@ export function resolveTemplateLiteral(node: TemplateLiteral) {
     }
     return prev + curr.value.cooked
   }, '')
+}
+
+export function resolveIdentifier(
+  node: Identifier | PrivateName | MemberExpression
+): string[] {
+  if (isTypeOf(node, ['Identifier', 'PrivateName']))
+    return [resolveString(node)]
+
+  if (isTypeOf(node.object, ['Identifier', 'MemberExpression'])) {
+    const keys = resolveIdentifier(node.object)
+
+    if (
+      isLiteralType(node.property) ||
+      isTypeOf(node.property, ['Identifier', 'PrivateName'])
+    ) {
+      keys.push(resolveString(node.property, node.computed))
+    } else {
+      throw new TypeError('Invalid Identifier')
+    }
+    return keys
+  }
+
+  throw new TypeError('Invalid Identifier')
 }

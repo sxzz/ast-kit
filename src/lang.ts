@@ -14,5 +14,5 @@ export function isDts(filename: string) {
 }
 
 export function isTs(lang?: string) {
-  return lang && (lang === 'dts' || REGEX_LANG_TS.test(lang))
+  return !!lang && (lang === 'dts' || REGEX_LANG_TS.test(lang))
 }
