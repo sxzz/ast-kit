@@ -5,13 +5,26 @@ import {
   type Node,
 } from '@babel/types'
 
-export type GetNode<K extends Node['type']> = Extract<Node, { type: K }>
+type NodeType = Node['type'] | 'Function' | 'Literal'
+export type GetNode<K extends NodeType> = K extends 'Function'
+  ? Function
+  : K extends 'Literal'
+  ? Literal
+  : Extract<Node, { type: K }>
 
-export function isTypeOf<K extends Node['type']>(
+export function isTypeOf<K extends NodeType>(
   node: Node,
-  types: Readonly<K[] | K>
+  types: Readonly<K[]>
 ): node is GetNode<K> {
-  return types.includes(node?.type as any)
+  return types.some((type) => {
+    if (type === 'Function') {
+      return isFunctionType(node)
+    } else if (type === 'Literal') {
+      return isLiteralType(node)
+    } else {
+      return node?.type === type
+    }
+  })
 }
 
 export function isCallOf(

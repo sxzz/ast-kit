@@ -64,10 +64,7 @@ export function resolveIdentifier(
   if (isTypeOf(node.object, ['Identifier', 'MemberExpression'])) {
     const keys = resolveIdentifier(node.object)
 
-    if (
-      isLiteralType(node.property) ||
-      isTypeOf(node.property, ['Identifier', 'PrivateName'])
-    ) {
+    if (isTypeOf(node.property, ['Identifier', 'PrivateName', 'Literal'])) {
       keys.push(resolveString(node.property, node.computed))
     } else {
       throw new TypeError('Invalid Identifier')
