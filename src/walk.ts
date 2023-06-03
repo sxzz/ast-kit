@@ -1,5 +1,12 @@
 import { walk } from 'estree-walker'
-import type { Node } from '@babel/types'
+import { toStringValue } from './utils'
+import type {
+  ImportDeclaration,
+  ImportDefaultSpecifier,
+  ImportNamespaceSpecifier,
+  ImportSpecifier,
+  Node,
+} from '@babel/types'
 
 export function walkAST<T = Node>(
   node: T,
@@ -29,4 +36,33 @@ export function walkAST<T = Node>(
   }
 ): T {
   return (walk as any)(node, options)
+}
+
+export interface ImportBinding {
+  local: string
+  imported: string
+  source: string
+  specifier: ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
+}
+
+export function walkImportDeclaration(
+  imports: Record<string, ImportBinding>,
+  node: ImportDeclaration
+) {
+  const source = node.source.value
+  for (const specifier of node.specifiers) {
+    const local = specifier.local.name
+    const imported =
+      specifier.type === 'ImportSpecifier'
+        ? toStringValue(specifier.imported)
+        : specifier.type === 'ImportNamespaceSpecifier'
+        ? '*'
+        : 'default'
+    imports[local] = {
+      source,
+      local,
+      imported,
+      specifier,
+    }
+  }
 }
