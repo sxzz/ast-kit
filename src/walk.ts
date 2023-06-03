@@ -1,12 +1,11 @@
 import { walk } from 'estree-walker'
-import { toStringValue } from './utils'
+import { resolveString } from './resolve'
 import type {
   ImportDeclaration,
   ImportDefaultSpecifier,
   ImportNamespaceSpecifier,
   ImportSpecifier,
   Node,
-  Program,
 } from '@babel/types'
 
 export function walkAST<T = Node>(
@@ -57,7 +56,7 @@ export function walkImportDeclaration(
     const local = specifier.local.name
     const imported =
       specifier.type === 'ImportSpecifier'
-        ? toStringValue(specifier.imported)
+        ? resolveString(specifier.imported)
         : specifier.type === 'ImportNamespaceSpecifier'
         ? '*'
         : 'default'
