@@ -11,9 +11,9 @@ export function walkAST<T = Node>(
         replace: (node: T) => void
       },
       node: T,
-      parent: T,
-      key: string,
-      index: number
+      parent: T | null | undefined,
+      key: string | null | undefined,
+      index: number | null | undefined
     ) => void
     leave?: (
       this: {
@@ -22,11 +22,11 @@ export function walkAST<T = Node>(
         replace: (node: T) => void
       },
       node: T,
-      parent: T,
-      key: string,
-      index: number
+      parent: T | null | undefined,
+      key: string | null | undefined,
+      index: number | null | undefined
     ) => void
   }
 ): T {
-  return walk(node as any, options as any) as any
+  return (walk as any)(node, options)
 }
