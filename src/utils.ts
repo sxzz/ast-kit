@@ -1,8 +1,10 @@
 import {
   type CallExpression,
   type Function,
+  type Identifier,
   type Literal,
   type Node,
+  type StringLiteral,
 } from '@babel/types'
 
 export function isCallOf(
@@ -42,4 +44,8 @@ export function unwrapTSNode(node: Node): Node {
   } else {
     return node
   }
+}
+
+export function toStringValue(node: Identifier | StringLiteral) {
+  return node.type === 'StringLiteral' ? node.value : node.name
 }
