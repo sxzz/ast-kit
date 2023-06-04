@@ -3,7 +3,10 @@ import {
   type Function,
   type Literal,
   type Node,
+  type ObjectExpression,
+  type ObjectProperty,
 } from '@babel/types'
+import { parseExpression } from '@babel/parser'
 
 type NodeType = Node['type'] | 'Function' | 'Literal'
 export type GetNode<K extends NodeType> = K extends 'Function'
@@ -64,4 +67,14 @@ export function unwrapTSNode(node: Node): Node {
   } else {
     return node
   }
+}
+
+export function escapeKey(rawKey: string) {
+  if (String(+rawKey) === rawKey) return rawKey
+  try {
+    const node = parseExpression(`({${rawKey}: 1})`) as ObjectExpression
+    if ((node.properties[0] as ObjectProperty).key.type === 'Identifier')
+      return rawKey
+  } catch {}
+  return JSON.stringify(rawKey)
 }
