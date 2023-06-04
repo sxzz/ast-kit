@@ -47,6 +47,7 @@ export function walkImportDeclaration(
   imports: Record<string, ImportBinding>,
   node: ImportDeclaration
 ) {
+  if (node.importKind === 'type') return
   const source = node.source.value
   for (const specifier of node.specifiers) {
     if (specifier.type === 'ImportSpecifier' && specifier.importKind === 'type')
