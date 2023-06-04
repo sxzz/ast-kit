@@ -10,10 +10,11 @@ import type {
 } from '@babel/types'
 
 export function resolveString(
-  node: Identifier | Literal | PrivateName | ThisExpression | Super,
+  node: string | Identifier | Literal | PrivateName | ThisExpression | Super,
   computed = false
 ) {
-  if (node.type === 'Identifier') {
+  if (typeof node === 'string') return node
+  else if (node.type === 'Identifier') {
     if (computed) throw new TypeError('Invalid Identifier')
     return node.name
   } else if (node.type === 'PrivateName') {
