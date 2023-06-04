@@ -6,4 +6,5 @@ export default defineConfig({
   target: 'node16.14',
   clean: true,
   dts: true,
+  platform: 'neutral',
 })
