@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest'
-import { babelParse, resolveIdentifier } from '../src'
-import type {
-  ExpressionStatement,
-  MemberExpression,
-  Program,
+import {
+  type ExpressionStatement,
+  type MemberExpression,
+  type Program,
 } from '@babel/types'
+import { babelParse, resolveIdentifier } from '../src'
 
 function getExpression(program: Program, index: number) {
   return (program.body[index] as ExpressionStatement).expression

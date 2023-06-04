@@ -3,6 +3,7 @@
   "version": "0.5.0",
   "packageManager": "pnpm@8.6.0",
   "description": "AST Toolkit.",
+  "type": "module",
   "license": "MIT",
   "homepage": "https://github.com/sxzz/ast-kit#readme",
   "bugs": {
@@ -16,13 +17,13 @@
     "dist"
   ],
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./*": "./*"
   },
@@ -30,9 +31,9 @@
     "access": "public"
   },
   "scripts": {
-    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx,.json,.md",
+    "lint": "eslint .",
     "lint:fix": "pnpm run lint --fix",
-    "build": "tsup && tsx scripts/postbuild.mts",
+    "build": "tsup",
     "test": "vitest",
     "release": "bumpp && pnpm publish",
     "prepublishOnly": "pnpm run build"
@@ -44,8 +45,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.22.4",
-    "@sxzz/eslint-config-prettier": "^2.4.6",
-    "@sxzz/eslint-config-ts": "^2.4.6",
+    "@sxzz/eslint-config": "^3.0.0-beta.12",
     "@types/node": "^18.16.16",
     "@vitest/coverage-c8": "^0.31.4",
     "bumpp": "^9.1.0",

@@ -1,13 +1,13 @@
-import { isLiteralType, isTypeOf } from './utils'
-import type {
-  Identifier,
-  Literal,
-  MemberExpression,
-  PrivateName,
-  Super,
-  TemplateLiteral,
-  ThisExpression,
+import {
+  type Identifier,
+  type Literal,
+  type MemberExpression,
+  type PrivateName,
+  type Super,
+  type TemplateLiteral,
+  type ThisExpression,
 } from '@babel/types'
+import { isLiteralType, isTypeOf } from './utils'
 
 export function resolveString(
   node: string | Identifier | Literal | PrivateName | ThisExpression | Super,

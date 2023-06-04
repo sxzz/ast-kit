@@ -1,12 +1,12 @@
 import { walk } from 'estree-walker'
-import { resolveString } from './resolve'
-import type {
-  ImportDeclaration,
-  ImportDefaultSpecifier,
-  ImportNamespaceSpecifier,
-  ImportSpecifier,
-  Node,
+import {
+  type ImportDeclaration,
+  type ImportDefaultSpecifier,
+  type ImportNamespaceSpecifier,
+  type ImportSpecifier,
+  type Node,
 } from '@babel/types'
+import { resolveString } from './resolve'
 
 export const walkAST: <T = Node>(
   node: T,
