@@ -4,13 +4,13 @@
 
 AST Toolkit.
 
-> **WIP**
-
 ## Install
 
 ```bash
 npm i ast-kit
 ```
+
+Node.js >= 16.14.0 required
 
 ## Sponsors
 
