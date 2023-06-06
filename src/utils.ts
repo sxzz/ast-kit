@@ -16,16 +16,17 @@ export type GetNode<K extends NodeType> = K extends 'Function'
   : Extract<Node, { type: K }>
 
 export function isTypeOf<K extends NodeType>(
-  node: Node,
+  node: Node | undefined | null,
   types: Readonly<K[]>
 ): node is GetNode<K> {
+  if (!node) return false
   return types.some((type) => {
     if (type === 'Function') {
       return isFunctionType(node)
     } else if (type === 'Literal') {
       return isLiteralType(node)
     } else {
-      return node?.type === type
+      return node.type === type
     }
   })
 }
@@ -34,8 +35,8 @@ export function isCallOf(
   node: Node | null | undefined,
   test: string | string[] | ((id: string) => boolean)
 ): node is CallExpression {
-  return !!(
-    node &&
+  return (
+    !!node &&
     node.type === 'CallExpression' &&
     node.callee.type === 'Identifier' &&
     (typeof test === 'string'
@@ -46,12 +47,14 @@ export function isCallOf(
   )
 }
 
-export function isLiteralType(node: Node): node is Literal {
-  return node.type.endsWith('Literal')
+export function isLiteralType(node: Node | undefined | null): node is Literal {
+  return !!node && node.type.endsWith('Literal')
 }
 
-export function isFunctionType(node: Node): node is Function {
-  return /Function(?:Expression|Declaration)$|Method$/.test(node.type)
+export function isFunctionType(
+  node: Node | undefined | null
+): node is Function {
+  return !!node && /Function(?:Expression|Declaration)$|Method$/.test(node.type)
 }
 
 export const TS_NODE_TYPES = [
