@@ -9,7 +9,7 @@ export function babelParse(
 ): Program {
   const plugins: ParserPlugin[] = [...(options.plugins || [])]
   if (isTs(lang)) {
-    plugins.push(['typescript', { dts: lang === 'dts' }])
+    plugins.push(lang === 'dts' ? ['typescript', { dts: true }] : 'typescript')
     if (REGEX_LANG_JSX.test(lang!)) plugins.push('jsx')
     if (!plugins.includes('decorators')) plugins.push('decorators-legacy')
   } else {
@@ -17,8 +17,8 @@ export function babelParse(
   }
   const { program } = parse(code, {
     sourceType: 'module',
-    plugins,
     ...options,
+    plugins,
   })
   return program
 }

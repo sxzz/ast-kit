@@ -9,5 +9,13 @@ describe('parse', () => {
 
     expect(() => babelParse('class A { @a b }')).toThrow()
     babelParse('class A { @a b }', 'ts')
+
+    babelParse(
+      `import { type A } from '../../macros' assert { type: 'macro' }`,
+      'ts',
+      {
+        plugins: ['importAssertions'],
+      }
+    )
   })
 })
