@@ -33,13 +33,15 @@ type WalkHandlers<T, R> = {
   ) => R
 }
 
-export const walkAST: <T = Node>(node: T, hooks: WalkHandlers<T, void>) => T =
-  walk as any
+export const walkAST: <T = Node>(
+  node: T,
+  hooks: WalkHandlers<T, void>
+) => T | null = walk as any
 
 export const walkASTAsync: <T = Node>(
   node: T,
   handlers: WalkHandlers<T, Promise<void>>
-) => T = asyncWalk as any
+) => Promise<T | null> = asyncWalk as any
 
 export interface ImportBinding {
   local: string
