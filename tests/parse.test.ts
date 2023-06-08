@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { babelParse } from '../src'
+import { babelParse, babelParseExpression } from '../src'
 
 describe('parse', () => {
   test('babelParse', () => {
@@ -17,5 +17,10 @@ describe('parse', () => {
         plugins: ['importAssertions'],
       }
     )
+  })
+
+  test('babelParseExpression', () => {
+    expect(babelParseExpression('1').type).toBe('NumericLiteral')
+    expect(babelParseExpression('{}').type).toBe('ObjectExpression')
   })
 })
