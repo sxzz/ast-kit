@@ -1,4 +1,4 @@
-import { walk } from 'estree-walker'
+import { asyncWalk, walk } from 'estree-walker'
 import {
   type ImportDeclaration,
   type ImportDefaultSpecifier,
@@ -8,33 +8,38 @@ import {
 } from '@babel/types'
 import { resolveString } from './resolve'
 
-export const walkAST: <T = Node>(
+type WalkHandlers<T, R> = {
+  enter?: (
+    this: {
+      skip: () => void
+      remove: () => void
+      replace: (node: T) => void
+    },
+    node: T,
+    parent: T | null | undefined,
+    key: string | null | undefined,
+    index: number | null | undefined
+  ) => R
+  leave?: (
+    this: {
+      skip: () => void
+      remove: () => void
+      replace: (node: T) => void
+    },
+    node: T,
+    parent: T | null | undefined,
+    key: string | null | undefined,
+    index: number | null | undefined
+  ) => R
+}
+
+export const walkAST: <T = Node>(node: T, hooks: WalkHandlers<T, void>) => T =
+  walk as any
+
+export const walkASTAsync: <T = Node>(
   node: T,
-  hooks: {
-    enter?: (
-      this: {
-        skip: () => void
-        remove: () => void
-        replace: (node: T) => void
-      },
-      node: T,
-      parent: T | null | undefined,
-      key: string | null | undefined,
-      index: number | null | undefined
-    ) => void
-    leave?: (
-      this: {
-        skip: () => void
-        remove: () => void
-        replace: (node: T) => void
-      },
-      node: T,
-      parent: T | null | undefined,
-      key: string | null | undefined,
-      index: number | null | undefined
-    ) => void
-  }
-) => T = walk as any
+  handlers: WalkHandlers<T, Promise<void>>
+) => T = asyncWalk as any
 
 export interface ImportBinding {
   local: string
