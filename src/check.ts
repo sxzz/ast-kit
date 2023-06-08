@@ -45,7 +45,7 @@ export function isCallOf(
   )
 }
 
-export function isVariableOf(
+export function isIdentifierOf(
   node: Node | undefined | null,
   test: string | string[]
 ): node is Identifier {
