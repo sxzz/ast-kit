@@ -7,7 +7,7 @@ import {
   type TemplateLiteral,
   type ThisExpression,
 } from '@babel/types'
-import { isLiteralType, isTypeOf } from './utils'
+import { isLiteralType, isTypeOf } from './check'
 
 export function resolveString(
   node: string | Identifier | Literal | PrivateName | ThisExpression | Super,
