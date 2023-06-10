@@ -7,6 +7,7 @@ import {
   type Node,
 } from '@babel/types'
 import { resolveString } from './resolve'
+import { type LiteralUnion } from './types'
 
 type WalkHandlers<T, R> = {
   enter?: (
@@ -45,9 +46,10 @@ export const walkASTAsync: <T = Node>(
 
 export interface ImportBinding {
   local: string
-  imported: string
+  imported: LiteralUnion<'*' | 'default'>
   source: string
   specifier: ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
+  isType: boolean
 }
 
 export function walkImportDeclaration(
@@ -57,8 +59,8 @@ export function walkImportDeclaration(
   if (node.importKind === 'type') return
   const source = node.source.value
   for (const specifier of node.specifiers) {
-    if (specifier.type === 'ImportSpecifier' && specifier.importKind === 'type')
-      continue
+    const isType =
+      specifier.type === 'ImportSpecifier' && specifier.importKind === 'type'
     const local = specifier.local.name
     const imported =
       specifier.type === 'ImportSpecifier'
@@ -71,6 +73,7 @@ export function walkImportDeclaration(
       local,
       imported,
       specifier,
+      isType,
     }
   }
 }

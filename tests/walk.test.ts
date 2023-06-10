@@ -30,28 +30,39 @@ describe('walk', () => {
       [
         {
           "imported": "a",
+          "isType": false,
           "local": "a",
           "source": "a",
         },
         {
           "imported": "*",
+          "isType": false,
           "local": "b",
           "source": "b",
         },
         {
           "imported": "default",
+          "isType": false,
           "local": "c",
           "source": "c",
         },
         {
           "imported": "default",
+          "isType": false,
           "local": "e",
           "source": "e",
         },
         {
           "imported": "f",
+          "isType": false,
           "local": "f",
           "source": "e",
+        },
+        {
+          "imported": "h",
+          "isType": true,
+          "local": "h",
+          "source": "h",
         },
       ]
     `)
