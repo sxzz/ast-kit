@@ -7,5 +7,5 @@ export type LiteralUnion<
     | number
     | boolean
     | symbol
-    | bigint = string
+    | bigint = string,
 > = LiteralType | (BaseType & Record<never, never>)
