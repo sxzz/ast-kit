@@ -36,10 +36,13 @@ export function babelParse(
   return { ...program, errors }
 }
 
-export function babelParseExpression(
+export function babelParseExpression<T extends t.Node = t.Expression>(
   code: string,
   lang?: string,
   options: ParserOptions = {}
-): ParseResult<t.Expression> {
-  return parseExpression(code, getParserOptions(lang, options))
+) {
+  return parseExpression(
+    code,
+    getParserOptions(lang, options)
+  ) as ParseResult<T>
 }
