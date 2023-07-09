@@ -1,20 +1,14 @@
-import {
-  type CallExpression,
-  type Function,
-  type Identifier,
-  type Literal,
-  type Node,
-} from '@babel/types'
+import type * as t from '@babel/types'
 
-type NodeType = Node['type'] | 'Function' | 'Literal'
+type NodeType = t.Node['type'] | 'Function' | 'Literal'
 export type GetNode<K extends NodeType> = K extends 'Function'
-  ? Function
+  ? t.Function
   : K extends 'Literal'
-  ? Literal
-  : Extract<Node, { type: K }>
+  ? t.Literal
+  : Extract<t.Node, { type: K }>
 
 export function isTypeOf<K extends NodeType>(
-  node: Node | undefined | null,
+  node: t.Node | undefined | null,
   types: Readonly<K[]>
 ): node is GetNode<K> {
   if (!node) return false
@@ -30,9 +24,9 @@ export function isTypeOf<K extends NodeType>(
 }
 
 export function isCallOf(
-  node: Node | null | undefined,
+  node: t.Node | null | undefined,
   test: string | string[] | ((id: string) => boolean)
-): node is CallExpression {
+): node is t.CallExpression {
   return (
     !!node &&
     node.type === 'CallExpression' &&
@@ -46,9 +40,9 @@ export function isCallOf(
 }
 
 export function isIdentifierOf(
-  node: Node | undefined | null,
+  node: t.Node | undefined | null,
   test: string | string[]
-): node is Identifier {
+): node is t.Identifier {
   return (
     !!node &&
     node.type === 'Identifier' &&
@@ -56,12 +50,14 @@ export function isIdentifierOf(
   )
 }
 
-export function isLiteralType(node: Node | undefined | null): node is Literal {
+export function isLiteralType(
+  node: t.Node | undefined | null
+): node is t.Literal {
   return !!node && node.type.endsWith('Literal')
 }
 
 export function isFunctionType(
-  node: Node | undefined | null
-): node is Function {
+  node: t.Node | undefined | null
+): node is t.Function {
   return !!node && /Function(?:Expression|Declaration)$|Method$/.test(node.type)
 }

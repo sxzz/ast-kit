@@ -1,13 +1,7 @@
 import { asyncWalk, walk } from 'estree-walker'
-import {
-  type ImportDeclaration,
-  type ImportDefaultSpecifier,
-  type ImportNamespaceSpecifier,
-  type ImportSpecifier,
-  type Node,
-} from '@babel/types'
 import { resolveString } from './resolve'
 import { type LiteralUnion } from './types'
+import type * as t from '@babel/types'
 
 type WalkHandlers<T, R> = {
   enter?: (
@@ -34,12 +28,12 @@ type WalkHandlers<T, R> = {
   ) => R
 }
 
-export const walkAST: <T = Node>(
+export const walkAST: <T = t.Node>(
   node: T,
   hooks: WalkHandlers<T, void>
 ) => T | null = walk as any
 
-export const walkASTAsync: <T = Node>(
+export const walkASTAsync: <T = t.Node>(
   node: T,
   handlers: WalkHandlers<T, Promise<void>>
 ) => Promise<T | null> = asyncWalk as any
@@ -48,13 +42,16 @@ export interface ImportBinding {
   local: string
   imported: LiteralUnion<'*' | 'default'>
   source: string
-  specifier: ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
+  specifier:
+    | t.ImportSpecifier
+    | t.ImportDefaultSpecifier
+    | t.ImportNamespaceSpecifier
   isType: boolean
 }
 
 export function walkImportDeclaration(
   imports: Record<string, ImportBinding>,
-  node: ImportDeclaration
+  node: t.ImportDeclaration
 ) {
   if (node.importKind === 'type') return
   const source = node.source.value

@@ -1,9 +1,4 @@
 import { describe, expect, test } from 'vitest'
-import {
-  type MemberExpression,
-  type Node,
-  type ObjectExpression,
-} from '@babel/types'
 import { type ParseResult } from '@babel/parser'
 import {
   type ObjectPropertyLike,
@@ -11,8 +6,9 @@ import {
   resolveIdentifier,
   resolveObjectKey,
 } from '../src'
+import type * as t from '@babel/types'
 
-function _parse<T extends Node>(code: string) {
+function _parse<T extends t.Node>(code: string) {
   return babelParseExpression(code, undefined, {
     errorRecovery: true,
   }) as unknown as ParseResult<T>
@@ -20,7 +16,7 @@ function _parse<T extends Node>(code: string) {
 
 describe('resolve', () => {
   test('resolveIdentifier', () => {
-    const parse = _parse<MemberExpression>
+    const parse = _parse<t.MemberExpression>
     expect(resolveIdentifier(parse('foo.bar.baz'))).toEqual([
       'foo',
       'bar',
@@ -40,7 +36,7 @@ describe('resolve', () => {
   })
 
   test('resolveObjectKey', () => {
-    const properties = _parse<ObjectExpression>(`{
+    const properties = _parse<t.ObjectExpression>(`{
       foo: 'foo',
       [1]: 'number',
       id: 'number',
@@ -56,7 +52,7 @@ describe('resolve', () => {
 
     expect(() => {
       resolveObjectKey(
-        _parse<ObjectExpression>(`{ [id]: 'error' }`).properties[0] as any
+        _parse<t.ObjectExpression>(`{ [id]: 'error' }`).properties[0] as any
       )
     }).toThrow('Cannot resolve computed Identifier')
   })

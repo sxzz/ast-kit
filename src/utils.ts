@@ -1,10 +1,6 @@
-import {
-  type Node,
-  type ObjectExpression,
-  type ObjectProperty,
-} from '@babel/types'
 import { parseExpression } from '@babel/parser'
 import { isTypeOf } from './check'
+import type * as t from '@babel/types'
 
 export const TS_NODE_TYPES = [
   'TSAsExpression', // foo as number
@@ -12,8 +8,8 @@ export const TS_NODE_TYPES = [
   'TSNonNullExpression', // foo!
   'TSInstantiationExpression', // foo<string>
   'TSSatisfiesExpression', // foo satisfies T
-] as const satisfies readonly Node['type'][]
-export function unwrapTSNode(node: Node): Node {
+] as const satisfies readonly t.Node['type'][]
+export function unwrapTSNode(node: t.Node): t.Node {
   if (isTypeOf(node, TS_NODE_TYPES)) {
     return unwrapTSNode(node.expression)
   } else {
@@ -24,8 +20,8 @@ export function unwrapTSNode(node: Node): Node {
 export function escapeKey(rawKey: string) {
   if (String(+rawKey) === rawKey) return rawKey
   try {
-    const node = parseExpression(`({${rawKey}: 1})`) as ObjectExpression
-    if ((node.properties[0] as ObjectProperty).key.type === 'Identifier')
+    const node = parseExpression(`({${rawKey}: 1})`) as t.ObjectExpression
+    if ((node.properties[0] as t.ObjectProperty).key.type === 'Identifier')
       return rawKey
   } catch {}
   return JSON.stringify(rawKey)

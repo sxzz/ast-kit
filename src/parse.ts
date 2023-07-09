@@ -5,8 +5,8 @@ import {
   parse,
   parseExpression,
 } from '@babel/parser'
-import { type Expression, type Program } from '@babel/types'
 import { REGEX_LANG_JSX, isTs } from './lang'
+import type * as t from '@babel/types'
 
 function getParserOptions(
   lang?: string,
@@ -31,7 +31,7 @@ export function babelParse(
   code: string,
   lang?: string,
   options: ParserOptions = {}
-): ParseResult<Program> {
+): ParseResult<t.Program> {
   const { program, errors } = parse(code, getParserOptions(lang, options))
   return { ...program, errors }
 }
@@ -40,6 +40,6 @@ export function babelParseExpression(
   code: string,
   lang?: string,
   options: ParserOptions = {}
-): ParseResult<Expression> {
+): ParseResult<t.Expression> {
   return parseExpression(code, getParserOptions(lang, options))
 }
