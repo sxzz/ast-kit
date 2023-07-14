@@ -14,7 +14,10 @@ function getParserOptions(
 ): ParserOptions {
   const plugins: ParserPlugin[] = [...(options.plugins || [])]
   if (isTs(lang)) {
-    plugins.push(lang === 'dts' ? ['typescript', { dts: true }] : 'typescript')
+    plugins.push(
+      lang === 'dts' ? ['typescript', { dts: true }] : 'typescript',
+      ['importAttributes', { deprecatedAssertSyntax: true }]
+    )
     if (REGEX_LANG_JSX.test(lang!)) plugins.push('jsx')
     if (!plugins.includes('decorators')) plugins.push('decorators-legacy')
   } else {
