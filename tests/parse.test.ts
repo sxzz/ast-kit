@@ -11,8 +11,8 @@ describe('parse', () => {
     babelParse('class A { @a b }', 'ts')
 
     babelParse(
-      `import { A } from '../../macros' assert { type: 'macro' }`,
-      'js',
+      `import { type A } from '../../macros' assert { type: 'macro' }`,
+      'ts',
       {
         plugins: ['importAssertions'],
       }

@@ -8,19 +8,43 @@ import {
 import { REGEX_LANG_JSX, isTs } from './lang'
 import type * as t from '@babel/types'
 
+function hasPlugin(
+  plugins: ParserPlugin[],
+  plugin: Exclude<ParserPlugin, any[]>
+) {
+  return plugins.some((p) => (Array.isArray(p) ? p[0] : p) === plugin)
+}
+
 function getParserOptions(
   lang?: string,
   options: ParserOptions = {}
 ): ParserOptions {
   const plugins: ParserPlugin[] = [...(options.plugins || [])]
   if (isTs(lang)) {
-    plugins.push(
-      lang === 'dts' ? ['typescript', { dts: true }] : 'typescript',
-      ['importAttributes', { deprecatedAssertSyntax: true }]
-    )
-    if (REGEX_LANG_JSX.test(lang!)) plugins.push('jsx')
-    if (!plugins.includes('decorators')) plugins.push('decorators-legacy')
-  } else {
+    if (!hasPlugin(plugins, 'typescript')) {
+      plugins.push(
+        lang === 'dts' ? ['typescript', { dts: true }] : 'typescript'
+      )
+    }
+
+    if (
+      !hasPlugin(plugins, 'decorators') &&
+      !hasPlugin(plugins, 'decorators-legacy')
+    ) {
+      plugins.push('decorators-legacy')
+    }
+
+    if (
+      !hasPlugin(plugins, 'importAttributes') &&
+      !hasPlugin(plugins, 'importAssertions')
+    ) {
+      plugins.push(['importAttributes', { deprecatedAssertSyntax: true }])
+    }
+
+    if (REGEX_LANG_JSX.test(lang!) && !hasPlugin(plugins, 'jsx')) {
+      plugins.push('jsx')
+    }
+  } else if (!hasPlugin(plugins, 'jsx')) {
     plugins.push('jsx')
   }
   return {
