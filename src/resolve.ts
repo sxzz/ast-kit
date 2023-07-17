@@ -67,22 +67,28 @@ export function resolveIdentifier(
     | t.MemberExpression
     | t.ThisExpression
     | t.Super
+    | t.TSEntityName
 ): string[] {
   if (isTypeOf(node, ['Identifier', 'PrivateName', 'ThisExpression', 'Super']))
     return [resolveString(node)]
 
+  const left = node.type === 'TSQualifiedName' ? node.left : node.object
+  const right = node.type === 'TSQualifiedName' ? node.right : node.property
+  const computed = node.type === 'TSQualifiedName' ? false : node.computed
+
   if (
-    isTypeOf(node.object, [
+    isTypeOf(left, [
       'Identifier',
       'MemberExpression',
       'ThisExpression',
       'Super',
+      'TSQualifiedName',
     ])
   ) {
-    const keys = resolveIdentifier(node.object)
+    const keys = resolveIdentifier(left)
 
-    if (isTypeOf(node.property, ['Identifier', 'PrivateName', 'Literal'])) {
-      keys.push(resolveString(node.property, node.computed))
+    if (isTypeOf(right, ['Identifier', 'PrivateName', 'Literal'])) {
+      keys.push(resolveString(right, computed))
     } else {
       throw new TypeError('Invalid Identifier')
     }
