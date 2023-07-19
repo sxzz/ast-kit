@@ -40,16 +40,19 @@ type SetupCallback<T extends NodeType = NodeType, N = GetNode<T>> = (
   key: string | null | undefined,
   index: number | null | undefined
 ) => void | Promise<void>
+
 interface WalkSetup {
   onEnter<T extends NodeType = NodeType>(
-    type: T | T[],
-    cb: SetupCallback<T>
+    type: T | T[] | WalkFilter<GetNode<T>>,
+    cb: SetupCallback<T, GetNode<T>>
   ): void
   onLeave<T extends NodeType = NodeType>(
-    type: T | T[],
-    cb: SetupCallback<T>
+    type: T | T[] | WalkFilter<GetNode<T>>,
+    cb: SetupCallback<T, GetNode<T>>
   ): void
 }
+
+type WalkFilter<N extends t.Node = t.Node> = (node: t.Node) => node is N
 
 export async function walkASTSetup(
   node: t.Node,
@@ -57,23 +60,27 @@ export async function walkASTSetup(
 ) {
   const callbacks: Record<
     'enter' | 'leave',
-    {
-      types: NodeType[]
-      cb: SetupCallback<any, any>
-    }[]
+    { filter: WalkFilter; cb: SetupCallback<any, any> }[]
   > = {
     enter: [],
     leave: [],
   }
 
+  function getFilter<T extends NodeType, N extends t.Node = GetNode<T>>(
+    types: T | T[] | WalkFilter<N>
+  ): WalkFilter<N> {
+    if (typeof types === 'function') return types
+
+    return (node): node is N =>
+      isTypeOf(node, Array.isArray(types) ? types : [types])
+  }
+
   const setup: WalkSetup = {
     onEnter(type, cb) {
-      const types = Array.isArray(type) ? type : [type]
-      callbacks.enter.push({ types, cb })
+      callbacks.enter.push({ filter: getFilter(type), cb })
     },
     onLeave(type, cb) {
-      const types = Array.isArray(type) ? type : [type]
-      callbacks.leave.push({ types, cb })
+      callbacks.leave.push({ filter: getFilter(type), cb })
     },
   }
 
@@ -81,14 +88,14 @@ export async function walkASTSetup(
 
   return walkASTAsync(node, {
     async enter(node, parent, key, index) {
-      for (const { types, cb } of callbacks.enter) {
-        if (!isTypeOf(node, types)) continue
+      for (const { filter, cb } of callbacks.enter) {
+        if (!filter(node)) continue
         await cb.call(this, node, parent, key, index)
       }
     },
     async leave(node, parent, key, index) {
-      for (const { types, cb } of callbacks.leave) {
-        if (!isTypeOf(node, types)) continue
+      for (const { filter, cb } of callbacks.leave) {
+        if (!filter(node)) continue
         await cb.call(this, node, parent, key, index)
       }
     },

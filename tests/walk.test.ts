@@ -99,11 +99,14 @@ describe('walk', () => {
         expectTypeOf<t.ParentMaps['NumericLiteral' | 'TSStringKeyword']>(parent)
         walkTS()
       })
-      setup.onEnter(['Identifier'], (node, parent) => {
-        expectTypeOf<t.Identifier>(node)
-        expectTypeOf<t.ParentMaps['Identifier']>(parent)
-        walkIdentifier()
-      })
+      setup.onEnter(
+        (node): node is t.Identifier => node.type === 'Identifier',
+        (node, parent) => {
+          expectTypeOf<t.Identifier>(node)
+          expectTypeOf<t.ParentMaps['Identifier']>(parent)
+          walkIdentifier()
+        }
+      )
     })
     expect(walkFunctionDeclaration).toBeCalledTimes(0)
 
