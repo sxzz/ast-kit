@@ -1,6 +1,6 @@
 import type * as t from '@babel/types'
 
-type NodeType = t.Node['type'] | 'Function' | 'Literal'
+export type NodeType = t.Node['type'] | 'Function' | 'Literal'
 export type GetNode<K extends NodeType> = K extends 'Function'
   ? t.Function
   : K extends 'Literal'
