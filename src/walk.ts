@@ -52,7 +52,13 @@ interface WalkSetup {
   ): void
 }
 
-type WalkFilter<N extends t.Node = t.Node> = (node: t.Node) => node is N
+type WalkFilter<N extends t.Node = t.Node> = (
+  this: WalkThis<t.Node>,
+  node: t.Node,
+  parent: t.Node | null | undefined,
+  key: string | null | undefined,
+  index: number | null | undefined
+) => node is N
 
 export async function walkASTSetup(
   node: t.Node,
@@ -87,16 +93,16 @@ export async function walkASTSetup(
   await cb(setup)
 
   return walkASTAsync(node, {
-    async enter(node, parent, key, index) {
+    async enter(...args) {
       for (const { filter, cb } of callbacks.enter) {
-        if (!filter(node)) continue
-        await cb.call(this, node, parent, key, index)
+        if (!filter.apply(this, args)) continue
+        await cb.apply(this, args)
       }
     },
-    async leave(node, parent, key, index) {
+    async leave(...args) {
       for (const { filter, cb } of callbacks.leave) {
-        if (!filter(node)) continue
-        await cb.call(this, node, parent, key, index)
+        if (!filter.apply(this, args)) continue
+        await cb.apply(this, args)
       }
     },
   })
