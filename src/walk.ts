@@ -43,16 +43,16 @@ type SetupCallback<T extends NodeType = NodeType, N = GetNode<T>> = (
 
 interface WalkSetup {
   onEnter<T extends NodeType = NodeType>(
-    type: T | T[] | WalkFilter<GetNode<T>>,
+    type: T | T[] | SetupFilter<GetNode<T>> | WalkCallback<t.Node, void>,
     cb?: SetupCallback<T, GetNode<T>>
   ): void
   onLeave<T extends NodeType = NodeType>(
-    type: T | T[] | WalkFilter<GetNode<T>>,
+    type: T | T[] | SetupFilter<GetNode<T>> | WalkCallback<t.Node, void>,
     cb?: SetupCallback<T, GetNode<T>>
   ): void
 }
 
-type WalkFilter<N extends t.Node = t.Node> = (
+type SetupFilter<N extends t.Node = t.Node> = (
   this: WalkThis<t.Node>,
   node: t.Node,
   parent: t.Node | null | undefined,
@@ -66,16 +66,16 @@ export async function walkASTSetup(
 ) {
   const callbacks: Record<
     'enter' | 'leave',
-    { filter: WalkFilter; cb?: SetupCallback<any, any> }[]
+    { filter: SetupFilter; cb?: SetupCallback<any, any> }[]
   > = {
     enter: [],
     leave: [],
   }
 
   function getFilter<T extends NodeType, N extends t.Node = GetNode<T>>(
-    types: T | T[] | WalkFilter<N>
-  ): WalkFilter<N> {
-    if (typeof types === 'function') return types
+    types: T | T[] | SetupFilter<N> | WalkCallback<N, void>
+  ): SetupFilter<N> {
+    if (typeof types === 'function') return types as any
 
     return (node): node is N =>
       isTypeOf(node, Array.isArray(types) ? types : [types])

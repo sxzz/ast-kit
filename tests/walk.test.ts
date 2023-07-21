@@ -107,6 +107,11 @@ describe('walk', () => {
           walkIdentifier()
         }
       )
+
+      setup.onEnter((node) => {
+        expectTypeOf<t.Node>(node)
+        return 123
+      })
     })
     expect(walkFunctionDeclaration).toBeCalledTimes(0)
 
