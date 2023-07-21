@@ -44,11 +44,11 @@ type SetupCallback<T extends NodeType = NodeType, N = GetNode<T>> = (
 interface WalkSetup {
   onEnter<T extends NodeType = NodeType>(
     type: T | T[] | WalkFilter<GetNode<T>>,
-    cb: SetupCallback<T, GetNode<T>>
+    cb?: SetupCallback<T, GetNode<T>>
   ): void
   onLeave<T extends NodeType = NodeType>(
     type: T | T[] | WalkFilter<GetNode<T>>,
-    cb: SetupCallback<T, GetNode<T>>
+    cb?: SetupCallback<T, GetNode<T>>
   ): void
 }
 
@@ -66,7 +66,7 @@ export async function walkASTSetup(
 ) {
   const callbacks: Record<
     'enter' | 'leave',
-    { filter: WalkFilter; cb: SetupCallback<any, any> }[]
+    { filter: WalkFilter; cb?: SetupCallback<any, any> }[]
   > = {
     enter: [],
     leave: [],
@@ -96,13 +96,13 @@ export async function walkASTSetup(
     async enter(...args) {
       for (const { filter, cb } of callbacks.enter) {
         if (!filter.apply(this, args)) continue
-        await cb.apply(this, args)
+        await cb?.apply(this, args)
       }
     },
     async leave(...args) {
       for (const { filter, cb } of callbacks.leave) {
         if (!filter.apply(this, args)) continue
-        await cb.apply(this, args)
+        await cb?.apply(this, args)
       }
     },
   })
