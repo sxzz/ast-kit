@@ -40,9 +40,6 @@ devDependencies:
   eslint:
     specifier: ^8.46.0
     version: 8.46.0
-  eslint-define-config:
-    specifier: ^1.22.0
-    version: 1.22.0
   estree-walker:
     specifier: ^3.0.3
     version: 3.0.3
