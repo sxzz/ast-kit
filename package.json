@@ -1,6 +1,6 @@
 {
   "name": "ast-kit",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "packageManager": "pnpm@8.6.12",
   "description": "AST Toolkit.",
   "type": "module",
