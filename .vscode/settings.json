@@ -1,4 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "eslint.experimental.useFlatConfig": true
+  "eslint.experimental.useFlatConfig": true,
+  "exportall.config.folderListener": ["/src"]
 }
