@@ -41,6 +41,10 @@ function getParserOptions(
       plugins.push(['importAttributes', { deprecatedAssertSyntax: true }])
     }
 
+    if (!hasPlugin(plugins, 'explicitResourceManagement')) {
+      plugins.push('explicitResourceManagement')
+    }
+
     if (REGEX_LANG_JSX.test(lang!) && !hasPlugin(plugins, 'jsx')) {
       plugins.push('jsx')
     }

@@ -17,6 +17,10 @@ describe('parse', () => {
         plugins: ['importAssertions'],
       }
     )
+
+    babelParse(`using foo = useFoo()`, 'ts', {
+      plugins: ['importAssertions'],
+    })
   })
 
   test('babelParseExpression', () => {
