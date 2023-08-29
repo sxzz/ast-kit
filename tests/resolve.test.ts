@@ -16,7 +16,7 @@ function _parse<T extends t.Node>(
 ): ParseResult<T>
 function _parse<T extends t.Node>(code: string, expression = false) {
   return (expression ? babelParseExpression<T> : babelParse)(code, undefined, {
-    plugins: ['typescript'],
+    plugins: ['typescript', 'importAttributes'],
     errorRecovery: true,
   })
 }
@@ -71,6 +71,11 @@ describe('resolve', () => {
 
     expect(resolveObjectKey(properties[2])).toEqual('id')
     expect(resolveObjectKey(properties[2], true)).toEqual('"id"')
+
+    const ast = _parse("import {} from '' with { type: 'json' }", false)
+    expect(
+      resolveObjectKey((ast.body[0] as t.ImportDeclaration).attributes![0])
+    ).toEqual('type')
 
     expect(() => {
       resolveObjectKey(

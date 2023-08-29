@@ -103,6 +103,7 @@ export type ObjectPropertyLike =
   | t.ObjectProperty
   | t.TSMethodSignature
   | t.TSPropertySignature
+  | t.ImportAttribute
 
 export function resolveObjectKey(
   node: ObjectPropertyLike,
@@ -110,6 +111,7 @@ export function resolveObjectKey(
 ): string | number
 export function resolveObjectKey(node: ObjectPropertyLike, raw: true): string
 export function resolveObjectKey(node: ObjectPropertyLike, raw = false) {
+  // @ts-expect-error computed is missing in ImportAttribute
   const { key, computed } = node
   switch (key.type) {
     case 'StringLiteral':
