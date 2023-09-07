@@ -1,12 +1,16 @@
 import {
-  type ParseResult,
   type ParserOptions,
   type ParserPlugin,
+  type ParseResult as _ParseResult,
   parse,
   parseExpression,
 } from '@babel/parser'
 import { REGEX_LANG_JSX, isTs } from './lang'
 import type * as t from '@babel/types'
+
+export type ParseResult<T> = _ParseResult<T> & {
+  comments?: t.Comment[] | null
+}
 
 function hasPlugin(
   plugins: ParserPlugin[],
@@ -63,8 +67,11 @@ export function babelParse(
   lang?: string,
   options: ParserOptions = {}
 ): ParseResult<t.Program> {
-  const { program, errors } = parse(code, getParserOptions(lang, options))
-  return { ...program, errors }
+  const { program, errors, comments } = parse(
+    code,
+    getParserOptions(lang, options)
+  )
+  return { ...program, errors, comments }
 }
 
 export function babelParseExpression<T extends t.Node = t.Expression>(
