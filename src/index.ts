@@ -1,6 +1,7 @@
 export * from './check'
 export * from './create'
 export * from './lang'
+export * from './loc'
 export * from './parse'
 export * from './resolve'
 export * from './scope'
