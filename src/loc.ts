@@ -13,7 +13,9 @@ export function locateTrailingComma(
       continue
     }
 
-    if (code[i] === ',') return i
+    const char = code[i]
+    if (['}', ')'].includes(char)) return -1
+    if (char === ',') return i
     i++
   }
   return -1
