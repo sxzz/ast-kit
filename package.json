@@ -1,7 +1,7 @@
 {
   "name": "ast-kit",
   "version": "0.11.2",
-  "packageManager": "pnpm@8.7.1",
+  "packageManager": "pnpm@8.7.4",
   "description": "AST Toolkit.",
   "type": "module",
   "license": "MIT",
@@ -39,26 +39,26 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@babel/parser": "^7.22.14",
+    "@babel/parser": "^7.22.16",
     "@rollup/pluginutils": "^5.0.4",
     "pathe": "^1.1.1"
   },
   "devDependencies": {
-    "@babel/types": "^7.22.11",
-    "@sxzz/eslint-config": "^3.5.1",
+    "@babel/types": "^7.22.17",
+    "@sxzz/eslint-config": "^3.5.4",
     "@sxzz/prettier-config": "^1.0.4",
-    "@types/node": "^20.5.9",
-    "@vitest/coverage-v8": "^0.34.3",
-    "@vitest/ui": "^0.34.3",
+    "@types/node": "^20.6.0",
+    "@vitest/coverage-v8": "^0.34.4",
+    "@vitest/ui": "^0.34.4",
     "bumpp": "^9.2.0",
-    "eslint": "^8.48.0",
+    "eslint": "^8.49.0",
     "estree-walker": "^3.0.3",
     "fast-glob": "^3.3.1",
     "prettier": "^3.0.3",
     "tsup": "^7.2.0",
     "tsx": "^3.12.8",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.3"
+    "vitest": "^0.34.4"
   },
   "engines": {
     "node": ">=16.14.0"
