@@ -1,7 +1,7 @@
 import { asyncWalk, walk } from 'estree-walker'
 import { resolveString } from './resolve'
-import { type LiteralUnion } from './types'
 import { type GetNode, type NodeType, isTypeOf } from './check'
+import type { LiteralUnion } from './types'
 import type * as t from '@babel/types'
 
 interface WalkThis<T> {

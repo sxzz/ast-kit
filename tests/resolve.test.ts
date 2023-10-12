@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest'
-import { type ParseResult } from '@babel/parser'
 import {
   type ObjectPropertyLike,
   babelParse,
@@ -7,6 +6,7 @@ import {
   resolveIdentifier,
   resolveObjectKey,
 } from '../src'
+import type { ParseResult } from '@babel/parser'
 import type * as t from '@babel/types'
 
 function _parse(code: string, expression?: false): ParseResult<t.Program>
