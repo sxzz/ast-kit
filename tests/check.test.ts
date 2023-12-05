@@ -5,7 +5,7 @@ describe('utils', () => {
   test('isTypeOf', () => {
     expect(isTypeOf({ type: 'NullLiteral' }, 'NullLiteral')).toBe(true)
     expect(
-      isTypeOf({ type: 'NullLiteral' }, ['Literal', 'ObjectExpression'])
+      isTypeOf({ type: 'NullLiteral' }, ['Literal', 'ObjectExpression']),
     ).toBe(true)
     expect(isTypeOf({ type: 'AnyTypeAnnotation' }, ['NullLiteral'])).toBe(false)
   })

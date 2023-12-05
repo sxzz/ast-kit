@@ -20,7 +20,7 @@ describe('loc', () => {
           start: 27,
           end: 32,
         },
-      ])
+      ]),
     ).toBe(32)
 
     expect(
@@ -31,8 +31,8 @@ describe('loc', () => {
 }`,
         12,
         24,
-        [{ type: 'CommentLine', value: ' a,', start: 13, end: 18 }]
-      )
+        [{ type: 'CommentLine', value: ' a,', start: 13, end: 18 }],
+      ),
     ).toBe(21)
   })
 })

@@ -4,12 +4,12 @@ export type NodeType = t.Node['type'] | 'Function' | 'Literal'
 export type GetNode<K extends NodeType> = K extends 'Function'
   ? t.Function
   : K extends 'Literal'
-  ? t.Literal
-  : Extract<t.Node, { type: K }>
+    ? t.Literal
+    : Extract<t.Node, { type: K }>
 
 export function isTypeOf<K extends NodeType>(
   node: t.Node | undefined | null,
-  types: K | Readonly<K[]>
+  types: K | Readonly<K[]>,
 ): node is GetNode<K> {
   if (!node) return false
   return ([] as string[]).concat(types).some((type) => {
@@ -25,7 +25,7 @@ export function isTypeOf<K extends NodeType>(
 
 export function isCallOf(
   node: t.Node | null | undefined,
-  test: string | string[] | ((id: string) => boolean)
+  test: string | string[] | ((id: string) => boolean),
 ): node is t.CallExpression {
   return (
     !!node &&
@@ -34,14 +34,14 @@ export function isCallOf(
     (typeof test === 'string'
       ? node.callee.name === test
       : Array.isArray(test)
-      ? test.includes(node.callee.name)
-      : test(node.callee.name))
+        ? test.includes(node.callee.name)
+        : test(node.callee.name))
   )
 }
 
 export function isIdentifierOf(
   node: t.Node | undefined | null,
-  test: string | string[]
+  test: string | string[],
 ): node is t.Identifier {
   return (
     !!node &&
@@ -51,13 +51,13 @@ export function isIdentifierOf(
 }
 
 export function isLiteralType(
-  node: t.Node | undefined | null
+  node: t.Node | undefined | null,
 ): node is t.Literal {
   return !!node && node.type.endsWith('Literal')
 }
 
 export function isFunctionType(
-  node: t.Node | undefined | null
+  node: t.Node | undefined | null,
 ): node is t.Function {
   return !!node && /Function(?:Expression|Declaration)$|Method$/.test(node.type)
 }
@@ -75,7 +75,7 @@ export function isFunctionType(
 export function isReferenced(
   node: t.Node,
   parent: t.Node,
-  grandparent?: t.Node
+  grandparent?: t.Node,
 ): boolean {
   switch (parent.type) {
     // yes: PARENT[NODE]

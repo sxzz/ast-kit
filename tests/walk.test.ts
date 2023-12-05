@@ -21,7 +21,7 @@ describe('walk', () => {
       import type * as i from 'i'
       import type j from 'j'
       import { type h } from 'h'`,
-      'ts'
+      'ts',
     )
     const imports: Record<string, ImportBinding> = {}
     for (const stmt of ast.body) {
@@ -31,7 +31,7 @@ describe('walk', () => {
 
     expect(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      Object.values(imports).map(({ specifier, ...i }) => i)
+      Object.values(imports).map(({ specifier, ...i }) => i),
     ).toMatchInlineSnapshot(`
       [
         {
@@ -81,7 +81,7 @@ describe('walk', () => {
       function bar(id: string) {}
       const baz = 1
       `,
-      'ts'
+      'ts',
     )
 
     const walkFunctionDeclaration = vi.fn()
@@ -105,7 +105,7 @@ describe('walk', () => {
           expectTypeOf<t.Identifier>(node)
           expectTypeOf<t.ParentMaps['Identifier']>(parent)
           walkIdentifier()
-        }
+        },
       )
 
       setup.onEnter((node) => {

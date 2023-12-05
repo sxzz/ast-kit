@@ -19,7 +19,7 @@ export function createTSUnionType(types: t.TSType[]): t.TSUnionType {
 }
 
 export function createTSLiteralType(
-  literal: t.TSLiteralType['literal']
+  literal: t.TSLiteralType['literal'],
 ): t.TSLiteralType {
   return {
     type: 'TSLiteralType',

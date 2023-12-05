@@ -12,7 +12,7 @@ import type * as t from '@babel/types'
 function _parse(code: string, expression?: false): ParseResult<t.Program>
 function _parse<T extends t.Node>(
   code: string,
-  expression: true
+  expression: true,
 ): ParseResult<T>
 function _parse<T extends t.Node>(code: string, expression = false) {
   return (expression ? babelParseExpression<T> : babelParse)(code, undefined, {
@@ -42,7 +42,7 @@ describe('resolve', () => {
       ])
 
       expect(() => resolveIdentifier(parse('foo.bar[b]', true))).toThrow(
-        'Invalid Identifier'
+        'Invalid Identifier',
       )
     }
 
@@ -61,7 +61,7 @@ describe('resolve', () => {
       [1]: 'number',
       id: 'number',
     }`,
-      true
+      true,
     ).properties as ObjectPropertyLike[]
     expect(resolveObjectKey(properties[0])).toEqual('foo')
     expect(resolveObjectKey(properties[0], true)).toEqual('"foo"')
@@ -74,13 +74,13 @@ describe('resolve', () => {
 
     const ast = _parse("import {} from '' with { type: 'json' }", false)
     expect(
-      resolveObjectKey((ast.body[0] as t.ImportDeclaration).attributes![0])
+      resolveObjectKey((ast.body[0] as t.ImportDeclaration).attributes![0]),
     ).toEqual('type')
 
     expect(() => {
       resolveObjectKey(
         _parse<t.ObjectExpression>(`{ [id]: 'error' }`, true)
-          .properties[0] as any
+          .properties[0] as any,
       )
     }).toThrow('Cannot resolve computed Identifier')
   })

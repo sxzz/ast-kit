@@ -15,7 +15,7 @@ type WalkCallback<T, R> = (
   node: T,
   parent: T | null | undefined,
   key: string | null | undefined,
-  index: number | null | undefined
+  index: number | null | undefined,
 ) => R
 
 interface WalkHandlers<T, R> {
@@ -25,12 +25,12 @@ interface WalkHandlers<T, R> {
 
 export const walkAST: <T = t.Node>(
   node: T,
-  hooks: WalkHandlers<T, void>
+  hooks: WalkHandlers<T, void>,
 ) => T | null = walk as any
 
 export const walkASTAsync: <T = t.Node>(
   node: T,
-  handlers: WalkHandlers<T, Promise<void>>
+  handlers: WalkHandlers<T, Promise<void>>,
 ) => Promise<T | null> = asyncWalk as any
 
 type SetupCallback<T extends NodeType = NodeType, N = GetNode<T>> = (
@@ -38,17 +38,17 @@ type SetupCallback<T extends NodeType = NodeType, N = GetNode<T>> = (
   node: N,
   parent: T extends keyof t.ParentMaps ? t.ParentMaps[T] : t.Node | null,
   key: string | null | undefined,
-  index: number | null | undefined
+  index: number | null | undefined,
 ) => void | Promise<void>
 
 interface WalkSetup {
   onEnter<T extends NodeType = NodeType>(
     type: T | T[] | SetupFilter<GetNode<T>> | WalkCallback<t.Node, void>,
-    cb?: SetupCallback<T, GetNode<T>>
+    cb?: SetupCallback<T, GetNode<T>>,
   ): void
   onLeave<T extends NodeType = NodeType>(
     type: T | T[] | SetupFilter<GetNode<T>> | WalkCallback<t.Node, void>,
-    cb?: SetupCallback<T, GetNode<T>>
+    cb?: SetupCallback<T, GetNode<T>>,
   ): void
 }
 
@@ -57,12 +57,12 @@ type SetupFilter<N extends t.Node = t.Node> = (
   node: t.Node,
   parent: t.Node | null | undefined,
   key: string | null | undefined,
-  index: number | null | undefined
+  index: number | null | undefined,
 ) => node is N
 
 export async function walkASTSetup(
   node: t.Node,
-  cb: (setup: WalkSetup) => void | Promise<void>
+  cb: (setup: WalkSetup) => void | Promise<void>,
 ) {
   const callbacks: Record<
     'enter' | 'leave',
@@ -73,7 +73,7 @@ export async function walkASTSetup(
   }
 
   function getFilter<T extends NodeType, N extends t.Node = GetNode<T>>(
-    types: T | T[] | SetupFilter<N> | WalkCallback<N, void>
+    types: T | T[] | SetupFilter<N> | WalkCallback<N, void>,
   ): SetupFilter<N> {
     if (typeof types === 'function') return types as any
 
@@ -121,7 +121,7 @@ export interface ImportBinding {
 
 export function walkImportDeclaration(
   imports: Record<string, ImportBinding>,
-  node: t.ImportDeclaration
+  node: t.ImportDeclaration,
 ) {
   if (node.importKind === 'type') return
   const source = node.source.value
@@ -133,8 +133,8 @@ export function walkImportDeclaration(
       specifier.type === 'ImportSpecifier'
         ? resolveString(specifier.imported)
         : specifier.type === 'ImportNamespaceSpecifier'
-        ? '*'
-        : 'default'
+          ? '*'
+          : 'default'
     imports[local] = {
       source,
       local,

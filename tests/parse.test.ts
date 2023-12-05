@@ -15,7 +15,7 @@ describe('parse', () => {
       'ts',
       {
         plugins: ['importAssertions'],
-      }
+      },
     )
 
     babelParse(`using foo = useFoo()`, 'ts', {

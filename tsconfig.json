@@ -11,6 +11,5 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src", "tests"],
-  "exclude": ["tests/fixtures"]
+  "include": ["src", "tests"]
 }

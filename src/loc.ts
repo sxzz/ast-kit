@@ -4,7 +4,7 @@ export function locateTrailingComma(
   code: string,
   start: number,
   end: number,
-  comments: t.Comment[] = []
+  comments: t.Comment[] = [],
 ) {
   let i = start
   while (i < end) {

@@ -9,7 +9,7 @@ export function resolveString(
     | t.PrivateName
     | t.ThisExpression
     | t.Super,
-  computed = false
+  computed = false,
 ) {
   if (typeof node === 'string') return node
   else if (node.type === 'Identifier') {
@@ -26,7 +26,7 @@ export function resolveString(
 }
 
 export function resolveLiteral(
-  node: t.Literal
+  node: t.Literal,
 ): string | number | boolean | null | RegExp | bigint {
   switch (node.type) {
     case 'TemplateLiteral':
@@ -67,7 +67,7 @@ export function resolveIdentifier(
     | t.MemberExpression
     | t.ThisExpression
     | t.Super
-    | t.TSEntityName
+    | t.TSEntityName,
 ): string[] {
   if (isTypeOf(node, ['Identifier', 'PrivateName', 'ThisExpression', 'Super']))
     return [resolveString(node)]
@@ -107,7 +107,7 @@ export type ObjectPropertyLike =
 
 export function resolveObjectKey(
   node: ObjectPropertyLike,
-  raw?: false
+  raw?: false,
 ): string | number
 export function resolveObjectKey(node: ObjectPropertyLike, raw: true): string
 export function resolveObjectKey(node: ObjectPropertyLike, raw = false) {

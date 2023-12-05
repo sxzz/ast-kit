@@ -14,20 +14,20 @@ export type ParseResult<T> = _ParseResult<T> & {
 
 function hasPlugin(
   plugins: ParserPlugin[],
-  plugin: Exclude<ParserPlugin, any[]>
+  plugin: Exclude<ParserPlugin, any[]>,
 ) {
   return plugins.some((p) => (Array.isArray(p) ? p[0] : p) === plugin)
 }
 
 function getParserOptions(
   lang?: string,
-  options: ParserOptions = {}
+  options: ParserOptions = {},
 ): ParserOptions {
   const plugins: ParserPlugin[] = [...(options.plugins || [])]
   if (isTs(lang)) {
     if (!hasPlugin(plugins, 'typescript')) {
       plugins.push(
-        lang === 'dts' ? ['typescript', { dts: true }] : 'typescript'
+        lang === 'dts' ? ['typescript', { dts: true }] : 'typescript',
       )
     }
 
@@ -65,11 +65,11 @@ function getParserOptions(
 export function babelParse(
   code: string,
   lang?: string,
-  options: ParserOptions = {}
+  options: ParserOptions = {},
 ): ParseResult<t.Program> {
   const { program, errors, comments } = parse(
     code,
-    getParserOptions(lang, options)
+    getParserOptions(lang, options),
   )
   return { ...program, errors, comments }
 }
@@ -77,10 +77,10 @@ export function babelParse(
 export function babelParseExpression<T extends t.Node = t.Expression>(
   code: string,
   lang?: string,
-  options: ParserOptions = {}
+  options: ParserOptions = {},
 ) {
   return parseExpression(
     code,
-    getParserOptions(lang, options)
+    getParserOptions(lang, options),
   ) as ParseResult<T>
 }
