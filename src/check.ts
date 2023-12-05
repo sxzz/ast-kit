@@ -9,10 +9,10 @@ export type GetNode<K extends NodeType> = K extends 'Function'
 
 export function isTypeOf<K extends NodeType>(
   node: t.Node | undefined | null,
-  types: Readonly<K[]>
+  types: K | Readonly<K[]>
 ): node is GetNode<K> {
   if (!node) return false
-  return types.some((type) => {
+  return ([] as string[]).concat(types).some((type) => {
     if (type === 'Function') {
       return isFunctionType(node)
     } else if (type === 'Literal') {
