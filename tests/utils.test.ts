@@ -1,7 +1,15 @@
 import { describe, expect, test } from 'vitest'
-import { escapeKey } from '../src'
+import { escapeKey, unwrapTSNode } from '../src'
+import { parse as _parse } from './_utils'
+import type * as t from '@babel/types'
 
 describe('utils', () => {
+  test('unwrapTSNode', () => {
+    const parse = _parse<t.TSAsExpression>
+    const node = parse('a as string', true)
+    expect(unwrapTSNode(node)).toEqual(node.expression)
+  })
+
   test('escapeKey', () => {
     expect(escapeKey('a')).toBe('a')
     expect(escapeKey('1')).toBe('1')

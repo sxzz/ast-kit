@@ -1,27 +1,33 @@
 import { describe, expect, test } from 'vitest'
 import {
   type ObjectPropertyLike,
-  babelParse,
-  babelParseExpression,
   resolveIdentifier,
+  resolveLiteral,
   resolveObjectKey,
+  resolveString,
 } from '../src'
-import type { ParseResult } from '@babel/parser'
+import { parse as _parse } from './_utils'
 import type * as t from '@babel/types'
 
-function _parse(code: string, expression?: false): ParseResult<t.Program>
-function _parse<T extends t.Node>(
-  code: string,
-  expression: true,
-): ParseResult<T>
-function _parse<T extends t.Node>(code: string, expression = false) {
-  return (expression ? babelParseExpression<T> : babelParse)(code, undefined, {
-    plugins: ['typescript', 'importAttributes'],
-    errorRecovery: true,
-  })
-}
-
 describe('resolve', () => {
+  test('resolveString', () => {
+    expect(resolveString('foo')).toBe('foo')
+  })
+
+  test('resolveLiteral', () => {
+    const parse = _parse<t.Literal>
+    expect(resolveLiteral(parse("`hello${'world'}`", true))).toBe('helloworld')
+    expect(resolveLiteral(parse('1', true))).toBe(1)
+    expect(resolveLiteral(parse('false', true))).toBe(false)
+    expect(resolveLiteral(parse('null', true))).toBe(null)
+    expect(resolveLiteral(parse('8n', true))).toBe(8n)
+    expect(resolveLiteral(parse('/foo/g', true))).toEqual(/foo/g)
+
+    expect(() => resolveLiteral(parse('`hello${id}`', true))).toThrowError(
+      'TemplateLiteral expression must be a literal',
+    )
+  })
+
   test('resolveIdentifier', () => {
     {
       const parse = _parse<t.MemberExpression>
@@ -44,6 +50,12 @@ describe('resolve', () => {
       expect(() => resolveIdentifier(parse('foo.bar[b]', true))).toThrow(
         'Invalid Identifier',
       )
+      expect(() => resolveIdentifier(parse('foo.bar[fn()]', true))).toThrow(
+        'Invalid Identifier',
+      )
+      expect(() => resolveIdentifier(parse('fn()[0]', true))).toThrow(
+        'Invalid Identifier',
+      )
     }
 
     {
@@ -59,7 +71,7 @@ describe('resolve', () => {
       `{
       foo: 'foo',
       [1]: 'number',
-      id: 'number',
+      ['id']: 'number',
     }`,
       true,
     ).properties as ObjectPropertyLike[]
@@ -70,7 +82,11 @@ describe('resolve', () => {
     expect(resolveObjectKey(properties[1], true)).toEqual('1')
 
     expect(resolveObjectKey(properties[2])).toEqual('id')
-    expect(resolveObjectKey(properties[2], true)).toEqual('"id"')
+    expect(resolveObjectKey(properties[2], true)).toEqual("'id'")
+
+    expect(() =>
+      resolveObjectKey({ key: { type: 'Unknown' } } as any),
+    ).toThrowError('Unexpected node type: Unknown')
 
     const ast = _parse("import {} from '' with { type: 'json' }", false)
     expect(

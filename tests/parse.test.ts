@@ -6,6 +6,7 @@ describe('parse', () => {
     babelParse('const a = 1')
     babelParse('const a: string = 1', 'ts')
     babelParse('const a: any = <div />', 'tsx')
+    babelParse('const a: string', 'dts')
 
     expect(() => babelParse('class A { @a b }')).toThrow()
     babelParse('class A { @a b }', 'ts')
