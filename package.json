@@ -48,8 +48,8 @@
     "@sxzz/eslint-config": "^3.7.5",
     "@sxzz/prettier-config": "^2.0.0",
     "@types/node": "^20.10.4",
-    "@vitest/coverage-v8": "^0.34.6",
-    "@vitest/ui": "^0.34.7",
+    "@vitest/coverage-v8": "^1.0.4",
+    "@vitest/ui": "^1.0.4",
     "bumpp": "^9.2.1",
     "eslint": "^8.55.0",
     "estree-walker": "^3.0.3",
@@ -58,7 +58,7 @@
     "tsup": "^8.0.1",
     "tsx": "^4.6.2",
     "typescript": "^5.3.3",
-    "vitest": "^0.34.6"
+    "vitest": "^1.0.4"
   },
   "engines": {
     "node": ">=16.14.0"
