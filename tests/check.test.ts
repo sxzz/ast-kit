@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import {
   isCallOf,
+  isExpressionType,
   isFunctionType,
   isIdentifierOf,
   isLiteralType,
@@ -21,6 +22,7 @@ describe('utils', () => {
       isTypeOf({ type: 'ClassMethod' } as t.ClassMethod, ['Function']),
     ).toBe(true)
     expect(isTypeOf({ type: 'AnyTypeAnnotation' }, ['NullLiteral'])).toBe(false)
+    expect(isTypeOf({ type: 'NullLiteral' }, 'Expression')).toBe(true)
   })
 
   test('isLiteralType', () => {
@@ -34,6 +36,25 @@ describe('utils', () => {
     ).toBe(true)
     expect(
       isFunctionType({ type: 'FunctionExpression' } as t.FunctionExpression),
+    ).toBe(true)
+  })
+
+  test('isExpressionType', () => {
+    expect(isExpressionType({ type: 'ArrayExpression' } as t.Expression)).toBe(
+      true,
+    )
+    expect(isExpressionType({ type: 'BooleanLiteral' } as t.Expression)).toBe(
+      true,
+    )
+    expect(isExpressionType({ type: 'Super' } as t.Expression)).toBe(true)
+
+    expect(
+      isExpressionType({
+        type: 'FunctionDeclaration',
+      } as t.FunctionDeclaration),
+    ).toBe(false)
+    expect(
+      isExpressionType({ type: 'FunctionExpression' } as t.FunctionExpression),
     ).toBe(true)
   })
 
