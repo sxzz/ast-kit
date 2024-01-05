@@ -26,24 +26,3 @@ export function escapeKey(rawKey: string) {
   } catch {}
   return JSON.stringify(rawKey)
 }
-
-/**
- * @see https://github.com/babel/babel/blob/main/packages/babel-types/src/utils/shallowEqual.ts
- */
-export function shallowEqual<T extends object>(
-  actual: object,
-  expected: T,
-): actual is T {
-  const keys = Object.keys(expected) as (keyof T)[]
-
-  for (const key of keys) {
-    if (
-      // @ts-expect-error maybe we should check whether key exists first
-      actual[key] !== expected[key]
-    ) {
-      return false
-    }
-  }
-
-  return true
-}

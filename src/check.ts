@@ -1,5 +1,3 @@
-import { shallowEqual } from './utils'
-import type { Opts } from './types'
 import type * as t from '@babel/types'
 
 export type NodeType = t.Node['type'] | 'Function' | 'Literal' | 'Expression'
@@ -66,84 +64,26 @@ export function isFunctionType(
   return !!node && /Function(?:Expression|Declaration)$|Method$/.test(node.type)
 }
 
-/**
- * @see https://github.com/babel/babel/blob/d7f8401f14779d5615c3ae5d669afcb76dc30432/packages/babel-types/src/validators/generated/index.ts#L2633C1-L2708C2
- */
 export function isExpressionType(
   node: t.Node | null | undefined,
-  opts?: Opts<t.Expression> | null,
 ): node is t.Expression {
-  if (!node) return false
-
-  switch (node.type) {
-    case 'ArrayExpression':
-    case 'AssignmentExpression':
-    case 'BinaryExpression':
-    case 'CallExpression':
-    case 'ConditionalExpression':
-    case 'FunctionExpression':
-    case 'Identifier':
-    case 'StringLiteral':
-    case 'NumericLiteral':
-    case 'NullLiteral':
-    case 'BooleanLiteral':
-    case 'RegExpLiteral':
-    case 'LogicalExpression':
-    case 'MemberExpression':
-    case 'NewExpression':
-    case 'ObjectExpression':
-    case 'SequenceExpression':
-    case 'ParenthesizedExpression':
-    case 'ThisExpression':
-    case 'UnaryExpression':
-    case 'UpdateExpression':
-    case 'ArrowFunctionExpression':
-    case 'ClassExpression':
-    case 'ImportExpression':
-    case 'MetaProperty':
-    case 'Super':
-    case 'TaggedTemplateExpression':
-    case 'TemplateLiteral':
-    case 'YieldExpression':
-    case 'AwaitExpression':
-    case 'Import':
-    case 'BigIntLiteral':
-    case 'OptionalMemberExpression':
-    case 'OptionalCallExpression':
-    case 'TypeCastExpression':
-    case 'JSXElement':
-    case 'JSXFragment':
-    case 'BindExpression':
-    case 'DoExpression':
-    case 'RecordExpression':
-    case 'TupleExpression':
-    case 'DecimalLiteral':
-    case 'ModuleExpression':
-    case 'TopicReference':
-    case 'PipelineTopicExpression':
-    case 'PipelineBareFunction':
-    case 'PipelinePrimaryTopicReference':
-    case 'TSInstantiationExpression':
-    case 'TSAsExpression':
-    case 'TSSatisfiesExpression':
-    case 'TSTypeAssertion':
-    case 'TSNonNullExpression':
-      break
-    case 'Placeholder':
-      switch (node.expectedNode) {
-        case 'Expression':
-        case 'Identifier':
-        case 'StringLiteral':
-          break
-        default:
-          return false
-      }
-      break
-    default:
-      return false
-  }
-
-  return opts == null || shallowEqual(node, opts)
+  return (
+    !!node &&
+    (node.type.endsWith('Expression') ||
+      isLiteralType(node) ||
+      [
+        'Identifier',
+        'MetaProperty',
+        'Super',
+        'Import',
+        'JSXElement',
+        'JSXFragment',
+        'TopicReference',
+        'PipelineBareFunction',
+        'PipelinePrimaryTopicReference',
+        'TSTypeAssertion',
+      ].includes(node.type))
+  )
 }
 
 /**

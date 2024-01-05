@@ -22,7 +22,14 @@ describe('utils', () => {
       isTypeOf({ type: 'ClassMethod' } as t.ClassMethod, ['Function']),
     ).toBe(true)
     expect(isTypeOf({ type: 'AnyTypeAnnotation' }, ['NullLiteral'])).toBe(false)
+
+    expect(
+      isTypeOf({ type: 'ArrayExpression' } as t.Expression, 'Expression'),
+    ).toBe(true)
     expect(isTypeOf({ type: 'NullLiteral' }, 'Expression')).toBe(true)
+    expect(isTypeOf({ type: 'JSXElement' } as t.Expression, 'Expression')).toBe(
+      true,
+    )
   })
 
   test('isLiteralType', () => {
