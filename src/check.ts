@@ -1,6 +1,6 @@
 import type * as t from '@babel/types'
 
-export type NodeType = t.Node['type'] | 'Function' | 'Literal'
+export type NodeType = t.Node['type'] | 'Function' | 'Literal' | 'Expression'
 export type GetNode<K extends NodeType> = K extends 'Function'
   ? t.Function
   : K extends 'Literal'
@@ -17,6 +17,8 @@ export function isTypeOf<K extends NodeType>(
       return isFunctionType(node)
     } else if (type === 'Literal') {
       return isLiteralType(node)
+    } else if (type === 'Expression') {
+      return isExpressionType(node)
     } else {
       return node.type === type
     }
@@ -60,6 +62,28 @@ export function isFunctionType(
   node: t.Node | undefined | null,
 ): node is t.Function {
   return !!node && /Function(?:Expression|Declaration)$|Method$/.test(node.type)
+}
+
+export function isExpressionType(
+  node: t.Node | null | undefined,
+): node is t.Expression {
+  return (
+    !!node &&
+    (node.type.endsWith('Expression') ||
+      isLiteralType(node) ||
+      [
+        'Identifier',
+        'MetaProperty',
+        'Super',
+        'Import',
+        'JSXElement',
+        'JSXFragment',
+        'TopicReference',
+        'PipelineBareFunction',
+        'PipelinePrimaryTopicReference',
+        'TSTypeAssertion',
+      ].includes(node.type))
+  )
 }
 
 /**
