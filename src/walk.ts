@@ -1,6 +1,11 @@
 import { asyncWalk, walk } from 'estree-walker'
 import { resolveString } from './resolve'
-import { type GetNode, type NodeType, isTypeOf } from './check'
+import {
+  type GetNode,
+  type NodeType,
+  isExpressionType,
+  isTypeOf,
+} from './check'
 import type { LiteralUnion } from './types'
 import type * as t from '@babel/types'
 
@@ -143,4 +148,120 @@ export function walkImportDeclaration(
       isType,
     }
   }
+}
+
+export interface ExportBinding {
+  local: string
+  exported: LiteralUnion<'*' | 'default'>
+  isType: boolean
+  source: string | null
+  specifier:
+    | t.ExportSpecifier
+    | t.ExportDefaultSpecifier
+    | t.ExportNamespaceSpecifier
+    | null
+  declaration: t.Declaration | t.ExportDefaultDeclaration['declaration'] | null
+}
+
+export function walkExportDeclaration(
+  exports: Record<string, ExportBinding>,
+  node: t.ExportDeclaration,
+) {
+  let local: ExportBinding['local']
+  let exported: ExportBinding['exported']
+  let isType: ExportBinding['isType']
+  let source: ExportBinding['source']
+  let specifier: ExportBinding['specifier']
+  let declaration: ExportBinding['declaration']
+
+  function setExport() {
+    exports[exported] = {
+      source,
+      local,
+      exported,
+      specifier,
+      isType,
+      declaration,
+    }
+  }
+
+  if (node.type === 'ExportNamedDeclaration') {
+    if (node.specifiers.length > 0) {
+      for (const s of node.specifiers) {
+        const isExportSpecifier = s.type === 'ExportSpecifier'
+        isType =
+          node.exportKind === 'type' ||
+          (isExportSpecifier && s.exportKind === 'type')
+        local = isExportSpecifier
+          ? s.local.name
+          : s.type === 'ExportNamespaceSpecifier'
+            ? '*'
+            : 'default'
+        source = node.source ? node.source.value : null
+        exported = isExportSpecifier
+          ? resolveString(s.exported)
+          : s.exported.name
+        declaration = null
+        specifier = s
+
+        setExport()
+      }
+    } else if (node.specifiers.length === 0 && !!node.declaration) {
+      // TODO: handle other nodeType
+      if (node.declaration.type === 'VariableDeclaration') {
+        for (const decl of node.declaration.declarations) {
+          if (decl.id.type !== 'Identifier') {
+            continue
+          }
+
+          local = resolveString(decl.id)
+          source = null
+          exported = local
+          isType = node.exportKind === 'type'
+          declaration = node.declaration
+          specifier = null
+
+          setExport()
+        }
+      } else if (
+        'id' in node.declaration &&
+        node.declaration.id &&
+        node.declaration.id.type === 'Identifier'
+      ) {
+        local = resolveString(node.declaration.id)
+        source = null
+        exported = local
+        isType = node.exportKind === 'type'
+        declaration = node.declaration
+        specifier = null
+
+        setExport()
+      } else {
+        // TODO handle other nodeType
+      }
+    }
+
+    return
+  } else if (node.type === 'ExportDefaultDeclaration') {
+    if (isExpressionType(node.declaration)) {
+      local = 'name' in node.declaration ? node.declaration.name : 'default'
+    } else {
+      local = resolveString(node.declaration.id || 'default')
+    }
+
+    source = null
+    exported = 'default'
+    isType = false
+    declaration = node.declaration
+    specifier = null
+  } else {
+    local = '*'
+    source = resolveString(node.source)
+    exported = '*'
+    isType = node.exportKind === 'type'
+    specifier = null
+    declaration = null
+  }
+
+  setExport()
 }

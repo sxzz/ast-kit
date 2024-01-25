@@ -1,0 +1,281 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`walk > walkExportDeclaration > ExportAllDeclaration 'type' 1`] = `
+[
+  {
+    "exported": "*",
+    "isType": true,
+    "local": "*",
+    "source": "a",
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportAllDeclaration 'value' 1`] = `
+[
+  {
+    "exported": "*",
+    "isType": false,
+    "local": "*",
+    "source": "a",
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'class with id' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "Cls",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'class' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "default",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'expression with VariableDeclaration' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "one",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'expression' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "default",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'function with id' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "foo",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'function' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "default",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'ts declaration' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "tsFoo",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '1' 1`] = `
+[
+  {
+    "exported": "v",
+    "isType": false,
+    "local": "v",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '2' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "f",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '3' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "default",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '4' 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "default",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '5' 1`] = `
+[
+  {
+    "exported": "x",
+    "isType": false,
+    "local": "x",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '6' 1`] = `
+[
+  {
+    "exported": "x",
+    "isType": false,
+    "local": "v",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '7' 1`] = `
+[
+  {
+    "exported": "x",
+    "isType": false,
+    "local": "x",
+    "source": "mod",
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '8' 1`] = `
+[
+  {
+    "exported": "x",
+    "isType": false,
+    "local": "v",
+    "source": "mod",
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '9' 1`] = `
+[
+  {
+    "exported": "*",
+    "isType": false,
+    "local": "*",
+    "source": "mod",
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportEntry record fields '10' 1`] = `
+[
+  {
+    "exported": "ns",
+    "isType": false,
+    "local": "*",
+    "source": "mod",
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportNamedDeclaration 1`] = `
+[
+  {
+    "exported": "one",
+    "isType": false,
+    "local": "one",
+    "source": null,
+  },
+  {
+    "exported": "aliasOne",
+    "isType": false,
+    "local": "one",
+    "source": null,
+  },
+  {
+    "exported": "specifierTypeOne",
+    "isType": true,
+    "local": "one",
+    "source": null,
+  },
+  {
+    "exported": "nodeTypeOne",
+    "isType": true,
+    "local": "one",
+    "source": null,
+  },
+  {
+    "exported": "two",
+    "isType": true,
+    "local": "two",
+    "source": null,
+  },
+  {
+    "exported": "a",
+    "isType": false,
+    "local": "a",
+    "source": "z",
+  },
+  {
+    "exported": "aliasB",
+    "isType": false,
+    "local": "b",
+    "source": "z",
+  },
+  {
+    "exported": "zAll",
+    "isType": false,
+    "local": "*",
+    "source": "z",
+  },
+  {
+    "exported": "c",
+    "isType": true,
+    "local": "c",
+    "source": "z",
+  },
+  {
+    "exported": "aliasTypeD",
+    "isType": true,
+    "local": "d",
+    "source": "z",
+  },
+  {
+    "exported": "zTypeAll",
+    "isType": true,
+    "local": "*",
+    "source": "z",
+  },
+]
+`;
