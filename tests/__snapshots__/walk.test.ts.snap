@@ -273,7 +273,7 @@ exports[`walk > walkExportDeclaration > ExportNamedDeclaration 1`] = `
   },
   {
     "exported": "zTypeAll",
-    "isType": false,
+    "isType": true,
     "local": "*",
     "source": "z",
   },

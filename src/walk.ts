@@ -188,17 +188,16 @@ export function walkExportDeclaration(
   if (node.type === 'ExportNamedDeclaration') {
     if (node.specifiers.length > 0) {
       for (const s of node.specifiers) {
-        const isExportSpecifier = isTypeOf(s, 'ExportSpecifier')
-
+        const isExportSpecifier = s.type === 'ExportSpecifier'
         isType =
-          isExportSpecifier &&
-          (node.exportKind === 'type' || s.exportKind === 'type')
+          node.exportKind === 'type' ||
+          (isExportSpecifier && s.exportKind === 'type')
         local = isExportSpecifier
           ? s.local.name
-          : isTypeOf(s, 'ExportNamespaceSpecifier')
+          : s.type === 'ExportNamespaceSpecifier'
             ? '*'
             : 'default'
-        source = node.source?.value || null
+        source = node.source ? node.source.value : null
         exported = isExportSpecifier
           ? resolveString(s.exported)
           : s.exported.name
@@ -208,14 +207,14 @@ export function walkExportDeclaration(
         setExport()
       }
     } else if (node.specifiers.length === 0 && !!node.declaration) {
-      // todo handle other nodeType
-      if (isTypeOf(node.declaration, 'VariableDeclaration')) {
-        for (const d of node.declaration.declarations) {
-          if (!isTypeOf(d.id, 'Identifier')) {
+      // TODO: handle other nodeType
+      if (node.declaration.type === 'VariableDeclaration') {
+        for (const decl of node.declaration.declarations) {
+          if (decl.id.type !== 'Identifier') {
             continue
           }
 
-          local = resolveString(d.id)
+          local = resolveString(decl.id)
           source = null
           exported = local
           isType = node.exportKind === 'type'
@@ -226,7 +225,8 @@ export function walkExportDeclaration(
         }
       } else if (
         'id' in node.declaration &&
-        isTypeOf(node.declaration.id, 'Identifier')
+        node.declaration.id &&
+        node.declaration.id.type === 'Identifier'
       ) {
         local = resolveString(node.declaration.id)
         source = null
@@ -237,7 +237,7 @@ export function walkExportDeclaration(
 
         setExport()
       } else {
-        // todo handle other nodeType
+        // TODO handle other nodeType
       }
     }
 
