@@ -212,6 +212,12 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '10' 1`] = `
 exports[`walk > walkExportDeclaration > ExportNamedDeclaration 1`] = `
 [
   {
+    "exported": "clz",
+    "isType": false,
+    "local": "clz",
+    "source": null,
+  },
+  {
     "exported": "one",
     "isType": false,
     "local": "one",
@@ -228,6 +234,12 @@ exports[`walk > walkExportDeclaration > ExportNamedDeclaration 1`] = `
     "isType": true,
     "local": "one",
     "source": null,
+  },
+  {
+    "exported": "d",
+    "isType": false,
+    "local": "default",
+    "source": "z",
   },
   {
     "exported": "nodeTypeOne",

@@ -126,7 +126,7 @@ describe('walk', () => {
 
   describe('walkExportDeclaration', () => {
     function getExports(code: string) {
-      const ast = babelParse(code, 'ts')
+      const ast = babelParse(code, 'ts', { plugins: ['exportDefaultFrom'] })
 
       const exports: Record<string, ExportBinding> = {}
 
@@ -185,7 +185,9 @@ describe('walk', () => {
       const exports = getExports(`
         const one = 1
         const two = 2
+        export class clz {}
         export { one, one as aliasOne, type one as specifierTypeOne }
+        export d from 'z'
         export type { one as nodeTypeOne }
         export type { two }
   

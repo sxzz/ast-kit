@@ -210,7 +210,9 @@ export function walkExportDeclaration(
       // TODO: handle other nodeType
       if (node.declaration.type === 'VariableDeclaration') {
         for (const decl of node.declaration.declarations) {
+          /* c8 ignore next 4 */
           if (decl.id.type !== 'Identifier') {
+            // TODO destructuring
             continue
           }
 
@@ -236,6 +238,7 @@ export function walkExportDeclaration(
         specifier = null
 
         setExport()
+        /* c8 ignore next 3 */
       } else {
         // TODO handle other nodeType
       }
