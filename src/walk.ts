@@ -47,14 +47,14 @@ type SetupCallback<T extends NodeType = NodeType, N = GetNode<T>> = (
 ) => void | Promise<void>
 
 interface WalkSetup {
-  onEnter<T extends NodeType = NodeType>(
+  onEnter: <T extends NodeType = NodeType>(
     type: T | T[] | SetupFilter<GetNode<T>> | WalkCallback<t.Node, void>,
     cb?: SetupCallback<T, GetNode<T>>,
-  ): void
-  onLeave<T extends NodeType = NodeType>(
+  ) => void
+  onLeave: <T extends NodeType = NodeType>(
     type: T | T[] | SetupFilter<GetNode<T>> | WalkCallback<t.Node, void>,
     cb?: SetupCallback<T, GetNode<T>>,
-  ): void
+  ) => void
 }
 
 type SetupFilter<N extends t.Node = t.Node> = (
