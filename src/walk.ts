@@ -236,7 +236,6 @@ export function walkExportDeclaration(
         setExport()
       }
     } else if (node.specifiers.length === 0 && !!node.declaration) {
-      // TODO: handle other nodeType
       if (node.declaration.type === 'VariableDeclaration') {
         for (const decl of node.declaration.declarations) {
           /* c8 ignore next 4 */
@@ -254,11 +253,7 @@ export function walkExportDeclaration(
 
           setExport()
         }
-      } else if (
-        'id' in node.declaration &&
-        node.declaration.id &&
-        node.declaration.id.type === 'Identifier'
-      ) {
+      } else if ('id' in node.declaration && node.declaration.id) {
         local = resolveString(node.declaration.id)
         source = null
         exported = local
@@ -267,9 +262,6 @@ export function walkExportDeclaration(
         specifier = null
 
         setExport()
-        /* c8 ignore next 3 */
-      } else {
-        // TODO handle other nodeType
       }
     }
 

@@ -181,11 +181,10 @@ describe('walk', () => {
       expect(mapExports(exports)).toMatchSnapshot()
     })
 
-    test('ExportNamedDeclaration', () => {
+    test('ExportNamedDeclaration specifiers', () => {
       const exports = getExports(`
         const one = 1
         const two = 2
-        export class clz {}
         export { one, one as aliasOne, type one as specifierTypeOne }
         export d from 'z'
         export type { one as nodeTypeOne }
@@ -196,6 +195,22 @@ describe('walk', () => {
   
         export type { c, d as aliasTypeD } from "z"
         export type * as zTypeAll from "z"
+      `)
+
+      expect(mapExports(exports)).toMatchSnapshot()
+    })
+
+    test('ExportNamedDeclaration declarations', () => {
+      const exports = getExports(`
+        export let a, b
+        export const one = 1
+
+        export function foo() {}
+        export class clz {}
+        
+        export enum enumA {}
+        export interface interfaceA {}
+        export type typeA = any
       `)
 
       expect(mapExports(exports)).toMatchSnapshot()

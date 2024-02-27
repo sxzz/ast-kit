@@ -209,14 +209,61 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '10' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportNamedDeclaration 1`] = `
+exports[`walk > walkExportDeclaration > ExportNamedDeclaration declarations 1`] = `
 [
+  {
+    "exported": "a",
+    "isType": false,
+    "local": "a",
+    "source": null,
+  },
+  {
+    "exported": "b",
+    "isType": false,
+    "local": "b",
+    "source": null,
+  },
+  {
+    "exported": "one",
+    "isType": false,
+    "local": "one",
+    "source": null,
+  },
+  {
+    "exported": "foo",
+    "isType": false,
+    "local": "foo",
+    "source": null,
+  },
   {
     "exported": "clz",
     "isType": false,
     "local": "clz",
     "source": null,
   },
+  {
+    "exported": "enumA",
+    "isType": false,
+    "local": "enumA",
+    "source": null,
+  },
+  {
+    "exported": "interfaceA",
+    "isType": true,
+    "local": "interfaceA",
+    "source": null,
+  },
+  {
+    "exported": "typeA",
+    "isType": true,
+    "local": "typeA",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportNamedDeclaration specifiers 1`] = `
+[
   {
     "exported": "one",
     "isType": false,
