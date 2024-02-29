@@ -4,6 +4,7 @@ import {
   type GetNode,
   type NodeType,
   isExpressionType,
+  isLiteralType,
   isTypeOf,
 } from './check'
 import type { LiteralUnion } from './types'
@@ -203,6 +204,9 @@ export function walkExportDeclaration(
   let specifier: ExportBinding['specifier']
   let declaration: ExportBinding['declaration']
 
+  // a helper for resolveObjectProperty
+  let keyName: string
+
   function setExport() {
     exports[exported] = {
       source,
@@ -237,21 +241,20 @@ export function walkExportDeclaration(
       }
     } else if (node.specifiers.length === 0 && !!node.declaration) {
       if (node.declaration.type === 'VariableDeclaration') {
+        source = null
+        isType = node.exportKind === 'type'
+        declaration = node.declaration
+        specifier = null
+
         for (const decl of node.declaration.declarations) {
-          /* c8 ignore next 4 */
-          if (decl.id.type !== 'Identifier') {
-            // TODO destructuring
-            continue
-          }
+          const res: ResolvedLValIds[] = []
+          resolveLValIds(decl.id, res, true)
 
-          local = resolveString(decl.id)
-          source = null
-          exported = local
-          isType = node.exportKind === 'type'
-          declaration = node.declaration
-          specifier = null
-
-          setExport()
+          res.forEach(({ keyName, valueName }) => {
+            local = keyName
+            exported = valueName
+            setExport()
+          })
         }
       } else if ('id' in node.declaration && node.declaration.id) {
         local = resolveString(node.declaration.id)
@@ -288,4 +291,88 @@ export function walkExportDeclaration(
   }
 
   setExport()
+
+  function resolveLValIds(
+    n: t.LVal,
+    res: ResolvedLValIds[] = [],
+    isRoot = false,
+    identifierCb: (res: ResolvedLValIds[], name: string) => void = (
+      res,
+      name,
+    ) => res.push({ keyName: name, valueName: name }),
+  ) {
+    switch (n.type) {
+      case 'Identifier':
+        // eslint-disable-next-line no-case-declarations
+        const name = resolveString(n)
+        identifierCb?.(res, name)
+        break
+
+      case 'ArrayPattern':
+        for (const el of n.elements) {
+          el && resolveLValIds(el, res, isRoot, identifierCb)
+        }
+        break
+
+      case 'ObjectPattern':
+        for (const prop of n.properties) {
+          if (!prop) return
+
+          if (prop.type === 'ObjectProperty') {
+            resolveObjectProperty(prop, res, isRoot)
+          } else {
+            resolveLValIds(prop, res, isRoot, identifierCb)
+          }
+        }
+
+        break
+
+      case 'AssignmentPattern':
+        resolveLValIds(n.left, res, isRoot, identifierCb)
+        break
+
+      case 'RestElement':
+        resolveLValIds(n.argument, res, isRoot, identifierCb)
+        break
+
+      default:
+        return
+    }
+  }
+
+  function resolveObjectProperty(
+    n: t.ObjectProperty,
+    res: ResolvedLValIds[],
+    isRoot: boolean,
+  ) {
+    if (n.key.type === 'Identifier' || isLiteralType(n.key)) {
+      if (isRoot) {
+        keyName = resolveString(n.key)
+        isRoot = false
+      }
+    } else return
+
+    if (
+      isTypeOf(n.value, [
+        'Identifier',
+        'RestElement',
+        'AssignmentPattern',
+        'ArrayPattern',
+        'ObjectPattern',
+      ])
+    ) {
+      resolveLValIds(n.value, res, isRoot, (r, name) => {
+        if (!keyName) return
+        r.push({
+          keyName,
+          valueName: name,
+        })
+      })
+    }
+  }
+}
+
+interface ResolvedLValIds {
+  keyName: string
+  valueName: string
 }

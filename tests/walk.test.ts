@@ -216,6 +216,88 @@ describe('walk', () => {
       expect(mapExports(exports)).toMatchSnapshot()
     })
 
+    test('ExportNamedDeclaration array complex declarations', () => {
+      const exports = getExports(`
+      export const [
+        a,
+        b = 22,
+        [c, cAsign, ...cRest],
+        {
+          four,
+          fourArr: [fourInnerArray, fourInnerArrayAsign, ...fourInnerArrayRest],
+          fourObj: {
+            o,
+            p: aliasP,
+            q = 33,
+            r: aliasR = 44,
+            s: { so, sp: AliasSP, sq = 33, sr: AliasSR = 44 },
+          },
+        },
+        ...rest
+      ] = [
+        1,
+        2,
+        [3, 33, 333, 3333],
+        {
+          four: 4,
+          fourArr: [44, 444, 444],
+          fourObj: {
+            o: 1,
+            p: 2,
+            q: 3,
+            r: 4,
+            s: {
+              so: 1,
+              sp: 2,
+              sq: 3,
+              sr: 4,
+            },
+          },
+        },
+        5,
+        6,
+      ]
+      `)
+
+      expect(mapExports(exports)).toMatchSnapshot()
+    })
+
+    test('ExportNamedDeclaration object complex declarations', () => {
+      const exports = getExports(`
+      export const {
+        o,
+        p: aliasP,
+        q = 33,
+        r: aliasR = 44,
+        s: { so, sp: AliasSP, sq = 33, sr: AliasSR = 44 },
+        t: [
+          a,
+          b = 22,
+          [c, cAsign, ...cRest],
+          {
+            four,
+            fourArr: [fourInnerArray, fourInnerArrayAsign, ...fourInnerArrayRest],
+          },
+          ...rest
+        ],
+      } = {
+        o: 1,
+        p: 2,
+        q: 3,
+        r: 4,
+        s: {
+          so: 1,
+          sp: 2,
+          sq: 3,
+          sr: 4,
+        },
+        t: [1, 2, [3, 33, 333, 3333], { four: 4, fourArr: [44, 444, 444] }, 5, 6],
+      }      
+      `)
+
+      expect(mapExports(exports)).toMatchSnapshot()
+    })
+
     /**
      * @see https://tc39.es/ecma262/multipage/ecmascript-language-scripts-and-modules.html#table-export-forms-mapping-to-exportentry-records
      */
