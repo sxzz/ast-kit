@@ -303,9 +303,7 @@ export function walkExportDeclaration(
   ) {
     switch (n.type) {
       case 'Identifier':
-        // eslint-disable-next-line no-case-declarations
-        const name = resolveString(n)
-        identifierCb?.(res, name)
+        identifierCb?.(res, resolveString(n))
         break
 
       case 'ArrayPattern':
