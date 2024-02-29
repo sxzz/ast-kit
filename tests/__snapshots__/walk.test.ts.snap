@@ -485,6 +485,18 @@ exports[`walk > walkExportDeclaration > ExportNamedDeclaration object complex de
     "local": "t",
     "source": null,
   },
+  {
+    "exported": "uu",
+    "isType": false,
+    "local": "u",
+    "source": null,
+  },
+  {
+    "exported": "rootRest",
+    "isType": false,
+    "local": "rootRest",
+    "source": null,
+  },
 ]
 `;
 
