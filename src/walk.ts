@@ -239,7 +239,7 @@ export function walkExportDeclaration(
 
         setExport()
       }
-    } else if (node.specifiers.length === 0 && !!node.declaration) {
+    } else if (node.specifiers.length === 0 && node.declaration) {
       if (node.declaration.type === 'VariableDeclaration') {
         source = null
         isType = node.exportKind === 'type'
@@ -247,10 +247,10 @@ export function walkExportDeclaration(
         specifier = null
 
         for (const decl of node.declaration.declarations) {
-          const res: ResolvedLValIds[] = []
-          resolveLValIds(decl.id, res, true)
+          const resolves: ResolvedBinding[] = []
+          resolveBindings(decl.id, resolves, true)
 
-          res.forEach(({ keyName, valueName }) => {
+          resolves.forEach(([keyName, valueName]) => {
             local = keyName
             exported = valueName
             setExport()
@@ -292,23 +292,21 @@ export function walkExportDeclaration(
 
   setExport()
 
-  function resolveLValIds(
+  function resolveBindings(
     n: t.LVal,
-    res: ResolvedLValIds[] = [],
+    res: ResolvedBinding[] = [],
     isRoot = false,
-    identifierCb: (res: ResolvedLValIds[], name: string) => void = (
-      res,
-      name,
-    ) => res.push({ keyName: name, valueName: name }),
+    onId: (res: ResolvedBinding[], name: string) => void = (res, name) =>
+      res.push([name, name]),
   ) {
     switch (n.type) {
       case 'Identifier':
-        identifierCb?.(res, resolveString(n))
+        onId(res, resolveString(n))
         break
 
       case 'ArrayPattern':
         for (const el of n.elements) {
-          el && resolveLValIds(el, res, isRoot, identifierCb)
+          el && resolveBindings(el, res, isRoot, onId)
         }
         break
 
@@ -319,18 +317,18 @@ export function walkExportDeclaration(
           if (prop.type === 'ObjectProperty') {
             resolveObjectProperty(prop, res, isRoot)
           } else {
-            resolveLValIds(prop, res, isRoot, identifierCb)
+            resolveBindings(prop, res, isRoot, onId)
           }
         }
 
         break
 
       case 'AssignmentPattern':
-        resolveLValIds(n.left, res, isRoot, identifierCb)
+        resolveBindings(n.left, res, isRoot, onId)
         break
 
       case 'RestElement':
-        resolveLValIds(n.argument, res, isRoot, identifierCb)
+        resolveBindings(n.argument, res, isRoot, onId)
         break
 
       default:
@@ -340,7 +338,7 @@ export function walkExportDeclaration(
 
   function resolveObjectProperty(
     n: t.ObjectProperty,
-    res: ResolvedLValIds[],
+    res: ResolvedBinding[],
     isRoot: boolean,
   ) {
     if (n.key.type === 'Identifier' || isLiteralType(n.key)) {
@@ -359,18 +357,12 @@ export function walkExportDeclaration(
         'ObjectPattern',
       ])
     ) {
-      resolveLValIds(n.value, res, isRoot, (r, name) => {
+      resolveBindings(n.value, res, isRoot, (r, name) => {
         if (!keyName) return
-        r.push({
-          keyName,
-          valueName: name,
-        })
+        r.push([keyName, name])
       })
     }
   }
 }
 
-interface ResolvedLValIds {
-  keyName: string
-  valueName: string
-}
+type ResolvedBinding = [key: string, value: string]
