@@ -1,12 +1,26 @@
 import type * as t from '@babel/types'
 
+/**
+ * All possible node types.
+ */
 export type NodeType = t.Node['type'] | 'Function' | 'Literal' | 'Expression'
+
+/**
+ * Represents the corresponding node based on the given node type.
+ */
 export type GetNode<K extends NodeType> = K extends 'Function'
   ? t.Function
   : K extends 'Literal'
     ? t.Literal
     : Extract<t.Node, { type: K }>
 
+/**
+ * Checks if the given node matches the specified type(s).
+ *
+ * @param node - The node to check.
+ * @param types - The type(s) to match against. It can be a single type or an array of types.
+ * @returns True if the node matches the specified type(s), false otherwise.
+ */
 export function isTypeOf<K extends NodeType>(
   node: t.Node | undefined | null,
   types: K | Readonly<K[]>,
@@ -25,6 +39,13 @@ export function isTypeOf<K extends NodeType>(
   })
 }
 
+/**
+ * Checks if the given node is a CallExpression with the specified callee.
+ *
+ * @param node - The node to check.
+ * @param test - The callee to compare against. It can be a string, an array of strings, or a function that takes a string and returns a boolean.
+ * @returns True if the node is a CallExpression with the specified callee, false otherwise.
+ */
 export function isCallOf(
   node: t.Node | null | undefined,
   test: string | string[] | ((id: string) => boolean),
@@ -41,6 +62,13 @@ export function isCallOf(
   )
 }
 
+/**
+ * Checks if the given node is an Identifier with the specified name.
+ *
+ * @param node - The node to check.
+ * @param test - The name to compare against. It can be a string or an array of strings.
+ * @returns True if the node is an Identifier with the specified name, false otherwise.
+ */
 export function isIdentifierOf(
   node: t.Node | undefined | null,
   test: string | string[],
@@ -52,18 +80,36 @@ export function isIdentifierOf(
   )
 }
 
+/**
+ * Checks if the given node is a literal type.
+ *
+ * @param node - The node to check.
+ * @returns True if the node is a literal type, false otherwise.
+ */
 export function isLiteralType(
   node: t.Node | undefined | null,
 ): node is t.Literal {
   return !!node && node.type.endsWith('Literal')
 }
 
+/**
+ * Checks if the given node is a function type.
+ *
+ * @param node - The node to check.
+ * @returns True if the node is a function type, false otherwise.
+ */
 export function isFunctionType(
   node: t.Node | undefined | null,
 ): node is t.Function {
   return !!node && /Function(?:Expression|Declaration)$|Method$/.test(node.type)
 }
 
+/**
+ * Checks if the given node is an expression type.
+ *
+ * @param node - The node to check.
+ * @returns True if the node is an expression type, false otherwise.
+ */
 export function isExpressionType(
   node: t.Node | null | undefined,
 ): node is t.Expression {
@@ -87,14 +133,18 @@ export function isExpressionType(
 }
 
 /**
- * Check if the input `node` is a reference to a bound variable.
+ * Checks if the input `node` is a reference to a bound variable.
  *
  * Copied from https://github.com/babel/babel/blob/main/packages/babel-types/src/validators/isReferenced.ts
- * To avoid runtime dependency on @babel/types (which includes process references)
+ *
+ * To avoid runtime dependency on `@babel/types` (which includes process references)
  * This file should not change very often in babel but we may need to keep it
  * up-to-date from time to time.
  *
- * https://github.com/babel/babel/blob/main/LICENSE
+ * @param node - The node to check.
+ * @param parent - The parent node of the input `node`.
+ * @param grandparent - The grandparent node of the input `node`.
+ * @returns True if the input `node` is a reference to a bound variable, false otherwise.
  */
 export function isReferenced(
   node: t.Node,

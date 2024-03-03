@@ -28,11 +28,28 @@ interface WalkHandlers<T, R> {
   leave?: WalkCallback<T, R>
 }
 
+/**
+ * Walks the AST and applies the provided handlers.
+ *
+ * @template T - The type of the AST node.
+ * @param {T} node - The root node of the AST.
+ * @param {WalkHandlers<T, void>} hooks - The handlers to be applied during the walk.
+ * @returns {T | null} - The modified AST node or null if the node is removed.
+ */
 export const walkAST: <T = t.Node>(
   node: T,
   hooks: WalkHandlers<T, void>,
 ) => T | null = walk as any
 
+/**
+ * Asynchronously walks the AST starting from the given node,
+ * applying the provided handlers to each node encountered.
+ *
+ * @template T - The type of the AST node.
+ * @param {T} node - The root node of the AST.
+ * @param {WalkHandlers<T, Promise<void>>} handlers - The handlers to be applied to each node.
+ * @returns {Promise<T | null>} - A promise that resolves to the modified AST or null if the AST is empty.
+ */
 export const walkASTAsync: <T = t.Node>(
   node: T,
   handlers: WalkHandlers<T, Promise<void>>,
@@ -65,6 +82,7 @@ type SetupFilter<N extends t.Node = t.Node> = (
   index: number | null | undefined,
 ) => node is N
 
+/** @deprecated */
 export async function walkASTSetup(
   node: t.Node,
   cb: (setup: WalkSetup) => void | Promise<void>,
@@ -124,6 +142,12 @@ export interface ImportBinding {
   isType: boolean
 }
 
+/**
+ * Walks through an ImportDeclaration node and populates the provided imports object.
+ *
+ * @param imports - The object to store the import bindings.
+ * @param node - The ImportDeclaration node to walk through.
+ */
 export function walkImportDeclaration(
   imports: Record<string, ImportBinding>,
   node: t.ImportDeclaration,
@@ -163,6 +187,11 @@ export interface ExportBinding {
   declaration: t.Declaration | t.ExportDefaultDeclaration['declaration'] | null
 }
 
+/**
+ * Walks through an ExportDeclaration node and populates the exports object with the relevant information.
+ * @param exports - The object to store the export information.
+ * @param node - The ExportDeclaration node to process.
+ */
 export function walkExportDeclaration(
   exports: Record<string, ExportBinding>,
   node: t.ExportDeclaration,

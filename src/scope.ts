@@ -134,6 +134,14 @@ class Scope implements AttachedScope {
 
 // copied from https://github.com/rollup/plugins/blob/master/packages/pluginutils/src/attachScopes.ts
 // MIT License
+
+/**
+ * Attaches scopes to the given AST
+ *
+ * @param ast - The AST to attach scopes to.
+ * @param propertyName - The name of the property to attach the scopes to. Default is 'scope'.
+ * @returns The root scope of the AST.
+ */
 export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
   let scope = new Scope()
 

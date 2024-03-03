@@ -62,6 +62,14 @@ function getParserOptions(
   }
 }
 
+/**
+ * Parses the given code using Babel parser.
+ *
+ * @param code - The code to parse.
+ * @param lang - The language of the code (optional).
+ * @param options - The parser options (optional).
+ * @returns The parse result, including the program, errors, and comments.
+ */
 export function babelParse(
   code: string,
   lang?: string,
@@ -74,6 +82,15 @@ export function babelParse(
   return { ...program, errors, comments }
 }
 
+/**
+ * Parses the given code using the Babel parser as an expression.
+ *
+ * @template T - The type of the parsed AST node.
+ * @param {string} code - The code to parse.
+ * @param {string} [lang] - The language to parse. Defaults to undefined.
+ * @param {ParserOptions} [options] - The options to configure the parser. Defaults to an empty object.
+ * @returns {ParseResult<T>} - The result of the parsing operation.
+ */
 export function babelParseExpression<T extends t.Node = t.Expression>(
   code: string,
   lang?: string,

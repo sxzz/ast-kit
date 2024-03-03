@@ -1,6 +1,12 @@
 import { isLiteralType, isTypeOf } from './check'
 import type * as t from '@babel/types'
 
+/**
+ * Resolves a string representation of the given node.
+ * @param node The node to resolve.
+ * @param computed Whether the node is computed or not.
+ * @returns The resolved string representation of the node.
+ */
 export function resolveString(
   node:
     | string
@@ -25,6 +31,11 @@ export function resolveString(
   return String(resolveLiteral(node))
 }
 
+/**
+ * Resolves the value of a literal node.
+ * @param node The literal node to resolve.
+ * @returns The resolved value of the literal node.
+ */
 export function resolveLiteral(
   node: t.Literal,
 ): string | number | boolean | null | RegExp | bigint {
@@ -49,6 +60,11 @@ export function resolveLiteral(
   }
 }
 
+/**
+ * Resolves a template literal node into a string.
+ * @param node The template literal node to resolve.
+ * @returns The resolved string representation of the template literal.
+ */
 export function resolveTemplateLiteral(node: t.TemplateLiteral): string {
   return node.quasis.reduce((prev, curr, idx) => {
     const expr = node.expressions[idx]
@@ -61,6 +77,11 @@ export function resolveTemplateLiteral(node: t.TemplateLiteral): string {
   }, '')
 }
 
+/**
+ * Resolves the identifier node into an array of strings.
+ * @param node The identifier node to resolve.
+ * @returns An array of resolved strings representing the identifier.
+ */
 export function resolveIdentifier(
   node:
     | t.Identifier
@@ -106,6 +127,12 @@ export type ObjectPropertyLike =
   | t.TSPropertySignature
   | t.ImportAttribute
 
+/**
+ * Resolves the key of an object property-like node.
+ * @param node The object property-like node to resolve.
+ * @param raw Whether to return the raw value of the key or not.
+ * @returns The resolved key of the object property-like node.
+ */
 export function resolveObjectKey(
   node: ObjectPropertyLike,
   raw?: false,
