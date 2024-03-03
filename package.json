@@ -34,7 +34,7 @@
     "lint:fix": "pnpm run lint --fix",
     "build": "tsup",
     "test": "vitest",
-    "release": "bumpp && pnpm publish",
+    "release": "bumpp package.json jsr.json && pnpm publish",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "pnpm run build"
   },

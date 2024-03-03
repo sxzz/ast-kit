@@ -2,7 +2,13 @@ import { parseExpression } from '@babel/parser'
 import { isTypeOf } from './check'
 import type * as t from '@babel/types'
 
-export const TS_NODE_TYPES = [
+export const TS_NODE_TYPES: readonly [
+  'TSAsExpression',
+  'TSTypeAssertion',
+  'TSNonNullExpression',
+  'TSInstantiationExpression',
+  'TSSatisfiesExpression',
+] = [
   'TSAsExpression', // foo as number
   'TSTypeAssertion', // (<number>foo)
   'TSNonNullExpression', // foo!
