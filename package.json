@@ -1,6 +1,6 @@
 {
   "name": "ast-kit",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "packageManager": "pnpm@8.15.4",
   "description": "A toolkit for easy AST generation and manipulation.",
   "type": "module",
