@@ -3,10 +3,8 @@ import {
   attachScopes as _attachScopes,
 } from '@rollup/pluginutils'
 
-const attachScopes = _attachScopes as <T>(
-  ast: T,
-  propertyName?: string,
-) => AttachedScope
+const attachScopes: <T>(ast: T, propertyName?: string) => AttachedScope =
+  _attachScopes as any
 export { type AttachedScope, attachScopes }
 
 export type WithScope<T> = T & {

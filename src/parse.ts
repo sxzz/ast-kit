@@ -78,7 +78,7 @@ export function babelParseExpression<T extends t.Node = t.Expression>(
   code: string,
   lang?: string,
   options: ParserOptions = {},
-) {
+): ParseResult<T> {
   return parseExpression(
     code,
     getParserOptions(lang, options),

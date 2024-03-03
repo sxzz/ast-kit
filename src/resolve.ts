@@ -10,7 +10,7 @@ export function resolveString(
     | t.ThisExpression
     | t.Super,
   computed = false,
-) {
+): string {
   if (typeof node === 'string') return node
   else if (node.type === 'Identifier') {
     if (computed) throw new TypeError('Invalid Identifier')
@@ -49,7 +49,7 @@ export function resolveLiteral(
   }
 }
 
-export function resolveTemplateLiteral(node: t.TemplateLiteral) {
+export function resolveTemplateLiteral(node: t.TemplateLiteral): string {
   return node.quasis.reduce((prev, curr, idx) => {
     const expr = node.expressions[idx]
     if (expr) {
@@ -111,7 +111,10 @@ export function resolveObjectKey(
   raw?: false,
 ): string | number
 export function resolveObjectKey(node: ObjectPropertyLike, raw: true): string
-export function resolveObjectKey(node: ObjectPropertyLike, raw = false) {
+export function resolveObjectKey(
+  node: ObjectPropertyLike,
+  raw = false,
+): string | number {
   // @ts-expect-error computed is missing in ImportAttribute
   const { key, computed } = node
   switch (key.type) {

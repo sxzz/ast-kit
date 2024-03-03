@@ -5,7 +5,7 @@ export function locateTrailingComma(
   start: number,
   end: number,
   comments: t.Comment[] = [],
-) {
+): number {
   let i = start
   while (i < end) {
     if (comments.some((c) => i >= c.start! && i < c.end!)) {

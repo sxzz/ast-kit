@@ -68,7 +68,7 @@ type SetupFilter<N extends t.Node = t.Node> = (
 export async function walkASTSetup(
   node: t.Node,
   cb: (setup: WalkSetup) => void | Promise<void>,
-) {
+): Promise<t.Node | null> {
   const callbacks: Record<
     'enter' | 'leave',
     { filter: SetupFilter; cb?: SetupCallback<any, any> }[]
@@ -127,7 +127,7 @@ export interface ImportBinding {
 export function walkImportDeclaration(
   imports: Record<string, ImportBinding>,
   node: t.ImportDeclaration,
-) {
+): void {
   if (node.importKind === 'type') return
   const source = node.source.value
   for (const specifier of node.specifiers) {
@@ -166,7 +166,7 @@ export interface ExportBinding {
 export function walkExportDeclaration(
   exports: Record<string, ExportBinding>,
   node: t.ExportDeclaration,
-) {
+): void {
   let local: ExportBinding['local']
   let exported: ExportBinding['exported']
   let isType: ExportBinding['isType']

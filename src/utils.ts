@@ -17,7 +17,7 @@ export function unwrapTSNode(node: t.Node): t.Node {
   }
 }
 
-export function escapeKey(rawKey: string) {
+export function escapeKey(rawKey: string): string {
   if (String(+rawKey) === rawKey) return rawKey
   try {
     const node = parseExpression(`({${rawKey}: 1})`) as t.ObjectExpression
