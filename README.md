@@ -4,13 +4,15 @@ A toolkit for easy AST generation and manipulation.
 
 [API Reference](https://paka.dev/npm/ast-kit/api)
 
+## Requirements
+
+- Node.js >= 16.14.0
+
 ## Install
 
 ```bash
 npm i ast-kit
 ```
-
-Node.js >= 16.14.0 required
 
 ## Sponsors
 
@@ -22,4 +24,4 @@ Node.js >= 16.14.0 required
 
 ## License
 
-[MIT](./LICENSE) License © 2023 [三咲智子](https://github.com/sxzz)
+[MIT](./LICENSE) License © 2023-PRESENT [三咲智子](https://github.com/sxzz)
