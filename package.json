@@ -2,7 +2,7 @@
   "name": "ast-kit",
   "version": "0.11.3",
   "packageManager": "pnpm@8.15.4",
-  "description": "AST Toolkit.",
+  "description": "A toolkit for easy AST generation and manipulation.",
   "type": "module",
   "license": "MIT",
   "homepage": "https://github.com/sxzz/ast-kit#readme",
