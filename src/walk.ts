@@ -4,9 +4,9 @@ import {
   type GetNode,
   type NodeType,
   isExpressionType,
-  isLiteralType,
   isTypeOf,
 } from './check'
+import { extractBindings } from './extract'
 import type { LiteralUnion } from './types'
 import type * as t from '@babel/types'
 
@@ -204,9 +204,6 @@ export function walkExportDeclaration(
   let specifier: ExportBinding['specifier']
   let declaration: ExportBinding['declaration']
 
-  // a helper for resolveObjectProperty
-  let keyName: string
-
   function setExport() {
     exports[exported] = {
       source,
@@ -247,8 +244,9 @@ export function walkExportDeclaration(
         specifier = null
 
         for (const decl of node.declaration.declarations) {
-          const resolves: ResolvedBinding[] = []
-          resolveBindings(decl.id, resolves, true)
+          const resolves = extractBindings(decl.id, [], {
+            isRoot: true,
+          })
 
           resolves.forEach(([keyName, valueName]) => {
             local = keyName
@@ -291,78 +289,4 @@ export function walkExportDeclaration(
   }
 
   setExport()
-
-  function resolveBindings(
-    n: t.LVal,
-    res: ResolvedBinding[] = [],
-    isRoot = false,
-    onId: (res: ResolvedBinding[], name: string) => void = (res, name) =>
-      res.push([name, name]),
-  ) {
-    switch (n.type) {
-      case 'Identifier':
-        onId(res, resolveString(n))
-        break
-
-      case 'ArrayPattern':
-        for (const el of n.elements) {
-          el && resolveBindings(el, res, isRoot, onId)
-        }
-        break
-
-      case 'ObjectPattern':
-        for (const prop of n.properties) {
-          if (!prop) return
-
-          if (prop.type === 'ObjectProperty') {
-            resolveObjectProperty(prop, res, isRoot)
-          } else {
-            resolveBindings(prop, res, isRoot, onId)
-          }
-        }
-
-        break
-
-      case 'AssignmentPattern':
-        resolveBindings(n.left, res, isRoot, onId)
-        break
-
-      case 'RestElement':
-        resolveBindings(n.argument, res, isRoot, onId)
-        break
-
-      default:
-        return
-    }
-  }
-
-  function resolveObjectProperty(
-    n: t.ObjectProperty,
-    res: ResolvedBinding[],
-    isRoot: boolean,
-  ) {
-    if (n.key.type === 'Identifier' || isLiteralType(n.key)) {
-      if (isRoot) {
-        keyName = resolveString(n.key)
-        isRoot = false
-      }
-    } else return
-
-    if (
-      isTypeOf(n.value, [
-        'Identifier',
-        'RestElement',
-        'AssignmentPattern',
-        'ArrayPattern',
-        'ObjectPattern',
-      ])
-    ) {
-      resolveBindings(n.value, res, isRoot, (r, name) => {
-        if (!keyName) return
-        r.push([keyName, name])
-      })
-    }
-  }
 }
-
-type ResolvedBinding = [key: string, value: string]
