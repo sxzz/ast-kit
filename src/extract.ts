@@ -15,14 +15,14 @@ export function extractIdentifiers(
       identifiers.push(node)
       break
 
-    case 'MemberExpression':
-      // eslint-disable-next-line no-case-declarations
+    case 'MemberExpression': {
       let object: any = node
       while (object.type === 'MemberExpression') {
         object = object.object
       }
       identifiers.push(object)
       break
+    }
 
     case 'ObjectPattern':
       for (const prop of node.properties) {
@@ -36,7 +36,7 @@ export function extractIdentifiers(
 
     case 'ArrayPattern':
       node.elements.forEach((element) => {
-        if (element) extractIdentifiers(element, identifiers)
+        element && extractIdentifiers(element, identifiers)
       })
       break
 
