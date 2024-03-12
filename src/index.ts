@@ -1,5 +1,6 @@
 export * from './check'
 export * from './create'
+export * from './extract'
 export * from './lang'
 export * from './loc'
 export * from './parse'
