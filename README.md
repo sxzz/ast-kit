@@ -1,4 +1,4 @@
-# ast-kit [![npm](https://img.shields.io/npm/v/ast-kit.svg)](https://npmjs.com/package/ast-kit) [![jsr](https://img.shields.io/endpoint?url=https%3A%2F%2Fjsr-api.sxzz.moe%2Fbadge%2F%40sxzz%2Fast-kit)](https://jsr.io/@sxzz/ast-kit) [![Unit Test](https://github.com/sxzz/ast-kit/actions/workflows/unit-test.yml/badge.svg)](https://github.com/sxzz/ast-kit/actions/workflows/unit-test.yml) [![codecov](https://codecov.io/gh/sxzz/ast-kit/graph/badge.svg?token=MHTCPNMZAK)](https://codecov.io/gh/sxzz/ast-kit)
+# ast-kit [![npm](https://img.shields.io/npm/v/ast-kit.svg)](https://npmjs.com/package/ast-kit) [![JSR](https://jsr.io/badges/@sxzz/ast-kit)](https://jsr.io/@sxzz/ast-kit) [![Unit Test](https://github.com/sxzz/ast-kit/actions/workflows/unit-test.yml/badge.svg)](https://github.com/sxzz/ast-kit/actions/workflows/unit-test.yml) [![codecov](https://codecov.io/gh/sxzz/ast-kit/graph/badge.svg?token=MHTCPNMZAK)](https://codecov.io/gh/sxzz/ast-kit)
 
 A toolkit for easy AST generation and manipulation.
 
