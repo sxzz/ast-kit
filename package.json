@@ -46,7 +46,7 @@
     "@babel/types": "^7.24.0",
     "@sxzz/eslint-config": "^3.8.7",
     "@sxzz/prettier-config": "^2.0.1",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.2",
     "@vitest/coverage-v8": "^1.4.0",
     "@vitest/ui": "^1.4.0",
     "bumpp": "^9.4.0",
