@@ -1,7 +1,7 @@
 {
   "name": "ast-kit",
   "version": "0.12.1",
-  "packageManager": "pnpm@8.15.5",
+  "packageManager": "pnpm@8.15.6",
   "description": "A toolkit for easy AST generation and manipulation.",
   "type": "module",
   "license": "MIT",
@@ -39,14 +39,14 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@babel/parser": "^7.24.1",
+    "@babel/parser": "^7.24.4",
     "pathe": "^1.1.2"
   },
   "devDependencies": {
     "@babel/types": "^7.24.0",
     "@sxzz/eslint-config": "^3.8.7",
     "@sxzz/prettier-config": "^2.0.1",
-    "@types/node": "^20.12.2",
+    "@types/node": "^20.12.5",
     "@vitest/coverage-v8": "^1.4.0",
     "@vitest/ui": "^1.4.0",
     "bumpp": "^9.4.0",
@@ -55,8 +55,8 @@
     "fast-glob": "^3.3.2",
     "prettier": "^3.2.5",
     "tsup": "^8.0.2",
-    "tsx": "^4.7.1",
-    "typescript": "^5.4.3",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.4",
     "vitest": "^1.4.0"
   },
   "engines": {
