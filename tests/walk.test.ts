@@ -32,10 +32,8 @@ describe('walk', () => {
         walkImportDeclaration(imports, stmt)
     }
 
-    expect(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      Object.values(imports).map(({ specifier, ...i }) => i),
-    ).toMatchInlineSnapshot(`
+    expect(Object.values(imports).map(({ specifier, ...i }) => i))
+      .toMatchInlineSnapshot(`
       [
         {
           "imported": "a",
@@ -148,7 +146,6 @@ describe('walk', () => {
 
     function mapExports(exports: Record<string, ExportBinding>) {
       return Object.values(exports).map(
-        // eslint-disable-next-line unused-imports/no-unused-vars
         ({ declaration, specifier, ...rest }) => rest,
       )
     }
