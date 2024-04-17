@@ -1,3 +1,6 @@
+/**
+ * A type that represents a literal union.
+ */
 export type LiteralUnion<
   LiteralType,
   BaseType extends

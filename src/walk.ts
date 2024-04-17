@@ -174,6 +174,9 @@ export function walkImportDeclaration(
   }
 }
 
+/**
+ * Represents an export binding.
+ */
 export interface ExportBinding {
   local: string
   exported: LiteralUnion<'*' | 'default'>
