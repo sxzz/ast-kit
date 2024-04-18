@@ -45,7 +45,7 @@
   "devDependencies": {
     "@babel/types": "^7.24.0",
     "@sxzz/eslint-config": "^3.9.1",
-    "@sxzz/prettier-config": "^2.0.1",
+    "@sxzz/prettier-config": "^2.0.2",
     "@types/node": "^20.12.7",
     "@vitest/coverage-v8": "^1.5.0",
     "@vitest/ui": "^1.5.0",
