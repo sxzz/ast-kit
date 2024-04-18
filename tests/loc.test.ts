@@ -34,5 +34,8 @@ describe('loc', () => {
         [{ type: 'CommentLine', value: ' a,', start: 13, end: 18 }],
       ),
     ).toBe(21)
+
+    expect(locateTrailingComma('a', 0, 1)).toBe(-1)
+    expect(locateTrailingComma('fn(a)', 0, 5)).toBe(-1)
   })
 })
