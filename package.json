@@ -1,7 +1,7 @@
 {
   "name": "ast-kit",
   "version": "0.12.1",
-  "packageManager": "pnpm@8.15.7",
+  "packageManager": "pnpm@9.0.5",
   "description": "A toolkit for easy AST generation and manipulation.",
   "type": "module",
   "license": "MIT",
