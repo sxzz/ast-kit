@@ -2,7 +2,7 @@
   "name": "ast-kit",
   "version": "0.12.1",
   "packageManager": "pnpm@9.0.6",
-  "description": "A toolkit for easy AST generation and manipulation.",
+  "description": "A toolkit for easy Babel AST generation and manipulation.",
   "type": "module",
   "license": "MIT",
   "homepage": "https://github.com/sxzz/ast-kit#readme",

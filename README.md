@@ -1,6 +1,6 @@
 # ast-kit [![npm](https://img.shields.io/npm/v/ast-kit.svg)](https://npmjs.com/package/ast-kit) [![JSR](https://jsr.io/badges/@sxzz/ast-kit)](https://jsr.io/@sxzz/ast-kit) [![Unit Test](https://github.com/sxzz/ast-kit/actions/workflows/unit-test.yml/badge.svg)](https://github.com/sxzz/ast-kit/actions/workflows/unit-test.yml) [![codecov](https://codecov.io/gh/sxzz/ast-kit/graph/badge.svg?token=MHTCPNMZAK)](https://codecov.io/gh/sxzz/ast-kit)
 
-A toolkit for easy AST generation and manipulation.
+A toolkit for easy Babel AST generation and manipulation.
 
 [API Reference](https://paka.dev/npm/ast-kit/api)
 
