@@ -1,12 +1,20 @@
 import type * as t from '@babel/types'
+// @ts-ignore
 import type * as estree from 'estree'
+
+type IfAny<T, Y, N> = 0 extends 1 & T ? Y : N
+type IfEstree<T> = IfAny<typeof estree, never, T>
 
 export type Node =
   | t.Node
-  | estree.Node
-  | estree.MaybeNamedClassDeclaration
-  | estree.MaybeNamedFunctionDeclaration
-export type Literal = t.Literal | estree.Literal | estree.TemplateLiteral
+  | IfEstree<
+      | estree.Node
+      | estree.MaybeNamedClassDeclaration
+      | estree.MaybeNamedFunctionDeclaration
+    >
+export type Literal =
+  | t.Literal
+  | IfEstree<estree.Literal | estree.TemplateLiteral>
 
 /**
  * All possible node types.
@@ -22,11 +30,11 @@ export type NodeType =
  * Represents the corresponding node based on the given node type.
  */
 export type GetNode<K extends NodeType> = K extends 'Function'
-  ? t.Function | estree.Function
+  ? t.Function | IfEstree<estree.Function>
   : K extends 'Expression'
-    ? t.Expression | estree.Expression
+    ? t.Expression | IfEstree<estree.Expression>
     : K extends 'Declaration'
-      ? t.Declaration | estree.Declaration
+      ? t.Declaration | IfEstree<estree.Declaration>
       : K extends 'Literal'
         ? Literal
         : Extract<Node, { type: K }>
