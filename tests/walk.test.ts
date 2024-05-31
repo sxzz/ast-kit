@@ -178,11 +178,10 @@ describe('walk', () => {
       expect(mapExports(exports)).toMatchSnapshot()
     })
 
-    test('ExportNamedDeclaration', () => {
+    test('ExportNamedDeclaration specifiers', () => {
       const exports = getExports(`
         const one = 1
         const two = 2
-        export class clz {}
         export { one, one as aliasOne, type one as specifierTypeOne }
         export d from 'z'
         export type { one as nodeTypeOne }
@@ -193,6 +192,108 @@ describe('walk', () => {
   
         export type { c, d as aliasTypeD } from "z"
         export type * as zTypeAll from "z"
+      `)
+
+      expect(mapExports(exports)).toMatchSnapshot()
+    })
+
+    test('ExportNamedDeclaration declarations', () => {
+      const exports = getExports(`
+        export let a, b
+        export const one = 1
+
+        export function foo() {}
+        export class clz {}
+        
+        export enum enumA {}
+        export interface interfaceA {}
+        export type typeA = any
+      `)
+
+      expect(mapExports(exports)).toMatchSnapshot()
+    })
+
+    test('ExportNamedDeclaration array complex declarations', () => {
+      const exports = getExports(`
+      export const [
+        a,
+        b = 22,
+        [c, cAsign, ...cRest],
+        {
+          four,
+          fourArr: [fourInnerArray, fourInnerArrayAsign, ...fourInnerArrayRest],
+          fourObj: {
+            o,
+            p: aliasP,
+            q = 33,
+            r: aliasR = 44,
+            s: { so, sp: AliasSP, sq = 33, sr: AliasSR = 44 },
+          },
+        },
+        ...rest
+      ] = [
+        1,
+        2,
+        [3, 33, 333, 3333],
+        {
+          four: 4,
+          fourArr: [44, 444, 444],
+          fourObj: {
+            o: 1,
+            p: 2,
+            q: 3,
+            r: 4,
+            s: {
+              so: 1,
+              sp: 2,
+              sq: 3,
+              sr: 4,
+            },
+          },
+        },
+        5,
+        6,
+      ]
+      `)
+
+      expect(mapExports(exports)).toMatchSnapshot()
+    })
+
+    test('ExportNamedDeclaration object complex declarations', () => {
+      const exports = getExports(`
+      export const {
+        o,
+        p: aliasP,
+        q = 33,
+        r: aliasR = 44,
+        s: { so, sp: AliasSP, sq = 33, sr: AliasSR = 44 },
+        t: [
+          a,
+          b = 22,
+          [c, cAsign, ...cRest],
+          {
+            four,
+            fourArr: [fourInnerArray, fourInnerArrayAsign, ...fourInnerArrayRest],
+          },
+          ...rest
+        ],
+        ["u"]: uu,
+        ...rootRest
+      } = {
+        o: 1,
+        p: 2,
+        q: 3,
+        r: 4,
+        s: {
+          so: 1,
+          sp: 2,
+          sq: 3,
+          sr: 4,
+        },
+        t: [1, 2, [3, 33, 333, 3333], { four: 4, fourArr: [44, 444, 444] }, 5, 6],
+        u: 7,
+        v: 8
+      }      
       `)
 
       expect(mapExports(exports)).toMatchSnapshot()

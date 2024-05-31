@@ -209,14 +209,299 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '10' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportNamedDeclaration 1`] = `
+exports[`walk > walkExportDeclaration > ExportNamedDeclaration array complex declarations 1`] = `
 [
+  {
+    "exported": "a",
+    "isType": false,
+    "local": "a",
+    "source": null,
+  },
+  {
+    "exported": "b",
+    "isType": false,
+    "local": "b",
+    "source": null,
+  },
+  {
+    "exported": "c",
+    "isType": false,
+    "local": "c",
+    "source": null,
+  },
+  {
+    "exported": "cAsign",
+    "isType": false,
+    "local": "cAsign",
+    "source": null,
+  },
+  {
+    "exported": "cRest",
+    "isType": false,
+    "local": "cRest",
+    "source": null,
+  },
+  {
+    "exported": "four",
+    "isType": false,
+    "local": "four",
+    "source": null,
+  },
+  {
+    "exported": "fourInnerArray",
+    "isType": false,
+    "local": "fourArr",
+    "source": null,
+  },
+  {
+    "exported": "fourInnerArrayAsign",
+    "isType": false,
+    "local": "fourArr",
+    "source": null,
+  },
+  {
+    "exported": "fourInnerArrayRest",
+    "isType": false,
+    "local": "fourArr",
+    "source": null,
+  },
+  {
+    "exported": "o",
+    "isType": false,
+    "local": "fourObj",
+    "source": null,
+  },
+  {
+    "exported": "aliasP",
+    "isType": false,
+    "local": "fourObj",
+    "source": null,
+  },
+  {
+    "exported": "q",
+    "isType": false,
+    "local": "fourObj",
+    "source": null,
+  },
+  {
+    "exported": "aliasR",
+    "isType": false,
+    "local": "fourObj",
+    "source": null,
+  },
+  {
+    "exported": "so",
+    "isType": false,
+    "local": "fourObj",
+    "source": null,
+  },
+  {
+    "exported": "AliasSP",
+    "isType": false,
+    "local": "fourObj",
+    "source": null,
+  },
+  {
+    "exported": "sq",
+    "isType": false,
+    "local": "fourObj",
+    "source": null,
+  },
+  {
+    "exported": "AliasSR",
+    "isType": false,
+    "local": "fourObj",
+    "source": null,
+  },
+  {
+    "exported": "rest",
+    "isType": false,
+    "local": "rest",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportNamedDeclaration declarations 1`] = `
+[
+  {
+    "exported": "a",
+    "isType": false,
+    "local": "a",
+    "source": null,
+  },
+  {
+    "exported": "b",
+    "isType": false,
+    "local": "b",
+    "source": null,
+  },
+  {
+    "exported": "one",
+    "isType": false,
+    "local": "one",
+    "source": null,
+  },
+  {
+    "exported": "foo",
+    "isType": false,
+    "local": "foo",
+    "source": null,
+  },
   {
     "exported": "clz",
     "isType": false,
     "local": "clz",
     "source": null,
   },
+  {
+    "exported": "enumA",
+    "isType": false,
+    "local": "enumA",
+    "source": null,
+  },
+  {
+    "exported": "interfaceA",
+    "isType": true,
+    "local": "interfaceA",
+    "source": null,
+  },
+  {
+    "exported": "typeA",
+    "isType": true,
+    "local": "typeA",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportNamedDeclaration object complex declarations 1`] = `
+[
+  {
+    "exported": "o",
+    "isType": false,
+    "local": "o",
+    "source": null,
+  },
+  {
+    "exported": "aliasP",
+    "isType": false,
+    "local": "p",
+    "source": null,
+  },
+  {
+    "exported": "q",
+    "isType": false,
+    "local": "q",
+    "source": null,
+  },
+  {
+    "exported": "aliasR",
+    "isType": false,
+    "local": "r",
+    "source": null,
+  },
+  {
+    "exported": "so",
+    "isType": false,
+    "local": "s",
+    "source": null,
+  },
+  {
+    "exported": "AliasSP",
+    "isType": false,
+    "local": "s",
+    "source": null,
+  },
+  {
+    "exported": "sq",
+    "isType": false,
+    "local": "s",
+    "source": null,
+  },
+  {
+    "exported": "AliasSR",
+    "isType": false,
+    "local": "s",
+    "source": null,
+  },
+  {
+    "exported": "a",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "b",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "c",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "cAsign",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "cRest",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "four",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "fourInnerArray",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "fourInnerArrayAsign",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "fourInnerArrayRest",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "rest",
+    "isType": false,
+    "local": "t",
+    "source": null,
+  },
+  {
+    "exported": "uu",
+    "isType": false,
+    "local": "u",
+    "source": null,
+  },
+  {
+    "exported": "rootRest",
+    "isType": false,
+    "local": "rootRest",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportNamedDeclaration specifiers 1`] = `
+[
   {
     "exported": "one",
     "isType": false,

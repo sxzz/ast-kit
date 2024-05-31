@@ -6,6 +6,7 @@ import {
   isExpressionType,
   isTypeOf,
 } from './check'
+import { extractBindings } from './extract'
 import type { LiteralUnion } from './types'
 import type * as t from '@babel/types'
 
@@ -238,30 +239,25 @@ export function walkExportDeclaration(
 
         setExport()
       }
-    } else if (node.specifiers.length === 0 && !!node.declaration) {
-      // TODO: handle other nodeType
+    } else if (node.specifiers.length === 0 && node.declaration) {
       if (node.declaration.type === 'VariableDeclaration') {
+        source = null
+        isType = node.exportKind === 'type'
+        declaration = node.declaration
+        specifier = null
+
         for (const decl of node.declaration.declarations) {
-          /* c8 ignore next 4 */
-          if (decl.id.type !== 'Identifier') {
-            // TODO destructuring
-            continue
-          }
+          const resolves = extractBindings(decl.id, [], {
+            isRoot: true,
+          })
 
-          local = resolveString(decl.id)
-          source = null
-          exported = local
-          isType = node.exportKind === 'type'
-          declaration = node.declaration
-          specifier = null
-
-          setExport()
+          resolves.forEach(([keyName, valueName]) => {
+            local = keyName
+            exported = valueName
+            setExport()
+          })
         }
-      } else if (
-        'id' in node.declaration &&
-        node.declaration.id &&
-        node.declaration.id.type === 'Identifier'
-      ) {
+      } else if ('id' in node.declaration && node.declaration.id) {
         local = resolveString(node.declaration.id)
         source = null
         exported = local
@@ -270,9 +266,6 @@ export function walkExportDeclaration(
         specifier = null
 
         setExport()
-        /* c8 ignore next 3 */
-      } else {
-        // TODO handle other nodeType
       }
     }
 
