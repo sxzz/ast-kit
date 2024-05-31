@@ -12,6 +12,7 @@ import {
 } from '../src'
 import { parse as _parse } from './_utils'
 import type * as t from '@babel/types'
+import type * as estree from 'estree'
 
 describe('utils', () => {
   test('isTypeOf', () => {
@@ -32,11 +33,17 @@ describe('utils', () => {
     expect(isTypeOf({ type: 'JSXElement' } as t.Expression, 'Expression')).toBe(
       true,
     )
+
+    expect(isTypeOf({ type: 'Literal' } as estree.Literal, 'Literal')).toBe(
+      true,
+    )
   })
 
   test('isLiteralType', () => {
     expect(isLiteralType({ type: 'NullLiteral' })).toBe(true)
     expect(isLiteralType({ type: 'AnyTypeAnnotation' })).toBe(false)
+
+    expect(isLiteralType({ type: 'Literal' } as estree.Literal)).toBe(true)
   })
 
   test('isFunctionType', () => {

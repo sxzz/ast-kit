@@ -1,5 +1,5 @@
 import { asyncWalk, walk } from 'estree-walker'
-import { isExpressionType } from './check'
+import { type GetNode, type Node, isExpressionType } from './check'
 import { resolveString } from './resolve'
 import type { LiteralUnion } from './types'
 import type * as t from '@babel/types'
@@ -31,7 +31,7 @@ interface WalkHandlers<T, R> {
  * @param {WalkHandlers<T, void>} hooks - The handlers to be applied during the walk.
  * @returns {T | null} - The modified AST node or null if the node is removed.
  */
-export const walkAST: <T = t.Node>(
+export const walkAST: <T = Node>(
   node: NoInfer<T>,
   hooks: WalkHandlers<T, void>,
 ) => T | null = walk as any
@@ -45,7 +45,7 @@ export const walkAST: <T = t.Node>(
  * @param {WalkHandlers<T, Promise<void>>} handlers - The handlers to be applied to each node.
  * @returns {Promise<T | null>} - A promise that resolves to the modified AST or null if the AST is empty.
  */
-export const walkASTAsync: <T = t.Node>(
+export const walkASTAsync: <T = Node>(
   node: NoInfer<T>,
   handlers: WalkHandlers<T, Promise<void>>,
 ) => Promise<T | null> = asyncWalk as any
@@ -54,10 +54,9 @@ export interface ImportBinding {
   local: string
   imported: LiteralUnion<'*' | 'default'>
   source: string
-  specifier:
-    | t.ImportSpecifier
-    | t.ImportDefaultSpecifier
-    | t.ImportNamespaceSpecifier
+  specifier: GetNode<
+    'ImportSpecifier' | 'ImportDefaultSpecifier' | 'ImportNamespaceSpecifier'
+  >
   isType: boolean
 }
 
@@ -69,13 +68,15 @@ export interface ImportBinding {
  */
 export function walkImportDeclaration(
   imports: Record<string, ImportBinding>,
-  node: t.ImportDeclaration,
+  node: GetNode<'ImportDeclaration'>,
 ): void {
-  if (node.importKind === 'type') return
-  const source = node.source.value
+  if ('importKind' in node && node.importKind === 'type') return
+  const source = (node.source as t.StringLiteral).value
   for (const specifier of node.specifiers) {
     const isType =
-      specifier.type === 'ImportSpecifier' && specifier.importKind === 'type'
+      specifier.type === 'ImportSpecifier' &&
+      'importKind' in specifier &&
+      specifier.importKind === 'type'
     const local = specifier.local.name
     const imported =
       specifier.type === 'ImportSpecifier'
@@ -101,12 +102,13 @@ export interface ExportBinding {
   exported: LiteralUnion<'*' | 'default'>
   isType: boolean
   source: string | null
-  specifier:
-    | t.ExportSpecifier
-    | t.ExportDefaultSpecifier
-    | t.ExportNamespaceSpecifier
+  specifier: GetNode<
+    'ExportSpecifier' | 'ExportDefaultSpecifier' | 'ExportNamespaceSpecifier'
+  > | null
+  declaration:
+    | GetNode<'Declaration'>
+    | GetNode<'ExportDefaultDeclaration'>['declaration']
     | null
-  declaration: t.Declaration | t.ExportDefaultDeclaration['declaration'] | null
 }
 
 /**
@@ -116,7 +118,11 @@ export interface ExportBinding {
  */
 export function walkExportDeclaration(
   exports: Record<string, ExportBinding>,
-  node: t.ExportDeclaration,
+  node: GetNode<
+    | 'ExportAllDeclaration'
+    | 'ExportDefaultDeclaration'
+    | 'ExportNamedDeclaration'
+  >,
 ): void {
   let local: ExportBinding['local']
   let exported: ExportBinding['exported']
@@ -141,14 +147,14 @@ export function walkExportDeclaration(
       for (const s of node.specifiers) {
         const isExportSpecifier = s.type === 'ExportSpecifier'
         isType =
-          node.exportKind === 'type' ||
-          (isExportSpecifier && s.exportKind === 'type')
+          ('exportKind' in node && node.exportKind === 'type') ||
+          (isExportSpecifier && 'exportKind' in s && s.exportKind === 'type')
         local = isExportSpecifier
           ? s.local.name
           : s.type === 'ExportNamespaceSpecifier'
             ? '*'
             : 'default'
-        source = node.source ? node.source.value : null
+        source = node.source ? (node.source as t.StringLiteral).value : null
         exported = isExportSpecifier
           ? resolveString(s.exported)
           : s.exported.name
@@ -170,7 +176,7 @@ export function walkExportDeclaration(
           local = resolveString(decl.id)
           source = null
           exported = local
-          isType = node.exportKind === 'type'
+          isType = 'exportKind' in node && node.exportKind === 'type'
           declaration = node.declaration
           specifier = null
 
@@ -184,7 +190,7 @@ export function walkExportDeclaration(
         local = resolveString(node.declaration.id)
         source = null
         exported = local
-        isType = node.exportKind === 'type'
+        isType = 'exportKind' in node && node.exportKind === 'type'
         declaration = node.declaration
         specifier = null
 
@@ -212,7 +218,7 @@ export function walkExportDeclaration(
     local = '*'
     source = resolveString(node.source)
     exported = '*'
-    isType = node.exportKind === 'type'
+    isType = 'exportKind' in node && node.exportKind === 'type'
     specifier = null
     declaration = null
   }

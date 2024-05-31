@@ -1,4 +1,4 @@
-import { isLiteralType, isTypeOf } from './check'
+import { type GetNode, type Literal, isLiteralType, isTypeOf } from './check'
 import type * as t from '@babel/types'
 
 /**
@@ -10,11 +10,14 @@ import type * as t from '@babel/types'
 export function resolveString(
   node:
     | string
-    | t.Identifier
-    | t.Literal
-    | t.PrivateName
-    | t.ThisExpression
-    | t.Super,
+    | GetNode<
+        | 'Identifier'
+        | 'PrivateName'
+        | 'PrivateIdentifier'
+        | 'ThisExpression'
+        | 'Super'
+        | 'Literal'
+      >,
   computed = false,
 ): string {
   if (typeof node === 'string') return node
@@ -23,6 +26,8 @@ export function resolveString(
     return node.name
   } else if (node.type === 'PrivateName') {
     return `#${node.id.name}`
+  } else if (node.type === 'PrivateIdentifier') {
+    return `#${node.name}`
   } else if (node.type === 'ThisExpression') {
     return 'this'
   } else if (node.type === 'Super') {
@@ -37,7 +42,7 @@ export function resolveString(
  * @returns The resolved value of the literal node.
  */
 export function resolveLiteral(
-  node: t.Literal,
+  node: Literal,
 ): string | number | boolean | null | RegExp | bigint {
   switch (node.type) {
     case 'TemplateLiteral':
@@ -57,6 +62,9 @@ export function resolveLiteral(
     /* c8 ignore next 2 */
     case 'DecimalLiteral':
       return Number(node.value)
+
+    case 'Literal':
+      return node.value!
   }
 }
 
@@ -65,13 +73,15 @@ export function resolveLiteral(
  * @param node The template literal node to resolve.
  * @returns The resolved string representation of the template literal.
  */
-export function resolveTemplateLiteral(node: t.TemplateLiteral): string {
+export function resolveTemplateLiteral(
+  node: GetNode<'TemplateLiteral'>,
+): string {
   return node.quasis.reduce((prev, curr, idx) => {
     const expr = node.expressions[idx]
     if (expr) {
       if (!isLiteralType(expr))
         throw new TypeError('TemplateLiteral expression must be a literal')
-      return prev + curr.value.cooked + resolveLiteral(expr as t.Literal)
+      return prev + curr.value.cooked + resolveLiteral(expr)
     }
     return prev + curr.value.cooked
   }, '')
@@ -85,14 +95,25 @@ export function resolveTemplateLiteral(node: t.TemplateLiteral): string {
  */
 export function resolveIdentifier(
   node:
-    | t.Identifier
-    | t.PrivateName
-    | t.MemberExpression
-    | t.ThisExpression
-    | t.Super
+    | GetNode<
+        | 'Identifier'
+        | 'PrivateName'
+        | 'PrivateIdentifier'
+        | 'ThisExpression'
+        | 'Super'
+        | 'MemberExpression'
+      >
     | t.TSEntityName,
 ): string[] {
-  if (isTypeOf(node, ['Identifier', 'PrivateName', 'ThisExpression', 'Super']))
+  if (
+    isTypeOf(node, [
+      'Identifier',
+      'PrivateName',
+      'PrivateIdentifier',
+      'ThisExpression',
+      'Super',
+    ])
+  )
     return [resolveString(node)]
 
   const left = node.type === 'TSQualifiedName' ? node.left : node.object
@@ -131,12 +152,14 @@ export function tryResolveIdentifier(
   }
 }
 
-export type ObjectPropertyLike =
-  | t.ObjectMethod
-  | t.ObjectProperty
-  | t.TSMethodSignature
-  | t.TSPropertySignature
-  | t.ImportAttribute
+export type ObjectPropertyLike = GetNode<
+  | 'Property'
+  | 'ObjectMethod'
+  | 'ObjectProperty'
+  | 'TSMethodSignature'
+  | 'TSPropertySignature'
+  | 'ImportAttribute'
+>
 
 /**
  * Resolves the key of an object property-like node.

@@ -7,7 +7,8 @@ import {
   tryResolveIdentifier,
   type ObjectPropertyLike,
 } from '../src'
-import { parse as _parse } from './_utils'
+import { parse as _parse, acornParse, testParsers } from './_utils'
+import type * as Estree from 'estree'
 import type * as t from '@babel/types'
 
 describe('resolve', () => {
@@ -15,18 +16,24 @@ describe('resolve', () => {
     expect(resolveString('foo')).toBe('foo')
   })
 
-  test('resolveLiteral', () => {
-    const parse = _parse<t.Literal>
-    expect(resolveLiteral(parse("`hello${'world'}`", true))).toBe('helloworld')
-    expect(resolveLiteral(parse('1', true))).toBe(1)
-    expect(resolveLiteral(parse('false', true))).toBe(false)
-    expect(resolveLiteral(parse('null', true))).toBe(null)
-    expect(resolveLiteral(parse('8n', true))).toBe(8n)
-    expect(resolveLiteral(parse('/foo/g', true))).toEqual(/foo/g)
+  describe('resolveLiteral', () => {
+    testParsers((parser) => {
+      const parse =
+        parser === 'babel' ? _parse<t.Literal> : acornParse<Estree.Literal>
 
-    expect(() => resolveLiteral(parse('`hello${id}`', true))).toThrowError(
-      'TemplateLiteral expression must be a literal',
-    )
+      expect(resolveLiteral(parse("`hello${'world'}`", true))).toBe(
+        'helloworld',
+      )
+      expect(resolveLiteral(parse('1', true))).toBe(1)
+      expect(resolveLiteral(parse('false', true))).toBe(false)
+      expect(resolveLiteral(parse('null', true))).toBe(null)
+      expect(resolveLiteral(parse('8n', true))).toBe(8n)
+      expect(resolveLiteral(parse('/foo/g', true))).toEqual(/foo/g)
+
+      expect(() => resolveLiteral(parse('`hello${id}`', true))).toThrowError(
+        'TemplateLiteral expression must be a literal',
+      )
+    })
   })
 
   test('resolveIdentifier', () => {
