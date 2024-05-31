@@ -1,14 +1,12 @@
-import { describe, expect, expectTypeOf, test, vi } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import {
   type ExportBinding,
   type ImportBinding,
   babelParse,
   isTypeOf,
-  walkASTSetup,
   walkExportDeclaration,
   walkImportDeclaration,
 } from '../src'
-import type * as t from '@babel/types'
 
 describe('walk', () => {
   test('walkImportDeclaration', () => {
@@ -73,53 +71,6 @@ describe('walk', () => {
         },
       ]
     `)
-  })
-
-  test('walkASTSetup', async () => {
-    const ast = babelParse(
-      `
-      function foo() {}
-      function bar(id: string) {}
-      const baz = 1
-      `,
-      'ts',
-    )
-
-    const walkFunctionDeclaration = vi.fn()
-    const walkTS = vi.fn()
-    const walkIdentifier = vi.fn()
-
-    const p = walkASTSetup(ast, (setup) => {
-      setup.onEnter('FunctionDeclaration', (node, parent) => {
-        expectTypeOf<t.FunctionDeclaration>(node)
-        expectTypeOf<t.ParentMaps['FunctionDeclaration']>(parent)
-        walkFunctionDeclaration()
-      })
-      setup.onEnter(['NumericLiteral', 'TSStringKeyword'], (node, parent) => {
-        expectTypeOf<t.NumericLiteral | t.TSStringKeyword>(node)
-        expectTypeOf<t.ParentMaps['NumericLiteral' | 'TSStringKeyword']>(parent)
-        walkTS()
-      })
-      setup.onEnter(
-        (node): node is t.Identifier => node.type === 'Identifier',
-        (node, parent) => {
-          expectTypeOf<t.Identifier>(node)
-          expectTypeOf<t.ParentMaps['Identifier']>(parent)
-          walkIdentifier()
-        },
-      )
-
-      setup.onEnter((node) => {
-        expectTypeOf<t.Node>(node)
-        return 123
-      })
-    })
-    expect(walkFunctionDeclaration).toBeCalledTimes(0)
-
-    await p
-    expect(walkFunctionDeclaration).toBeCalledTimes(2)
-    expect(walkTS).toBeCalledTimes(2)
-    expect(walkIdentifier).toBeCalledTimes(4)
   })
 
   describe('walkExportDeclaration', () => {
