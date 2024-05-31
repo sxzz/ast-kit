@@ -217,7 +217,8 @@ export function walkExportDeclaration(
   } else {
     local = '*'
     source = resolveString(node.source)
-    exported = '*'
+    exported =
+      'exported' in node && node.exported ? resolveString(node.exported) : '*'
     isType = 'exportKind' in node && node.exportKind === 'type'
     specifier = null
     declaration = null
