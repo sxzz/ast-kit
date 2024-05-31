@@ -2,17 +2,26 @@
 
 A toolkit for easy Babel AST generation and manipulation.
 
-[API Reference](https://paka.dev/npm/ast-kit/api)
+[📖 API Reference](https://jsr.io/@sxzz/ast-kit/doc)
 
-## Requirements
+## Features
 
-- Node.js >= 16.14.0
+- **😇 Easy to Use**: Parse and resolve Babel AST with a straightforward API.
+- **🦾 Type-Friendly**: Built in TypeScript with complete type definitions.
+- **🧪 Thoroughly Tested**: 95% test coverage.
+- **🪶 Lightweight**: Tree-shakable with only two dependencies.
 
 ## Install
 
 ```bash
 npm i ast-kit
 ```
+
+Requires Node.js 16.14.0 or higher.
+
+## AST Explorer
+
+You can explore your code's AST using the [AST Explorer](https://ast.sxzz.moe/).
 
 ## Sponsors
 
