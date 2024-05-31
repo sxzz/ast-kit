@@ -8,8 +8,11 @@
     "types": [],
     "strict": true,
     "noUnusedLocals": true,
+    "declaration": true,
+    "emitDeclarationOnly": false,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "isolatedDeclarations": true
   },
   "include": ["src", "tests"]
 }

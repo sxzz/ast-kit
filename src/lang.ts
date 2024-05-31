@@ -1,8 +1,8 @@
 import { extname } from 'pathe'
 
-export const REGEX_DTS = /\.d\.[cm]?ts(\?.*)?$/
-export const REGEX_LANG_TS = /^[cm]?tsx?$/
-export const REGEX_LANG_JSX = /^[cm]?[jt]sx$/
+export const REGEX_DTS: RegExp = /\.d\.[cm]?ts(\?.*)?$/
+export const REGEX_LANG_TS: RegExp = /^[cm]?tsx?$/
+export const REGEX_LANG_JSX: RegExp = /^[cm]?[jt]sx$/
 
 /**
  * Returns the language (extension name) of a given filename.
