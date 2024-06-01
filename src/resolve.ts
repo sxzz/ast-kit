@@ -171,6 +171,12 @@ export function resolveObjectKey(
     case 'StringLiteral':
     case 'NumericLiteral':
       return raw ? (key.extra!.raw as string) : key.value
+    case 'Literal':
+      return raw
+        ? key.raw!
+        : typeof key.value === 'number'
+          ? key.value
+          : String(key.value!)
     case 'Identifier':
       if (!computed) return raw ? `"${key.name}"` : key.name
       throw 'Cannot resolve computed Identifier'
