@@ -14,6 +14,19 @@ import type * as t from '@babel/types'
 describe('resolve', () => {
   test('resolveString', () => {
     expect(resolveString('foo')).toBe('foo')
+    expect(resolveString({ type: 'PrivateIdentifier', name: 'foo' })).toBe(
+      '#foo',
+    )
+    expect(
+      resolveString({
+        type: 'PrivateName',
+        id: { type: 'Identifier', name: 'foo' },
+      }),
+    ).toBe('#foo')
+    expect(resolveString({ type: 'Literal', value: 'hello' })).toBe('hello')
+    expect(
+      resolveString({ type: 'Literal', value: 8n } as Estree.BigIntLiteral),
+    ).toBe('8')
   })
 
   describe('resolveLiteral', () => {
@@ -76,38 +89,45 @@ describe('resolve', () => {
     }
   })
 
-  test('resolveObjectKey', () => {
-    const properties = _parse<t.ObjectExpression>(
-      `{
-      foo: 'foo',
-      [1]: 'number',
-      ['id']: 'number',
-    }`,
-      true,
-    ).properties as ObjectPropertyLike[]
-    expect(resolveObjectKey(properties[0])).toEqual('foo')
-    expect(resolveObjectKey(properties[0], true)).toEqual('"foo"')
+  describe('resolveObjectKey', () => {
+    testParsers((parser) => {
+      const code = `({
+        foo: 'foo',
+        [1]: 'number',
+        ['id']: 'number',
+      })`
+      const properties = (
+        parser === 'babel'
+          ? _parse<t.ObjectExpression>(code, true)
+          : acornParse<Estree.ObjectExpression>(code, true)
+      ).properties as ObjectPropertyLike[]
 
-    expect(resolveObjectKey(properties[1])).toEqual(1)
-    expect(resolveObjectKey(properties[1], true)).toEqual('1')
+      expect(resolveObjectKey(properties[0])).toEqual('foo')
+      expect(resolveObjectKey(properties[0], true)).toEqual('"foo"')
 
-    expect(resolveObjectKey(properties[2])).toEqual('id')
-    expect(resolveObjectKey(properties[2], true)).toEqual("'id'")
+      expect(resolveObjectKey(properties[1])).toEqual(1)
+      expect(resolveObjectKey(properties[1], true)).toEqual('1')
 
-    expect(() =>
-      resolveObjectKey({ key: { type: 'Unknown' } } as any),
-    ).toThrowError('Unexpected node type: Unknown')
+      expect(resolveObjectKey(properties[2])).toEqual('id')
+      expect(resolveObjectKey(properties[2], true)).toEqual("'id'")
 
-    const ast = _parse("import {} from '' with { type: 'json' }", false)
-    expect(
-      resolveObjectKey((ast.body[0] as t.ImportDeclaration).attributes![0]),
-    ).toEqual('type')
+      expect(() =>
+        resolveObjectKey({ key: { type: 'Unknown' } } as any),
+      ).toThrowError('Unexpected node type: Unknown')
+    })
 
-    expect(() => {
-      resolveObjectKey(
-        _parse<t.ObjectExpression>(`{ [id]: 'error' }`, true)
-          .properties[0] as any,
-      )
-    }).toThrow('Cannot resolve computed Identifier')
+    test('import attributes', () => {
+      const ast = _parse("import {} from '' with { type: 'json' }", false)
+      expect(
+        resolveObjectKey((ast.body[0] as t.ImportDeclaration).attributes![0]),
+      ).toEqual('type')
+
+      expect(() => {
+        resolveObjectKey(
+          _parse<t.ObjectExpression>(`{ [id]: 'error' }`, true)
+            .properties[0] as any,
+        )
+      }).toThrow('Cannot resolve computed Identifier')
+    })
   })
 })

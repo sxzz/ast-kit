@@ -35,7 +35,5 @@ export function acornParse(code: string, expression = false) {
 }
 
 export function testParsers(fn: (parser: string) => void): void {
-  for (const parser of ['babel', 'estree']) {
-    test(parser, fn)
-  }
+  test.each(['babel', 'estree'])('%s format', fn)
 }
