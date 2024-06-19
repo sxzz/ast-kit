@@ -21,7 +21,7 @@ describe('utils', () => {
     expect(escapeKey('0xa')).toBe('"0xa"')
     expect(escapeKey('0b0')).toBe('"0b0"')
     expect(escapeKey('0o0')).toBe('"0o0"')
-    expect(escapeKey('\t')).toBe('"\\t"')
+    expect(escapeKey('\t')).toBe(String.raw`"\t"`)
     expect(escapeKey('1a')).toBe('"1a"')
   })
 })
