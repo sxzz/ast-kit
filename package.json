@@ -46,7 +46,7 @@
     "@babel/types": "^7.24.7",
     "@sxzz/eslint-config": "^3.13.0",
     "@sxzz/prettier-config": "^2.0.2",
-    "@types/node": "^20.14.6",
+    "@types/node": "^20.14.8",
     "@vitest/coverage-v8": "^1.6.0",
     "@vitest/ui": "^1.6.0",
     "bumpp": "^9.4.1",
@@ -55,7 +55,7 @@
     "fast-glob": "^3.3.2",
     "prettier": "^3.3.2",
     "tsup": "^8.1.0",
-    "tsx": "^4.15.6",
+    "tsx": "^4.15.7",
     "typescript": "5.5.2",
     "vitest": "^1.6.0"
   },
