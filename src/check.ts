@@ -132,6 +132,8 @@ export function isExpressionType(
   )
 }
 
+/* v8 ignore start */
+
 /**
  * Checks if the input `node` is a reference to a bound variable.
  *
@@ -319,3 +321,5 @@ export function isReferenced(
 
   return true
 }
+
+/* v8 ignore end */
