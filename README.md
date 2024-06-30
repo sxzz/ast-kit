@@ -8,7 +8,7 @@ A toolkit for easy Babel AST generation and manipulation.
 
 - **😇 Easy to Use**: Parse and resolve Babel AST with a straightforward API.
 - **🦾 Type-Friendly**: Built in TypeScript with complete type definitions.
-- **🧪 Thoroughly Tested**: 95% test coverage.
+- **💯 Coverage**: 100% test coverage.
 - **🪶 Lightweight**: Tree-shakable with only two dependencies.
 
 ## Install
