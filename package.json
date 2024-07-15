@@ -39,21 +39,21 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@babel/parser": "^7.24.7",
+    "@babel/parser": "^7.24.8",
     "pathe": "^1.1.2"
   },
   "devDependencies": {
-    "@babel/types": "^7.24.7",
+    "@babel/types": "^7.24.8",
     "@sxzz/eslint-config": "^3.13.0",
     "@sxzz/prettier-config": "^2.0.2",
     "@types/node": "^20.14.10",
     "@vitest/coverage-v8": "^1.6.0",
     "@vitest/ui": "^1.6.0",
     "bumpp": "^9.4.1",
-    "eslint": "^9.6.0",
+    "eslint": "^9.7.0",
     "estree-walker": "^3.0.3",
     "fast-glob": "^3.3.2",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "tsup": "^8.1.0",
     "tsx": "^4.16.2",
     "typescript": "5.5.3",
