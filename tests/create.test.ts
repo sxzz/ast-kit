@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vitest'
 import * as t from '@babel/types'
+import { describe, expect, test } from 'vitest'
 import {
   createStringLiteral,
   createTSLiteralType,

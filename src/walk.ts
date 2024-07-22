@@ -1,6 +1,6 @@
 import { asyncWalk, walk } from 'estree-walker'
-import { resolveString } from './resolve'
 import { isExpressionType } from './check'
+import { resolveString } from './resolve'
 import type { LiteralUnion } from './types'
 import type * as t from '@babel/types'
 

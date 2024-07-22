@@ -1,11 +1,11 @@
 import {
-  type ParserOptions,
-  type ParserPlugin,
-  type ParseResult as _ParseResult,
   parse,
   parseExpression,
+  type ParseResult as _ParseResult,
+  type ParserOptions,
+  type ParserPlugin,
 } from '@babel/parser'
-import { REGEX_LANG_JSX, isTs } from './lang'
+import { isTs, REGEX_LANG_JSX } from './lang'
 import type * as t from '@babel/types'
 
 export type ParseResult<T> = _ParseResult<T> & {

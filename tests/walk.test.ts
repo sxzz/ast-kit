@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
 import {
-  type ExportBinding,
-  type ImportBinding,
   babelParse,
   isTypeOf,
   walkExportDeclaration,
   walkImportDeclaration,
+  type ExportBinding,
+  type ImportBinding,
 } from '../src'
 
 describe('walk', () => {

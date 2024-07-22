@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest'
 import {
-  type ObjectPropertyLike,
   resolveIdentifier,
   resolveLiteral,
   resolveObjectKey,
   resolveString,
+  type ObjectPropertyLike,
 } from '../src'
 import { parse as _parse } from './_utils'
 import type * as t from '@babel/types'
