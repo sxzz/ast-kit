@@ -44,6 +44,9 @@ describe('utils', () => {
     expect(
       isFunctionType({ type: 'FunctionExpression' } as t.FunctionExpression),
     ).toBe(true)
+    expect(
+      isFunctionType({ type: 'TSDeclareMethod' } as t.TSDeclareMethod),
+    ).toBe(false)
   })
 
   test('isExpressionType', () => {

@@ -101,7 +101,11 @@ export function isLiteralType(
 export function isFunctionType(
   node: t.Node | undefined | null,
 ): node is t.Function {
-  return !!node && /Function(?:Expression|Declaration)$|Method$/.test(node.type)
+  return (
+    !!node &&
+    !node.type.startsWith('TS') &&
+    /Function(?:Expression|Declaration)$|Method$/.test(node.type)
+  )
 }
 
 /**
