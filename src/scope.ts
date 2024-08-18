@@ -149,7 +149,7 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
     enter(node, parent) {
       // function foo () {...}
       // class Foo {...}
-      if (/(Function|Class)Declaration/.test(node.type)) {
+      if (/(?:Function|Class)Declaration/.test(node.type)) {
         scope.addDeclaration(node, false, false)
       }
 
@@ -181,7 +181,7 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
       }
 
       // create new for scope
-      if (/For(In|Of)?Statement/.test(node.type)) {
+      if (/For(?:In|Of)?Statement/.test(node.type)) {
         newScope = new Scope({
           parent: scope,
           block: true,
