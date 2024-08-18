@@ -81,6 +81,7 @@ export function resolveTemplateLiteral(node: t.TemplateLiteral): string {
  * Resolves the identifier node into an array of strings.
  * @param node The identifier node to resolve.
  * @returns An array of resolved strings representing the identifier.
+ * @throws TypeError If the identifier is invalid.
  */
 export function resolveIdentifier(
   node:
@@ -118,6 +119,16 @@ export function resolveIdentifier(
   }
 
   throw new TypeError('Invalid Identifier')
+}
+
+export function tryResolveIdentifier(
+  ...args: Parameters<typeof resolveIdentifier>
+): string[] | undefined {
+  try {
+    return resolveIdentifier(...args)
+  } catch {
+    return
+  }
 }
 
 export type ObjectPropertyLike =
