@@ -1,3 +1,6 @@
+// copied from https://github.com/rollup/plugins/blob/master/packages/pluginutils/src/attachScopes.ts
+// MIT License
+
 /* c8 ignore start */
 
 import { walkAST } from './walk'
@@ -50,7 +53,7 @@ const extractors: Extractors = {
   },
 }
 
-const extractAssignedNames = function extractAssignedNames(param: Node) {
+function extractAssignedNames(param: Node) {
   const names: string[] = []
 
   extractors[param.type](names, param)
@@ -132,9 +135,6 @@ class Scope implements AttachedScope {
   }
 }
 
-// copied from https://github.com/rollup/plugins/blob/master/packages/pluginutils/src/attachScopes.ts
-// MIT License
-
 /**
  * Attaches scopes to the given AST
  *
@@ -146,8 +146,7 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
   let scope = new Scope()
 
   walkAST(ast, {
-    enter(n, parent) {
-      const node = n as Node
+    enter(node, parent) {
       // function foo () {...}
       // class Foo {...}
       if (/(Function|Class)Declaration/.test(node.type)) {
@@ -215,9 +214,8 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
         scope = newScope
       }
     },
-    leave(n) {
-      const node = n as Node & Record<string, any>
-      if (node[propertyName]) scope = scope.parent!
+    leave(node) {
+      if ((node as Record<string, any>)[propertyName]) scope = scope.parent!
     },
   })
 
