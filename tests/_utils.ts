@@ -1,9 +1,9 @@
 import * as Acorn from 'acorn'
 import { test } from 'vitest'
 import { babelParse, babelParseExpression } from '../src'
-import type * as Estree from 'estree'
 import type { ParseResult } from '@babel/parser'
 import type * as t from '@babel/types'
+import type * as Estree from 'estree'
 
 export function parse(code: string, expression?: false): ParseResult<t.Program>
 export function parse<T extends t.Node>(

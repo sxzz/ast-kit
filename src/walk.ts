@@ -1,5 +1,5 @@
 import { asyncWalk, walk } from 'estree-walker'
-import { type GetNode, type Node, isExpressionType } from './check'
+import { isExpressionType, type GetNode, type Node } from './check'
 import { resolveString } from './resolve'
 import type { LiteralUnion } from './types'
 import type * as t from '@babel/types'
