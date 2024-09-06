@@ -53,12 +53,7 @@ export function isCallOf(
   return (
     !!node &&
     node.type === 'CallExpression' &&
-    node.callee.type === 'Identifier' &&
-    (typeof test === 'string'
-      ? node.callee.name === test
-      : Array.isArray(test)
-        ? test.includes(node.callee.name)
-        : test(node.callee.name))
+    isIdentifierOf(node.callee, test)
   )
 }
 
@@ -71,13 +66,9 @@ export function isCallOf(
  */
 export function isIdentifierOf(
   node: t.Node | undefined | null,
-  test: string | string[],
+  test: string | string[] | ((id: string) => boolean),
 ): node is t.Identifier {
-  return (
-    !!node &&
-    node.type === 'Identifier' &&
-    (typeof test === 'string' ? node.name === test : test.includes(node.name))
-  )
+  return !!node && node.type === 'Identifier' && match(node.name, test)
 }
 
 /**
@@ -134,6 +125,15 @@ export function isExpressionType(
         'TSTypeAssertion',
       ].includes(node.type))
   )
+}
+
+function match<T extends string | number | boolean>(
+  value: T,
+  test: T | T[] | ((id: T) => boolean),
+): boolean {
+  if (Array.isArray(test)) return test.includes(value)
+  if (typeof test === 'function') return test(value)
+  return value === test
 }
 
 /* v8 ignore start */
