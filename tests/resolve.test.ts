@@ -8,8 +8,8 @@ import {
   type ObjectPropertyLike,
 } from '../src'
 import { parse as _parse, acornParse, testParsers } from './_utils'
-import type * as Estree from 'estree'
 import type * as t from '@babel/types'
+import type * as Estree from 'estree'
 
 describe('resolve', () => {
   test('resolveString', () => {

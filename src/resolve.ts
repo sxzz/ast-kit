@@ -1,4 +1,4 @@
-import { type GetNode, type Literal, isLiteralType, isTypeOf } from './check'
+import { isLiteralType, isTypeOf, type GetNode, type Literal } from './check'
 import type * as t from '@babel/types'
 
 /**
