@@ -1,7 +1,7 @@
 {
   "name": "ast-kit",
   "version": "1.1.0",
-  "packageManager": "pnpm@9.9.0",
+  "packageManager": "pnpm@9.10.0",
   "description": "A toolkit for easy Babel AST generation and manipulation.",
   "type": "module",
   "license": "MIT",
@@ -44,20 +44,20 @@
   },
   "devDependencies": {
     "@babel/types": "^7.25.6",
-    "@sxzz/eslint-config": "^4.1.6",
+    "@sxzz/eslint-config": "^4.2.0",
     "@sxzz/prettier-config": "^2.0.2",
     "@types/node": "^20.16.5",
-    "@vitest/coverage-v8": "^2.0.5",
-    "@vitest/ui": "^2.0.5",
+    "@vitest/coverage-v8": "^2.1.1",
+    "@vitest/ui": "^2.1.1",
     "bumpp": "^9.5.2",
     "eslint": "^9.10.0",
     "estree-walker": "^3.0.3",
     "fast-glob": "^3.3.2",
     "prettier": "^3.3.3",
     "tsup": "^8.2.4",
-    "tsx": "^4.19.0",
-    "typescript": "5.5.4",
-    "vitest": "^2.0.5"
+    "tsx": "^4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "^2.1.1"
   },
   "engines": {
     "node": ">=16.14.0"
