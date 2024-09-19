@@ -1,16 +1,12 @@
 import {
   parse,
   parseExpression,
-  type ParseResult as _ParseResult,
+  type ParseResult,
   type ParserOptions,
   type ParserPlugin,
 } from '@babel/parser'
 import { isTs, REGEX_LANG_JSX } from './lang'
 import type * as t from '@babel/types'
-
-export type ParseResult<T> = _ParseResult<T> & {
-  comments?: t.Comment[] | null
-}
 
 function hasPlugin(
   plugins: ParserPlugin[],
@@ -19,7 +15,13 @@ function hasPlugin(
   return plugins.some((p) => (Array.isArray(p) ? p[0] : p) === plugin)
 }
 
-function getParserOptions(
+/**
+ * Gets the Babel parser options for the given language.
+ * @param lang - The language of the code (optional).
+ * @param options - The parser options (optional).
+ * @returns The Babel parser options for the given language.
+ */
+export function getBabelParserOptions(
   lang?: string,
   options: ParserOptions = {},
 ): ParserOptions {
@@ -74,12 +76,12 @@ export function babelParse(
   code: string,
   lang?: string,
   options: ParserOptions = {},
-): ParseResult<t.Program> {
-  const { program, errors, comments } = parse(
+): t.Program & Omit<ParseResult<t.File>, 'type' | 'program'> {
+  const { program, type, ...rest } = parse(
     code,
-    getParserOptions(lang, options),
+    getBabelParserOptions(lang, options),
   )
-  return { ...program, errors, comments }
+  return { ...program, ...rest }
 }
 
 /**
@@ -98,6 +100,6 @@ export function babelParseExpression<T extends t.Node = t.Expression>(
 ): ParseResult<T> {
   return parseExpression(
     code,
-    getParserOptions(lang, options),
+    getBabelParserOptions(lang, options),
   ) as ParseResult<T>
 }

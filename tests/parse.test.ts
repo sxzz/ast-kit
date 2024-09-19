@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { babelParse, babelParseExpression } from '../src'
+import { babelParse, babelParseExpression, getBabelParserOptions } from '../src'
 
 describe('parse', () => {
   test('babelParse', () => {
@@ -27,5 +27,20 @@ describe('parse', () => {
   test('babelParseExpression', () => {
     expect(babelParseExpression('1').type).toBe('NumericLiteral')
     expect(babelParseExpression('{}').type).toBe('ObjectExpression')
+  })
+
+  test('getBabelParserOptions', () => {
+    expect(getBabelParserOptions('ts')).toEqual({
+      plugins: expect.any(Array),
+      sourceType: 'module',
+    })
+
+    expect(
+      getBabelParserOptions(undefined, { allowAwaitOutsideFunction: true }),
+    ).toEqual({
+      plugins: ['jsx'],
+      sourceType: 'module',
+      allowAwaitOutsideFunction: true,
+    })
   })
 })
