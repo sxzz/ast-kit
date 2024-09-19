@@ -4,6 +4,7 @@ import {
   resolveLiteral,
   resolveObjectKey,
   resolveString,
+  tryResolveIdentifier,
   type ObjectPropertyLike,
 } from '../src'
 import { parse as _parse } from './_utils'
@@ -56,6 +57,8 @@ describe('resolve', () => {
       expect(() => resolveIdentifier(parse('fn()[0]', true))).toThrow(
         'Invalid Identifier',
       )
+
+      expect(tryResolveIdentifier(parse('foo.bar[b]', true))).toBe(undefined)
     }
 
     {
