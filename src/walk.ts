@@ -32,7 +32,7 @@ interface WalkHandlers<T, R> {
  * @returns {T | null} - The modified AST node or null if the node is removed.
  */
 export const walkAST: <T = t.Node>(
-  node: T,
+  node: NoInfer<T>,
   hooks: WalkHandlers<T, void>,
 ) => T | null = walk as any
 
@@ -46,7 +46,7 @@ export const walkAST: <T = t.Node>(
  * @returns {Promise<T | null>} - A promise that resolves to the modified AST or null if the AST is empty.
  */
 export const walkASTAsync: <T = t.Node>(
-  node: T,
+  node: NoInfer<T>,
   handlers: WalkHandlers<T, Promise<void>>,
 ) => Promise<T | null> = asyncWalk as any
 
