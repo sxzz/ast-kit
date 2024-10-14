@@ -70,19 +70,30 @@ export function getBabelParserOptions(
  * @param code - The code to parse.
  * @param lang - The language of the code (optional).
  * @param options - The parser options (optional).
+ * @param options.cache - Whether to cache the result (optional).
  * @returns The parse result, including the program, errors, and comments.
  */
 export function babelParse(
   code: string,
   lang?: string,
-  options: ParserOptions = {},
+  { cache, ...options }: ParserOptions & { cache?: boolean } = {},
 ): t.Program & Omit<ParseResult<t.File>, 'type' | 'program'> {
-  const { program, type, ...rest } = parse(
-    code,
-    getBabelParserOptions(lang, options),
-  )
+  let result: ParseResult<t.File> | undefined
+  if (cache) result = parseCache.get(code)
+
+  if (!result) {
+    result = parse(code, getBabelParserOptions(lang, options))
+    if (cache) parseCache.set(code, result)
+  }
+
+  const { program, type, ...rest } = result
   return { ...program, ...rest }
 }
+
+export const parseCache: Map<string, ParseResult<t.File>> = new Map<
+  string,
+  ParseResult<t.File>
+>()
 
 /**
  * Parses the given code using the Babel parser as an expression.

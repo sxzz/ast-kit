@@ -1,5 +1,10 @@
 import { describe, expect, test } from 'vitest'
-import { babelParse, babelParseExpression, getBabelParserOptions } from '../src'
+import {
+  babelParse,
+  babelParseExpression,
+  getBabelParserOptions,
+  parseCache,
+} from '../src'
 
 describe('parse', () => {
   test('babelParse', () => {
@@ -16,8 +21,10 @@ describe('parse', () => {
       'ts',
       {
         plugins: ['importAssertions'],
+        cache: true,
       },
     )
+    expect(Array.from(parseCache.keys())).lengthOf(1)
 
     babelParse(`using foo = useFoo()`, 'ts', {
       plugins: ['importAssertions'],
