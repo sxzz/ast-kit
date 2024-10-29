@@ -20,11 +20,12 @@ describe('parse', () => {
       `import { type A } from '../../macros' assert { type: 'macro' }`,
       'ts',
       {
-        plugins: ['importAssertions'],
+        plugins: ['deprecatedImportAssert'],
         cache: true,
       },
     )
     expect(Array.from(parseCache.keys())).lengthOf(1)
+    expect(() => babelParse(`import { a } from 'b' assert {}`)).toThrow()
 
     babelParse(`using foo = useFoo()`, 'ts', {
       plugins: ['importAssertions'],

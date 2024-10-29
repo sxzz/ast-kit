@@ -42,9 +42,10 @@ export function getBabelParserOptions(
 
     if (
       !hasPlugin(plugins, 'importAttributes') &&
-      !hasPlugin(plugins, 'importAssertions')
+      !hasPlugin(plugins, 'importAssertions') &&
+      !hasPlugin(plugins, 'deprecatedImportAssert')
     ) {
-      plugins.push(['importAttributes', { deprecatedAssertSyntax: true }])
+      plugins.push('importAttributes', 'deprecatedImportAssert')
     }
 
     if (!hasPlugin(plugins, 'explicitResourceManagement')) {
