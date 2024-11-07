@@ -58,6 +58,24 @@ export function isCallOf(
 }
 
 /**
+ * Checks if the given node is a TaggedTemplateExpression with the specified callee.
+ *
+ * @param node - The node to check.
+ * @param test - The callee to compare against. It can be a string, an array of strings, or a function that takes a string and returns a boolean.
+ * @returns True if the node is a TaggedTemplateExpression with the specified callee, false otherwise.
+ */
+export function isTaggedFunctionCallOf(
+  node: t.Node | null | undefined,
+  test: string | string[] | ((id: string) => boolean),
+): node is t.TaggedTemplateExpression {
+  return (
+    !!node &&
+    node.type === 'TaggedTemplateExpression' &&
+    isIdentifierOf(node.tag, test)
+  )
+}
+
+/**
  * Checks if the given node is an Identifier with the specified name.
  *
  * @param node - The node to check.
