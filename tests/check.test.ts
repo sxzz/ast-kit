@@ -6,6 +6,7 @@ import {
   isIdentifierOf,
   isLiteralType,
   isReferenced,
+  isTaggedFunctionCallOf,
   isTypeOf,
 } from '../src'
 import { parse as _parse } from './_utils'
@@ -118,6 +119,23 @@ describe('utils', () => {
           arguments: [],
         },
         (n) => n.startsWith('b'),
+      ),
+    ).toBe(true)
+  })
+
+  test('isTaggedFunctionCallOf', () => {
+    expect(isTaggedFunctionCallOf(null, 'foo')).toBe(false)
+    expect(isTaggedFunctionCallOf({ type: 'ThisExpression' }, 'foo')).toBe(
+      false,
+    )
+    expect(
+      isTaggedFunctionCallOf(
+        {
+          type: 'TaggedTemplateExpression',
+          tag: { type: 'Identifier', name: 'foo' },
+          quasi: { type: 'TemplateLiteral', quasis: [], expressions: [] },
+        },
+        'foo',
       ),
     ).toBe(true)
   })
