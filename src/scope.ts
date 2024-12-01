@@ -85,13 +85,19 @@ const blockDeclarations: BlockDeclaration = {
   let: true,
 }
 
-interface ScopeOptions {
+/**
+ * Options for creating a new scope.
+ */
+export interface ScopeOptions {
   parent?: AttachedScope
   block?: boolean
   params?: Node[]
 }
 
-class Scope implements AttachedScope {
+/**
+ * Represents a scope.
+ */
+export class Scope implements AttachedScope {
   parent?: AttachedScope
   isBlockScope: boolean
   declarations: { [key: string]: boolean }
