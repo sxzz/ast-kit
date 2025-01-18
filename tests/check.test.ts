@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import {
   isCallOf,
+  isDeclarationType,
   isExpressionType,
   isFunctionType,
   isIdentifierOf,
@@ -48,6 +49,24 @@ describe('utils', () => {
     expect(
       isFunctionType({ type: 'TSDeclareMethod' } as t.TSDeclareMethod),
     ).toBe(false)
+  })
+
+  test('isDeclarationType', () => {
+    expect(
+      isDeclarationType({
+        type: 'FunctionDeclaration',
+      } as t.FunctionDeclaration),
+    ).toBe(true)
+    expect(
+      isDeclarationType({
+        type: 'Placeholder',
+        expectedNode: 'Declaration',
+      } as t.Placeholder),
+    ).toBe(true)
+    expect(
+      isDeclarationType({ type: 'FunctionExpression' } as t.FunctionExpression),
+    ).toBe(false)
+    expect(isDeclarationType(null)).toBe(false)
   })
 
   test('isExpressionType', () => {
