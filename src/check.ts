@@ -118,6 +118,50 @@ export function isFunctionType(
 }
 
 /**
+ * Checks if the given node is a declaration type.
+ *
+ * @param node - The node to check.
+ * @returns True if the node is a declaration type, false otherwise.
+ */
+export function isDeclarationType(
+  node: t.Node | undefined | null,
+): node is t.Declaration {
+  if (!node) return false
+  switch (node.type) {
+    case 'FunctionDeclaration':
+    case 'VariableDeclaration':
+    case 'ClassDeclaration':
+    case 'ExportAllDeclaration':
+    case 'ExportDefaultDeclaration':
+    case 'ExportNamedDeclaration':
+    case 'ImportDeclaration':
+    case 'DeclareClass':
+    case 'DeclareFunction':
+    case 'DeclareInterface':
+    case 'DeclareModule':
+    case 'DeclareModuleExports':
+    case 'DeclareTypeAlias':
+    case 'DeclareOpaqueType':
+    case 'DeclareVariable':
+    case 'DeclareExportDeclaration':
+    case 'DeclareExportAllDeclaration':
+    case 'InterfaceDeclaration':
+    case 'OpaqueType':
+    case 'TypeAlias':
+    case 'EnumDeclaration':
+    case 'TSDeclareFunction':
+    case 'TSInterfaceDeclaration':
+    case 'TSTypeAliasDeclaration':
+    case 'TSEnumDeclaration':
+    case 'TSModuleDeclaration':
+      return true
+    case 'Placeholder':
+      if (node.expectedNode === 'Declaration') return true
+  }
+  return false
+}
+
+/**
  * Checks if the given node is an expression type.
  *
  * @param node - The node to check.
