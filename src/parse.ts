@@ -1,6 +1,7 @@
 import {
   parse,
   parseExpression,
+  type ParseError,
   type ParseResult,
   type ParserOptions,
   type ParserPlugin,
@@ -109,9 +110,6 @@ export function babelParseExpression<T extends t.Node = t.Expression>(
   code: string,
   lang?: string,
   options: ParserOptions = {},
-): ParseResult<T> {
-  return parseExpression(
-    code,
-    getBabelParserOptions(lang, options),
-  ) as ParseResult<T>
+): T & { errors: null | ParseError[] } {
+  return parseExpression(code, getBabelParserOptions(lang, options)) as any
 }
