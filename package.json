@@ -1,6 +1,6 @@
 {
   "name": "ast-kit",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "packageManager": "pnpm@10.5.2",
   "description": "A toolkit for easy Babel AST generation and manipulation.",
   "type": "module",
