@@ -24,6 +24,9 @@ importers:
       '@sxzz/prettier-config':
         specifier: ^2.2.1
         version: 2.2.1
+      '@types/estree':
+        specifier: ^1.0.5
+        version: 1.0.6
       '@types/node':
         specifier: ^22.13.14
         version: 22.13.14
@@ -33,6 +36,9 @@ importers:
       '@vitest/ui':
         specifier: ^3.1.1
         version: 3.1.1(vitest@3.1.1)
+      acorn:
+        specifier: ^8.12.1
+        version: 8.14.1
       bumpp:
         specifier: ^10.1.0
         version: 10.1.0(magicast@0.3.5)

@@ -1,18 +1,43 @@
 import type * as t from '@babel/types'
+// @ts-ignore
+import type * as estree from 'estree'
+
+type IfAny<T, Y, N> = 0 extends 1 & T ? Y : N
+type IfEstree<T> = IfAny<typeof estree, never, T>
+
+export type Node =
+  | t.Node
+  | IfEstree<
+      | estree.Node
+      | estree.MaybeNamedClassDeclaration
+      | estree.MaybeNamedFunctionDeclaration
+    >
+export type Literal =
+  | t.Literal
+  | IfEstree<estree.Literal | estree.TemplateLiteral>
 
 /**
  * All possible node types.
  */
-export type NodeType = t.Node['type'] | 'Function' | 'Literal' | 'Expression'
+export type NodeType =
+  | Node['type']
+  | 'Function'
+  | 'Literal'
+  | 'Expression'
+  | 'Declaration'
 
 /**
  * Represents the corresponding node based on the given node type.
  */
 export type GetNode<K extends NodeType> = K extends 'Function'
-  ? t.Function
-  : K extends 'Literal'
-    ? t.Literal
-    : Extract<t.Node, { type: K }>
+  ? t.Function | IfEstree<estree.Function>
+  : K extends 'Expression'
+    ? t.Expression | IfEstree<estree.Expression>
+    : K extends 'Declaration'
+      ? t.Declaration | IfEstree<estree.Declaration>
+      : K extends 'Literal'
+        ? Literal
+        : Extract<Node, { type: K }>
 
 /**
  * Checks if the given node matches the specified type(s).
@@ -22,7 +47,7 @@ export type GetNode<K extends NodeType> = K extends 'Function'
  * @returns True if the node matches the specified type(s), false otherwise.
  */
 export function isTypeOf<K extends NodeType>(
-  node: t.Node | undefined | null,
+  node: Node | undefined | null,
   types: K | Readonly<K[]>,
 ): node is GetNode<K> {
   if (!node) return false
@@ -47,9 +72,9 @@ export function isTypeOf<K extends NodeType>(
  * @returns True if the node is a CallExpression with the specified callee, false otherwise.
  */
 export function isCallOf(
-  node: t.Node | null | undefined,
+  node: Node | null | undefined,
   test: string | string[] | ((id: string) => boolean),
-): node is t.CallExpression {
+): node is GetNode<'CallExpression'> {
   return (
     !!node &&
     node.type === 'CallExpression' &&
@@ -83,9 +108,9 @@ export function isTaggedFunctionCallOf(
  * @returns True if the node is an Identifier with the specified name, false otherwise.
  */
 export function isIdentifierOf(
-  node: t.Node | undefined | null,
+  node: Node | undefined | null,
   test: string | string[] | ((id: string) => boolean),
-): node is t.Identifier {
+): node is GetNode<'Identifier'> {
   return !!node && node.type === 'Identifier' && match(node.name, test)
 }
 
@@ -95,9 +120,7 @@ export function isIdentifierOf(
  * @param node - The node to check.
  * @returns True if the node is a literal type, false otherwise.
  */
-export function isLiteralType(
-  node: t.Node | undefined | null,
-): node is t.Literal {
+export function isLiteralType(node: Node | undefined | null): node is Literal {
   return !!node && node.type.endsWith('Literal')
 }
 
@@ -108,8 +131,8 @@ export function isLiteralType(
  * @returns True if the node is a function type, false otherwise.
  */
 export function isFunctionType(
-  node: t.Node | undefined | null,
-): node is t.Function {
+  node: Node | undefined | null,
+): node is GetNode<'Function'> {
   return (
     !!node &&
     !node.type.startsWith('TS') &&
@@ -168,8 +191,8 @@ export function isDeclarationType(
  * @returns True if the node is an expression type, false otherwise.
  */
 export function isExpressionType(
-  node: t.Node | null | undefined,
-): node is t.Expression {
+  node: Node | null | undefined,
+): node is GetNode<'Expression'> {
   return (
     !!node &&
     (node.type.endsWith('Expression') ||
@@ -215,9 +238,9 @@ function match<T extends string | number | boolean>(
  * @returns True if the input `node` is a reference to a bound variable, false otherwise.
  */
 export function isReferenced(
-  node: t.Node,
-  parent: t.Node,
-  grandparent?: t.Node,
+  node: Node,
+  parent: Node,
+  grandparent?: Node,
 ): boolean {
   switch (parent.type) {
     // yes: PARENT[NODE]
