@@ -41,23 +41,23 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@babel/parser": "^7.27.0",
+    "@babel/parser": "^7.27.1",
     "pathe": "^2.0.3"
   },
   "devDependencies": {
-    "@babel/types": "^7.27.0",
-    "@sxzz/eslint-config": "^6.1.2",
+    "@babel/types": "^7.27.1",
+    "@sxzz/eslint-config": "^6.2.0",
     "@sxzz/prettier-config": "^2.2.1",
-    "@types/node": "^22.15.2",
+    "@types/node": "^22.15.3",
     "@vitest/coverage-v8": "^3.1.2",
     "@vitest/ui": "^3.1.2",
     "bumpp": "^10.1.0",
-    "eslint": "^9.25.1",
+    "eslint": "^9.26.0",
     "estree-walker": "^3.0.3",
     "fast-glob": "^3.3.3",
     "prettier": "^3.5.3",
-    "tsdown": "^0.9.9",
-    "tsx": "^4.19.3",
+    "tsdown": "^0.10.2",
+    "tsx": "^4.19.4",
     "typescript": "5.8.3",
     "vitest": "^3.1.2"
   },
