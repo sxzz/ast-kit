@@ -3,10 +3,12 @@ import {
   babelParse,
   isTypeOf,
   walkExportDeclaration,
+  walkIdentifiers,
   walkImportDeclaration,
   type ExportBinding,
   type ImportBinding,
 } from '../src'
+import type { FunctionDeclaration } from '@babel/types'
 
 describe('walk', () => {
   test('walkImportDeclaration', () => {
@@ -167,6 +169,38 @@ describe('walk', () => {
       const exports = getExports(code)
 
       expect(mapExports(exports)).toMatchSnapshot()
+    })
+  })
+
+  describe('walkIdentifiers', () => {
+    test('JSXIdentifier', () => {
+      const ast = babelParse(
+        `
+        function Comp({ Foo }){
+        const a= 1
+          return <Foo />
+        }
+        `,
+        'tsx',
+      )
+      walkIdentifiers((ast.body[0] as FunctionDeclaration).body, (id) => {
+        expect(id.name).toBe('Foo')
+      })
+    })
+
+    test('JSXMemberExpression', () => {
+      const ast = babelParse(
+        `
+        function Comp(props){
+          return <props.Foo />
+        }
+        `,
+        'tsx',
+      )
+
+      walkIdentifiers((ast.body[0] as FunctionDeclaration).body, (id) => {
+        expect(id.name).toBe('props')
+      })
     })
   })
 })
