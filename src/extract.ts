@@ -12,10 +12,12 @@ export function extractIdentifiers(
 ): t.Identifier[] {
   switch (node.type) {
     case 'Identifier':
-      identifiers.push(node)
+    case 'JSXIdentifier':
+      identifiers.push(node as t.Identifier)
       break
 
-    case 'MemberExpression': {
+    case 'MemberExpression':
+    case 'JSXMemberExpression': {
       let object: any = node
       while (object.type === 'MemberExpression') {
         object = object.object
@@ -51,3 +53,11 @@ export function extractIdentifiers(
 
   return identifiers
 }
+
+export const isStaticProperty = (node: t.Node): node is t.ObjectProperty =>
+  node &&
+  (node.type === 'ObjectProperty' || node.type === 'ObjectMethod') &&
+  !node.computed
+
+export const isStaticPropertyKey = (node: t.Node, parent: t.Node): boolean =>
+  isStaticProperty(parent) && parent.key === node
