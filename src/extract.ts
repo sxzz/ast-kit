@@ -53,11 +53,3 @@ export function extractIdentifiers(
 
   return identifiers
 }
-
-export const isStaticProperty = (node: t.Node): node is t.ObjectProperty =>
-  node &&
-  (node.type === 'ObjectProperty' || node.type === 'ObjectMethod') &&
-  !node.computed
-
-export const isStaticPropertyKey = (node: t.Node, parent: t.Node): boolean =>
-  isStaticProperty(parent) && parent.key === node

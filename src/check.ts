@@ -388,4 +388,26 @@ export function isReferenced(
   return true
 }
 
+export const isStaticProperty = (node: t.Node): node is t.ObjectProperty =>
+  node &&
+  (node.type === 'ObjectProperty' || node.type === 'ObjectMethod') &&
+  !node.computed
+
+export const isStaticPropertyKey = (node: t.Node, parent: t.Node): boolean =>
+  isStaticProperty(parent) && parent.key === node
+
+export function isIdentifier(node: t.Node): node is t.Identifier {
+  return node.type === 'Identifier' || node.type === 'JSXIdentifier'
+}
+
+export function isForStatement(
+  stmt: t.Node,
+): stmt is t.ForStatement | t.ForOfStatement | t.ForInStatement {
+  return (
+    stmt.type === 'ForOfStatement' ||
+    stmt.type === 'ForInStatement' ||
+    stmt.type === 'ForStatement'
+  )
+}
+
 /* v8 ignore end */
