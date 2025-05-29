@@ -179,7 +179,7 @@ describe('walk', () => {
       const ast = babelParse(
         `
         function Comp({ Foo }){
-        const a= 1
+        const a = 1
           return <Foo />
         }
         `,
@@ -309,6 +309,9 @@ describe('walk', () => {
         `
       function params(a, b, c) {
         return a + b + c;
+        function inner(a, b, c) {
+          return a + b + c;
+        }
       }
       `,
         'ts',
@@ -321,16 +324,30 @@ describe('walk', () => {
         },
         true,
       )
-      expect(identifiers).toEqual(['params', 'a', 'b', 'c', 'a', 'b', 'c'])
+      expect(identifiers).toEqual([
+        'params',
+        'a',
+        'b',
+        'c',
+        'a',
+        'b',
+        'c',
+        'inner',
+        'a',
+        'b',
+        'c',
+        'a',
+        'b',
+        'c',
+      ])
     })
 
     test('ignore type annotations', () => {
       const ast = babelParse(
         `
-      function typed(a: number, b: string): void {
-        ;[a, b]
-      }
-      `,
+        function typed(a: number, b: string): void {
+          ;[a, b]
+        }`,
         'ts',
       )
       const identifiers: string[] = []
@@ -342,6 +359,13 @@ describe('walk', () => {
         true,
       )
       expect(identifiers).toEqual(['typed', 'a', 'b', 'a', 'b'])
+    })
+
+    test('walk ExpressionStatement', () => {
+      const ast = babelParse(`a`, 'ts')
+      walkIdentifiers(ast, (id) => {
+        expect(id.name).toBe('a')
+      })
     })
   })
 

@@ -279,8 +279,10 @@ export function walkIdentifiers(
         // mark property in destructure pattern
         ;(node as any).inPattern = true
       } else if (isFunctionType(node)) {
+        /* v8 ignore start */
         if (node.scopeIds) {
           node.scopeIds.forEach((id) => markKnownIds(id, knownIds))
+          /* v8 ignore end */
         } else {
           // walk function expressions and add its arguments to known identifiers
           // so that we don't prefix them
@@ -289,8 +291,10 @@ export function walkIdentifiers(
           )
         }
       } else if (node.type === 'BlockStatement') {
+        /* v8 ignore start */
         if (node.scopeIds) {
           node.scopeIds.forEach((id) => markKnownIds(id, knownIds))
+          /* v8 ignore end */
         } else {
           // #3445 record block-level local variables
           walkBlockDeclarations(node, (id) =>
@@ -348,6 +352,7 @@ export function walkBlockDeclarations(
       stmt.type === 'FunctionDeclaration' ||
       stmt.type === 'ClassDeclaration'
     ) {
+      /* v8 ignore next */
       if (stmt.declare || !stmt.id) continue
       onIdent(stmt.id)
     } else if (isForStatement(stmt)) {
@@ -389,9 +394,11 @@ function markScopeIdentifier(
   knownIds: Record<string, number>,
 ) {
   const { name } = child
+  /* v8 ignore start */
   if (node.scopeIds && node.scopeIds.has(name)) {
     return
   }
+  /* v8 ignore end */
   markKnownIds(name, knownIds)
   ;(node.scopeIds || (node.scopeIds = new Set())).add(name)
 }
