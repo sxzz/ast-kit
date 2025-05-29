@@ -1,6 +1,14 @@
 import { asyncWalk, walk } from 'estree-walker'
-import { isExpressionType } from './check'
+import {
+  isExpressionType,
+  isForStatement,
+  isFunctionType,
+  isIdentifier,
+  isReferencedIdentifier,
+} from './check'
+import { extractIdentifiers } from './extract'
 import { resolveString } from './resolve'
+import { TS_NODE_TYPES } from './utils'
 import type { LiteralUnion } from './types'
 import type * as t from '@babel/types'
 
@@ -218,4 +226,179 @@ export function walkExportDeclaration(
   }
 
   setExport()
+}
+
+/**
+ * Modified from https://github.com/vuejs/core/blob/main/packages/compiler-core/src/babelUtils.ts
+ * To support browser environments and JSX.
+ *
+ * https://github.com/vuejs/core/blob/main/LICENSE
+ */
+
+/**
+ * Return value indicates whether the AST walked can be a constant
+ */
+export function walkIdentifiers(
+  root: t.Node,
+  onIdentifier: (
+    node: t.Identifier,
+    parent: t.Node | null | undefined,
+    parentStack: t.Node[],
+    isReference: boolean,
+    isLocal: boolean,
+  ) => void,
+  includeAll = false,
+  parentStack: t.Node[] = [],
+  knownIds: Record<string, number> = Object.create(null),
+): void {
+  const rootExp =
+    root.type === 'Program'
+      ? root.body[0].type === 'ExpressionStatement' && root.body[0].expression
+      : root
+
+  walkAST<t.Node>(root, {
+    enter(node: t.Node & { scopeIds?: Set<string> }, parent) {
+      parent && parentStack.push(parent)
+      if (
+        parent &&
+        parent.type.startsWith('TS') &&
+        !TS_NODE_TYPES.includes(parent.type as any)
+      ) {
+        return this.skip()
+      }
+      if (isIdentifier(node)) {
+        const isLocal = !!knownIds[node.name]
+        const isRefed = isReferencedIdentifier(node, parent, parentStack)
+        if (includeAll || (isRefed && !isLocal)) {
+          onIdentifier(node, parent, parentStack, isRefed, isLocal)
+        }
+      } else if (
+        node.type === 'ObjectProperty' &&
+        parent?.type === 'ObjectPattern'
+      ) {
+        // mark property in destructure pattern
+        ;(node as any).inPattern = true
+      } else if (isFunctionType(node)) {
+        /* v8 ignore start */
+        if (node.scopeIds) {
+          node.scopeIds.forEach((id) => markKnownIds(id, knownIds))
+          /* v8 ignore end */
+        } else {
+          // walk function expressions and add its arguments to known identifiers
+          // so that we don't prefix them
+          walkFunctionParams(node, (id) =>
+            markScopeIdentifier(node, id, knownIds),
+          )
+        }
+      } else if (node.type === 'BlockStatement') {
+        /* v8 ignore start */
+        if (node.scopeIds) {
+          node.scopeIds.forEach((id) => markKnownIds(id, knownIds))
+          /* v8 ignore end */
+        } else {
+          // #3445 record block-level local variables
+          walkBlockDeclarations(node, (id) =>
+            markScopeIdentifier(node, id, knownIds),
+          )
+        }
+      } else if (node.type === 'CatchClause' && node.param) {
+        for (const id of extractIdentifiers(node.param)) {
+          markScopeIdentifier(node, id, knownIds)
+        }
+      } else if (isForStatement(node)) {
+        walkForStatement(node, false, (id) =>
+          markScopeIdentifier(node, id, knownIds),
+        )
+      }
+    },
+    leave(node: t.Node & { scopeIds?: Set<string> }, parent) {
+      parent && parentStack.pop()
+      if (node !== rootExp && node.scopeIds) {
+        for (const id of node.scopeIds) {
+          knownIds[id]--
+          if (knownIds[id] === 0) {
+            delete knownIds[id]
+          }
+        }
+      }
+    },
+  })
+}
+
+export function walkFunctionParams(
+  node: t.Function,
+  onIdent: (id: t.Identifier) => void,
+): void {
+  for (const p of node.params) {
+    for (const id of extractIdentifiers(p)) {
+      onIdent(id)
+    }
+  }
+}
+
+export function walkBlockDeclarations(
+  block: t.BlockStatement | t.Program,
+  onIdent: (node: t.Identifier) => void,
+): void {
+  for (const stmt of block.body) {
+    if (stmt.type === 'VariableDeclaration') {
+      if (stmt.declare) continue
+      for (const decl of stmt.declarations) {
+        for (const id of extractIdentifiers(decl.id)) {
+          onIdent(id)
+        }
+      }
+    } else if (
+      stmt.type === 'FunctionDeclaration' ||
+      stmt.type === 'ClassDeclaration'
+    ) {
+      /* v8 ignore next */
+      if (stmt.declare || !stmt.id) continue
+      onIdent(stmt.id)
+    } else if (isForStatement(stmt)) {
+      walkForStatement(stmt, true, onIdent)
+    }
+  }
+}
+
+function walkForStatement(
+  stmt: t.ForStatement | t.ForOfStatement | t.ForInStatement,
+  isVar: boolean,
+  onIdent: (id: t.Identifier) => void,
+) {
+  const variable = stmt.type === 'ForStatement' ? stmt.init : stmt.left
+  if (
+    variable &&
+    variable.type === 'VariableDeclaration' &&
+    (variable.kind === 'var' ? isVar : !isVar)
+  ) {
+    for (const decl of variable.declarations) {
+      for (const id of extractIdentifiers(decl.id)) {
+        onIdent(id)
+      }
+    }
+  }
+}
+
+function markKnownIds(name: string, knownIds: Record<string, number>) {
+  if (name in knownIds) {
+    knownIds[name]++
+  } else {
+    knownIds[name] = 1
+  }
+}
+
+function markScopeIdentifier(
+  node: t.Node & { scopeIds?: Set<string> },
+  child: t.Identifier,
+  knownIds: Record<string, number>,
+) {
+  const { name } = child
+  /* v8 ignore start */
+  if (node.scopeIds && node.scopeIds.has(name)) {
+    return
+  }
+  /* v8 ignore end */
+  markKnownIds(name, knownIds)
+  ;(node.scopeIds || (node.scopeIds = new Set())).add(name)
 }

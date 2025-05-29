@@ -2,11 +2,15 @@ import { describe, expect, test } from 'vitest'
 import {
   babelParse,
   isTypeOf,
+  walkBlockDeclarations,
   walkExportDeclaration,
+  walkFunctionParams,
+  walkIdentifiers,
   walkImportDeclaration,
   type ExportBinding,
   type ImportBinding,
 } from '../src'
+import type { BlockStatement, FunctionDeclaration } from '@babel/types'
 
 describe('walk', () => {
   test('walkImportDeclaration', () => {
@@ -167,6 +171,300 @@ describe('walk', () => {
       const exports = getExports(code)
 
       expect(mapExports(exports)).toMatchSnapshot()
+    })
+  })
+
+  describe('walkIdentifiers', () => {
+    test('JSXIdentifier', () => {
+      const ast = babelParse(
+        `
+        function Comp({ Foo }){
+        const a = 1
+          return <Foo />
+        }
+        `,
+        'tsx',
+      )
+      walkIdentifiers((ast.body[0] as FunctionDeclaration).body, (id) => {
+        expect(id.name).toBe('Foo')
+      })
+    })
+
+    test('JSXMemberExpression', () => {
+      const ast = babelParse(
+        `
+        function Comp(props){
+          return <props.Foo />
+        }
+        `,
+        'tsx',
+      )
+
+      walkIdentifiers((ast.body[0] as FunctionDeclaration).body, (id) => {
+        expect(id.name).toBe('props')
+      })
+    })
+
+    test('nested identifiers', () => {
+      const ast = babelParse(
+        `
+      function nested() {
+        const a = 1;
+        function inner() {
+        const b = 2;
+        return a + b;
+        }
+        return inner();
+      }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkIdentifiers(
+        (ast.body[0] as FunctionDeclaration).body,
+        (id) => {
+          identifiers.push(id.name)
+        },
+        true,
+      )
+      expect(identifiers).toEqual(['a', 'inner', 'b', 'a', 'b', 'inner'])
+    })
+
+    test('object pattern destructuring', () => {
+      const ast = babelParse(
+        `
+      function destructure({ x, y }) {
+        return x + y;
+      }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkIdentifiers((ast.body[0] as FunctionDeclaration).body, (id) => {
+        identifiers.push(id.name)
+      })
+      expect(identifiers).toEqual(['x', 'y'])
+    })
+
+    test('array pattern destructuring', () => {
+      const ast = babelParse(
+        `
+      function destructure([a, b]) {
+        return a + b;
+      }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkIdentifiers((ast.body[0] as FunctionDeclaration).body, (id) => {
+        identifiers.push(id.name)
+      })
+      expect(identifiers).toEqual(['a', 'b'])
+    })
+
+    test('catch clause identifiers', () => {
+      const ast = babelParse(
+        `
+      try {
+        throw new Error('test');
+      } catch (error) {
+        ;[error]
+      }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkIdentifiers(
+        (ast.body[0] as any).handler,
+        (id) => {
+          identifiers.push(id.name)
+        },
+        true,
+      )
+      expect(identifiers).toEqual(['error', 'error'])
+    })
+
+    test('for loop identifiers', () => {
+      const ast = babelParse(
+        `
+      for (let i = 0; i < 10; i++) {
+        ;[i]
+      }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkIdentifiers(
+        ast.body[0] as any,
+        (id, _, __, isReference) => {
+          if (isReference) identifiers.push(id.name)
+        },
+        true,
+      )
+      expect(identifiers).toEqual(['i', 'i', 'i'])
+    })
+
+    test('function parameters', () => {
+      const ast = babelParse(
+        `
+      function params(a, b, c) {
+        return a + b + c;
+        function inner(a, b, c) {
+          return a + b + c;
+        }
+      }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkIdentifiers(
+        ast.body[0] as FunctionDeclaration,
+        (id) => {
+          identifiers.push(id.name)
+        },
+        true,
+      )
+      expect(identifiers).toEqual([
+        'params',
+        'a',
+        'b',
+        'c',
+        'a',
+        'b',
+        'c',
+        'inner',
+        'a',
+        'b',
+        'c',
+        'a',
+        'b',
+        'c',
+      ])
+    })
+
+    test('ignore type annotations', () => {
+      const ast = babelParse(
+        `
+        function typed(a: number, b: string): void {
+          ;[a, b]
+        }`,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkIdentifiers(
+        ast.body[0] as FunctionDeclaration,
+        (id) => {
+          identifiers.push(id.name)
+        },
+        true,
+      )
+      expect(identifiers).toEqual(['typed', 'a', 'b', 'a', 'b'])
+    })
+
+    test('walk ExpressionStatement', () => {
+      const ast = babelParse(`a`, 'ts')
+      walkIdentifiers(ast, (id) => {
+        expect(id.name).toBe('a')
+      })
+    })
+  })
+
+  test('walkFunctionParams', () => {
+    const ast = babelParse(`function Comp({ foo }){}`, 'ts')
+    walkFunctionParams(ast.body[0] as FunctionDeclaration, (id) => {
+      expect(id.name).toBe('foo')
+    })
+  })
+
+  describe('walkBlockDeclarations', () => {
+    test('variable declarations', () => {
+      const ast = babelParse(
+        `
+        {
+          let a = 1;
+          const b = 2;
+          var c = 3;
+        }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkBlockDeclarations(ast.body[0] as BlockStatement, (id) => {
+        identifiers.push(id.name)
+      })
+      expect(identifiers).toEqual(['a', 'b', 'c'])
+    })
+
+    test('function and class declarations', () => {
+      const ast = babelParse(
+        `
+        {
+          function foo() {}
+          class Bar {}
+        }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkBlockDeclarations(ast.body[0] as BlockStatement, (id) => {
+        identifiers.push(id.name)
+      })
+      expect(identifiers).toEqual(['foo', 'Bar'])
+    })
+
+    test('for loop variable declarations', () => {
+      const ast = babelParse(
+        `
+        {
+          for (let i = 0; i < 10; i++) {}
+          for (const j of [1, 2, 3]) {}
+          for (var k in { a: 1, b: 2 }) {}
+        }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkBlockDeclarations(ast.body[0] as any, (id) => {
+        identifiers.push(id.name)
+      })
+      expect(identifiers).toEqual(['k'])
+    })
+
+    test('nested block declarations', () => {
+      const ast = babelParse(
+        `
+        {
+          {
+            let x = 1;
+            const y = 2;
+          }
+          var z = 3;
+        }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkBlockDeclarations(ast.body[0] as any, (id) => {
+        identifiers.push(id.name)
+      })
+      expect(identifiers).toEqual(['z'])
+    })
+
+    test('ignore declared variables', () => {
+      const ast = babelParse(
+        `
+        {
+          declare const a: number;
+          declare function foo(): void;
+        }
+      `,
+        'ts',
+      )
+      const identifiers: string[] = []
+      walkBlockDeclarations(ast.body[0] as any, (id) => {
+        identifiers.push(id.name)
+      })
+      expect(identifiers).toEqual([])
     })
   })
 })

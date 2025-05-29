@@ -86,7 +86,7 @@ export function isIdentifierOf(
   node: t.Node | undefined | null,
   test: string | string[] | ((id: string) => boolean),
 ): node is t.Identifier {
-  return !!node && node.type === 'Identifier' && match(node.name, test)
+  return isIdentifier(node) && match(node.name, test)
 }
 
 /**
@@ -386,6 +386,102 @@ export function isReferenced(
   }
 
   return true
+}
+
+export function isIdentifier(
+  node?: t.Node | undefined | null,
+): node is t.Identifier {
+  return !!node && (node.type === 'Identifier' || node.type === 'JSXIdentifier')
+}
+
+export function isStaticProperty(
+  node?: t.Node | undefined | null,
+): node is t.ObjectProperty {
+  return (
+    !!node &&
+    (node.type === 'ObjectProperty' || node.type === 'ObjectMethod') &&
+    !node.computed
+  )
+}
+
+export function isStaticPropertyKey(node: t.Node, parent: t.Node): boolean {
+  return isStaticProperty(parent) && parent.key === node
+}
+
+export function isForStatement(
+  stmt: t.Node,
+): stmt is t.ForStatement | t.ForOfStatement | t.ForInStatement {
+  return (
+    stmt.type === 'ForOfStatement' ||
+    stmt.type === 'ForInStatement' ||
+    stmt.type === 'ForStatement'
+  )
+}
+
+export function isReferencedIdentifier(
+  id: t.Identifier,
+  parent: t.Node | null | undefined,
+  parentStack: t.Node[],
+): boolean {
+  if (!parent) {
+    return true
+  }
+
+  // is a special keyword but parsed as identifier
+  if (id.name === 'arguments') {
+    return false
+  }
+
+  if (isReferenced(id, parent)) {
+    return true
+  }
+
+  // babel's isReferenced check returns false for ids being assigned to, so we
+  // need to cover those cases here
+  switch (parent.type) {
+    case 'AssignmentExpression':
+    case 'AssignmentPattern':
+      return true
+    case 'ObjectPattern':
+    case 'ArrayPattern':
+      return isInDestructureAssignment(parent, parentStack)
+  }
+
+  return false
+}
+
+export function isInDestructureAssignment(
+  parent: t.Node,
+  parentStack: t.Node[],
+): boolean {
+  if (
+    parent &&
+    (parent.type === 'ObjectProperty' || parent.type === 'ArrayPattern')
+  ) {
+    let i = parentStack.length
+    while (i--) {
+      const p = parentStack[i]
+      if (p.type === 'AssignmentExpression') {
+        return true
+      } else if (p.type !== 'ObjectProperty' && !p.type.endsWith('Pattern')) {
+        break
+      }
+    }
+  }
+  return false
+}
+
+export function isInNewExpression(parentStack: t.Node[]): boolean {
+  let i = parentStack.length
+  while (i--) {
+    const p = parentStack[i]
+    if (p.type === 'NewExpression') {
+      return true
+    } else if (p.type !== 'MemberExpression') {
+      break
+    }
+  }
+  return false
 }
 
 /* v8 ignore end */

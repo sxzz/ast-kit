@@ -1,14 +1,19 @@
 import { describe, expect, test } from 'vitest'
 import {
+  babelParse,
   isCallOf,
   isDeclarationType,
   isExpressionType,
   isFunctionType,
   isIdentifierOf,
+  isInDestructureAssignment,
+  isInNewExpression,
   isLiteralType,
   isReferenced,
+  isReferencedIdentifier,
   isTaggedFunctionCallOf,
   isTypeOf,
+  walkIdentifiers,
 } from '../src'
 import { parse as _parse } from './_utils'
 import type * as t from '@babel/types'
@@ -175,6 +180,185 @@ describe('utils', () => {
 
       const node2 = _parse<t.ClassExpression>('class extends Foo {}', true)
       expect(isReferenced(node2.superClass!, node2)) //.toBe(true)
+    })
+  })
+
+  describe('isReferencedIdentifier', () => {
+    test('identifier is referenced in a variable declaration', () => {
+      expect.assertions(1)
+      const ast = babelParse(`const a = b`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'b') {
+          expect(isReferencedIdentifier(node, parent, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier is referenced in a function call', () => {
+      expect.assertions(1)
+      const ast = babelParse(`foo(bar)`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'bar') {
+          expect(isReferencedIdentifier(node, parent, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier is referenced in a member expression', () => {
+      expect.assertions(1)
+      const ast = babelParse(`obj.prop`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'obj') {
+          expect(isReferencedIdentifier(node, parent, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier is referenced in an assignment expression', () => {
+      expect.assertions(1)
+      const ast = babelParse(`a = b`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'b') {
+          expect(isReferencedIdentifier(node, parent, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier is referenced in a return statement', () => {
+      expect.assertions(1)
+      const ast = babelParse(`function foo() { return bar }`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'bar') {
+          expect(isReferencedIdentifier(node, parent, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier is referenced in a conditional expression', () => {
+      expect.assertions(2)
+      const ast = babelParse(`a ? b : c`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (
+          node.type === 'Identifier' &&
+          (node.name === 'b' || node.name === 'c')
+        ) {
+          expect(isReferencedIdentifier(node, parent, parentStack)).toBe(true)
+        }
+      })
+    })
+  })
+
+  describe('isInNewExpression', () => {
+    test('identifier in NewExpression', () => {
+      expect.assertions(1)
+      const ast = babelParse(`new Foo()`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'Foo') {
+          expect(isInNewExpression(parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier not in NewExpression', () => {
+      expect.assertions(1)
+      const ast = babelParse(`Foo()`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'Foo') {
+          expect(isInNewExpression(parentStack)).toBe(false)
+        }
+      })
+    })
+
+    test('identifier in nested MemberExpression within NewExpression', () => {
+      expect.assertions(1)
+      const ast = babelParse(`new Foo.Bar()`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'Foo') {
+          expect(isInNewExpression(parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier in deeply nested MemberExpression within NewExpression', () => {
+      expect.assertions(1)
+      const ast = babelParse(`new Foo.Bar.Baz()`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'Foo') {
+          expect(isInNewExpression(parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier in MemberExpression not in NewExpression', () => {
+      expect.assertions(1)
+      const ast = babelParse(`Foo.Bar()`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'Foo') {
+          expect(isInNewExpression(parentStack)).toBe(false)
+        }
+      })
+    })
+  })
+
+  describe('isInDestructureAssignment', () => {
+    test('identifier in object destructure assignment', () => {
+      expect.assertions(1)
+      const ast = babelParse(`({ a: c } = obj)`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'c') {
+          expect(isInDestructureAssignment(parent!, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier in array destructure assignment', () => {
+      expect.assertions(1)
+      const ast = babelParse(`[a, b] = arr`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'a') {
+          expect(isInDestructureAssignment(parent!, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier in nested object destructure assignment', () => {
+      expect.assertions(1)
+      const ast = babelParse(`({ a: { b: c } } = obj)`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'c') {
+          expect(isInDestructureAssignment(parent!, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier in nested array destructure assignment', () => {
+      expect.assertions(1)
+      const ast = babelParse(`[[a], b] = arr`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'a') {
+          expect(isInDestructureAssignment(parent!, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier in mixed destructure assignment', () => {
+      expect.assertions(1)
+      const ast = babelParse(`({ a: [b, c] } = obj)`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'b') {
+          expect(isInDestructureAssignment(parent!, parentStack)).toBe(true)
+        }
+      })
+    })
+
+    test('identifier in destructure assignment with default value', () => {
+      expect.assertions(1)
+      const ast = babelParse(`({ a = 1 } = obj)`, 'ts')
+      walkIdentifiers(ast.body[0], (node, parent, parentStack) => {
+        if (node.type === 'Identifier' && node.name === 'a') {
+          expect(isInDestructureAssignment(parent!, parentStack)).toBe(false)
+        }
+      })
     })
   })
 })

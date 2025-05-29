@@ -12,10 +12,12 @@ export function extractIdentifiers(
 ): t.Identifier[] {
   switch (node.type) {
     case 'Identifier':
-      identifiers.push(node)
+    case 'JSXIdentifier':
+      identifiers.push(node as t.Identifier)
       break
 
-    case 'MemberExpression': {
+    case 'MemberExpression':
+    case 'JSXMemberExpression': {
       let object: any = node
       while (object.type === 'MemberExpression') {
         object = object.object
