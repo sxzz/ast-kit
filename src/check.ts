@@ -86,7 +86,7 @@ export function isIdentifierOf(
   node: t.Node | undefined | null,
   test: string | string[] | ((id: string) => boolean),
 ): node is t.Identifier {
-  return !!node && node.type === 'Identifier' && match(node.name, test)
+  return isIdentifier(node) && match(node.name, test)
 }
 
 /**
@@ -388,13 +388,17 @@ export function isReferenced(
   return true
 }
 
-export function isIdentifier(node: t.Node): node is t.Identifier {
-  return node.type === 'Identifier' || node.type === 'JSXIdentifier'
+export function isIdentifier(
+  node?: t.Node | undefined | null,
+): node is t.Identifier {
+  return !!node && (node.type === 'Identifier' || node.type === 'JSXIdentifier')
 }
 
-export function isStaticProperty(node: t.Node): node is t.ObjectProperty {
+export function isStaticProperty(
+  node?: t.Node | undefined | null,
+): node is t.ObjectProperty {
   return (
-    node &&
+    !!node &&
     (node.type === 'ObjectProperty' || node.type === 'ObjectMethod') &&
     !node.computed
   )
