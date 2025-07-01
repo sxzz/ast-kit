@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import {
   babelParse,
   isCallOf,
@@ -258,6 +258,13 @@ describe('utils', () => {
         },
         true,
       )
+    })
+
+    test('JSXNamespacedName should not be inferred as references', () => {
+      const ast = babelParse(`const Comp = <svg:circle foo:bar="" />`, 'tsx')
+      const onIdentifier = vi.fn()
+      walkIdentifiers(ast.body[0], onIdentifier)
+      expect(onIdentifier).toHaveBeenCalledTimes(0)
     })
   })
 
