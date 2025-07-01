@@ -248,6 +248,7 @@ describe('utils', () => {
     })
 
     test('identifiers in function parameters should not be inferred as references', () => {
+      expect.assertions(4)
       const ast = babelParse(`(({ title }) => [])`)
       walkIdentifiers(
         ast.body[0],
