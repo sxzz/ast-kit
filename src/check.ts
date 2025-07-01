@@ -432,7 +432,7 @@ export function isReferencedIdentifier(
     return false
   }
 
-  if (isReferenced(id, parent)) {
+  if (isReferenced(id, parent, parentStack.at(-2))) {
     return true
   }
 
@@ -442,7 +442,8 @@ export function isReferencedIdentifier(
     case 'AssignmentExpression':
     case 'AssignmentPattern':
       return true
-    case 'ObjectPattern':
+    case 'ObjectProperty':
+      return parent.key !== id && isInDestructureAssignment(parent, parentStack)
     case 'ArrayPattern':
       return isInDestructureAssignment(parent, parentStack)
   }
