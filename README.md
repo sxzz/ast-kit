@@ -17,7 +17,7 @@ A toolkit for easy Babel AST generation and manipulation.
 npm i ast-kit
 ```
 
-Requires Node.js 16.14.0 or higher.
+Requires Node.js 20.18.0 or higher.
 
 ## AST Explorer
 
