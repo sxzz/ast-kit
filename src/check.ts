@@ -351,7 +351,9 @@ export function isReferenced(
       return false
 
     // no: <div NODE="foo" />
+    // no: <div foo:NODE="foo" />
     case 'JSXAttribute':
+    case 'JSXNamespacedName':
       return false
 
     // no: [NODE] = [];
