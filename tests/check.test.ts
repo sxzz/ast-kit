@@ -247,6 +247,19 @@ describe('utils', () => {
       })
     })
 
+    test('identifiers in function parameters should not be inferred as references', () => {
+      expect.assertions(4)
+      const ast = babelParse(`(({ title }) => [])`)
+      walkIdentifiers(
+        ast.body[0],
+        (node, parent, parentStack, isReference) => {
+          expect(isReference).toBe(false)
+          expect(isReferencedIdentifier(node, parent, parentStack)).toBe(false)
+        },
+        true,
+      )
+    })
+
     test('JSXNamespacedName should not be referenced', () => {
       const ast = babelParse(`const Comp = <svg:circle foo:bar="" />`, 'tsx')
       const onIdentifier = vi.fn()
