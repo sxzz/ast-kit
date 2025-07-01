@@ -260,7 +260,7 @@ describe('utils', () => {
       )
     })
 
-    test('JSXNamespacedName should not be referenced', () => {
+    test('JSXNamespacedName should not be inferred as references', () => {
       const ast = babelParse(`const Comp = <svg:circle foo:bar="" />`, 'tsx')
       const onIdentifier = vi.fn()
       walkIdentifiers(ast.body[0], onIdentifier)
