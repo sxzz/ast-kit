@@ -14,27 +14,8 @@ jobs:
       contents: write
       id-token: write
 
-  publish-jsr:
-    runs-on: ubuntu-latest
-
+  release-jsr:
+    uses: sxzz/workflows/.github/workflows/release-jsr.yml@v1
     permissions:
       contents: read
       id-token: write
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.1.0
-
-      - name: Set node
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-          cache: pnpm
-
-      - name: Install
-        run: pnpm i
-
-      - name: Publish package
-        run: npx jsr publish
