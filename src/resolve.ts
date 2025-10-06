@@ -18,16 +18,23 @@ export function resolveString(
   computed = false,
 ): string {
   if (typeof node === 'string') return node
-  else if (node.type === 'Identifier') {
-    if (computed) throw new TypeError('Invalid Identifier')
-    return node.name
-  } else if (node.type === 'PrivateName') {
-    return `#${node.id.name}`
-  } else if (node.type === 'ThisExpression') {
-    return 'this'
-  } else if (node.type === 'Super') {
-    return 'super'
-  }
+  else
+    switch (node.type) {
+      case 'Identifier': {
+        if (computed) throw new TypeError('Invalid Identifier')
+        return node.name
+      }
+      case 'PrivateName': {
+        return `#${node.id.name}`
+      }
+      case 'ThisExpression': {
+        return 'this'
+      }
+      case 'Super': {
+        return 'super'
+      }
+      // No default
+    }
   return String(resolveLiteral(node))
 }
 

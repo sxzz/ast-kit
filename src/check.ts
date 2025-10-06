@@ -27,14 +27,19 @@ export function isTypeOf<K extends NodeType>(
 ): node is GetNode<K> {
   if (!node) return false
   return ([] as string[]).concat(types).some((type) => {
-    if (type === 'Function') {
-      return isFunctionType(node)
-    } else if (type === 'Literal') {
-      return isLiteralType(node)
-    } else if (type === 'Expression') {
-      return isExpressionType(node)
-    } else {
-      return node.type === type
+    switch (type) {
+      case 'Function': {
+        return isFunctionType(node)
+      }
+      case 'Literal': {
+        return isLiteralType(node)
+      }
+      case 'Expression': {
+        return isExpressionType(node)
+      }
+      default: {
+        return node.type === type
+      }
     }
   })
 }
