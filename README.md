@@ -23,11 +23,11 @@ A toolkit for easy Babel AST generation and manipulation.
 npm i ast-kit
 ```
 
-Requires Node.js 20.18.0 or higher.
+Requires Node.js 20.19.0 or higher.
 
 ## AST Explorer
 
-You can explore your code's AST using the [AST Explorer](https://ast.sxzz.moe/).
+You can explore your code's AST using the [AST Explorer](https://ast-explorer.dev/).
 
 ## Sponsors
 
