@@ -92,6 +92,8 @@ export function babelParse(
   return { ...program, ...rest }
 }
 
+export { parse as babelParseFile }
+
 export const parseCache: Map<string, ParseResult<t.File>> = new Map<
   string,
   ParseResult<t.File>
