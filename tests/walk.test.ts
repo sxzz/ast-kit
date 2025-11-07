@@ -119,6 +119,7 @@ describe('walk', () => {
         desc: 'expression with VariableDeclaration',
       },
       { code: 'export default [1]', desc: 'expression' },
+      { code: 'export {}', desc: 'empty specifier' },
     ])('ExportDefaultDeclaration $desc', ({ code }) => {
       const exports = getExports(code)
 

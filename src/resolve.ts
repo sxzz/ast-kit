@@ -61,7 +61,7 @@ export function resolveLiteral(
     case 'StringLiteral':
       return node.value
 
-    /* c8 ignore next 2 */
+    /* v8 ignore next -- @preserve */
     case 'DecimalLiteral':
       return Number(node.value)
   }

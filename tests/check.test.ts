@@ -11,6 +11,8 @@ import {
   isLiteralType,
   isReferenced,
   isReferencedIdentifier,
+  isStaticProperty,
+  isStaticPropertyKey,
   isTaggedFunctionCallOf,
   isTypeOf,
   walkIdentifiers,
@@ -62,6 +64,12 @@ describe('utils', () => {
         type: 'FunctionDeclaration',
       } as t.FunctionDeclaration),
     ).toBe(true)
+    expect(
+      isDeclarationType({
+        type: 'Placeholder',
+        expectedNode: 'Identifier',
+      } as t.Placeholder),
+    ).toBe(false)
     expect(
       isDeclarationType({
         type: 'Placeholder',
@@ -184,6 +192,19 @@ describe('utils', () => {
   })
 
   describe('isReferencedIdentifier', () => {
+    test('no parent', () => {
+      const identifier = _parse<t.Identifier>('foo', true)
+      expect(isReferencedIdentifier(identifier, undefined, [])).toBe(true)
+    })
+
+    test('arguments', () => {
+      const ast = babelParse('function foo() { arguments }')
+      const funcBody = (ast.body[0] as t.FunctionDeclaration).body
+      const parent = funcBody.body[0] as t.ExpressionStatement
+      const identifier = parent.expression as t.Identifier
+      expect(isReferencedIdentifier(identifier, parent, [])).toBe(false)
+    })
+
     test('identifier is referenced in a variable declaration', () => {
       expect.assertions(1)
       const ast = babelParse(`const a = b`, 'ts')
@@ -379,6 +400,19 @@ describe('utils', () => {
           expect(isInDestructureAssignment(parent!, parentStack)).toBe(false)
         }
       })
+    })
+  })
+
+  test('isStaticProperty', () => {
+    const ast = babelParse(`const obj = { a: 1, b() {} }`)
+    const objDecl = ast.body[0] as t.VariableDeclaration
+    const objInit = objDecl.declarations[0].init as t.ObjectExpression
+
+    objInit.properties.forEach((prop) => {
+      expect(isStaticProperty(prop)).toBe(true)
+      expect(isStaticPropertyKey((prop as t.ObjectProperty).key, prop)).toBe(
+        true,
+      )
     })
   })
 })

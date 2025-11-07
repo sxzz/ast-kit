@@ -1,7 +1,7 @@
 // copied from https://github.com/rollup/plugins/blob/master/packages/pluginutils/src/attachScopes.ts
 // MIT License
 
-/* c8 ignore start */
+/* v8 ignore file -- @preserve */
 
 import { walkAST } from './walk'
 import type {
@@ -227,5 +227,3 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
 
   return scope
 }
-
-/* c8 ignore stop */

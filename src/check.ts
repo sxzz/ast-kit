@@ -203,7 +203,7 @@ function match<T extends string | number | boolean>(
   return value === test
 }
 
-/* v8 ignore start */
+/* v8 ignore next -- @preserve */
 
 /**
  * Checks if the input `node` is a reference to a bound variable.
@@ -491,5 +491,3 @@ export function isInNewExpression(parentStack: t.Node[]): boolean {
   }
   return false
 }
-
-/* v8 ignore end */

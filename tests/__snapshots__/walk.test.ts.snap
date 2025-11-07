@@ -44,6 +44,8 @@ exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'class' 1`] = `
 ]
 `;
 
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'empty specifier' 1`] = `[]`;
+
 exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'expression with VariableDeclaration' 1`] = `
 [
   {
