@@ -1,32 +1,35 @@
 {
   "name": "ast-kit",
+  "type": "module",
   "version": "2.2.0",
   "packageManager": "pnpm@10.24.0",
   "description": "A toolkit for easy Babel AST generation and manipulation.",
-  "type": "module",
+  "author": "Kevin Deng <sxzz@sxzz.moe>",
   "license": "MIT",
+  "funding": "https://github.com/sponsors/sxzz",
   "homepage": "https://github.com/sxzz/ast-kit#readme",
-  "bugs": {
-    "url": "https://github.com/sxzz/ast-kit/issues"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sxzz/ast-kit.git"
   },
-  "author": "Kevin Deng <sxzz@sxzz.moe>",
-  "funding": "https://github.com/sponsors/sxzz",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/sxzz/ast-kit/issues"
+  },
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   },
   "scripts": {
     "lint": "eslint .",
@@ -43,23 +46,20 @@
   },
   "devDependencies": {
     "@babel/types": "^7.28.5",
-    "@sxzz/eslint-config": "^7.4.0",
+    "@sxzz/eslint-config": "^7.4.1",
     "@sxzz/prettier-config": "^2.2.6",
     "@types/node": "^24.10.1",
-    "@vitest/coverage-v8": "^4.0.14",
-    "@vitest/ui": "^4.0.14",
+    "@vitest/coverage-v8": "^4.0.15",
+    "@vitest/ui": "^4.0.15",
     "bumpp": "^10.3.2",
     "eslint": "^9.39.1",
     "estree-walker": "^3.0.3",
     "fast-glob": "^3.3.3",
     "prettier": "^3.7.3",
-    "tsdown": "^0.16.8",
+    "tsdown": "^0.17.0-beta.5",
     "tsx": "^4.21.0",
     "typescript": "5.9.3",
-    "vitest": "^4.0.14"
-  },
-  "engines": {
-    "node": ">=20.19.0"
+    "vitest": "^4.0.15"
   },
   "prettier": "@sxzz/prettier-config"
 }

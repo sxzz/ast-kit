@@ -10,8 +10,8 @@
     "noUnusedLocals": true,
     "declaration": true,
     "emitDeclarationOnly": false,
-    "isolatedDeclarations": true,
     "esModuleInterop": true,
+    "isolatedDeclarations": true,
     "skipLibCheck": true
   },
   "include": ["src", "tests"]
