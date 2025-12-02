@@ -37,7 +37,7 @@
     "build": "tsdown",
     "test": "vitest",
     "release": "bumpp",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsgo --noEmit",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
@@ -49,6 +49,7 @@
     "@sxzz/eslint-config": "^7.4.1",
     "@sxzz/prettier-config": "^2.2.6",
     "@types/node": "^24.10.1",
+    "@typescript/native-preview": "7.0.0-dev.20251202.1",
     "@vitest/coverage-v8": "^4.0.15",
     "@vitest/ui": "^4.0.15",
     "bumpp": "^10.3.2",
