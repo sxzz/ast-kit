@@ -203,8 +203,6 @@ function match<T extends string | number | boolean>(
   return value === test
 }
 
-/* v8 ignore next -- @preserve */
-
 /**
  * Checks if the input `node` is a reference to a bound variable.
  *
@@ -219,6 +217,7 @@ function match<T extends string | number | boolean>(
  * @param grandparent - The grandparent node of the input `node`.
  * @returns True if the input `node` is a reference to a bound variable, false otherwise.
  */
+/* v8 ignore next */
 export function isReferenced(
   node: t.Node,
   parent: t.Node,

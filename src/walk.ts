@@ -167,10 +167,10 @@ export function walkExportDeclaration(
       }
     } else if (!node.specifiers.length && node.declaration) {
       // TODO: handle other nodeType
-      /* v8 ignore else -- @preserve */
+      /* v8 ignore else */
       if (node.declaration.type === 'VariableDeclaration') {
         for (const decl of node.declaration.declarations) {
-          /* v8 ignore if -- @preserve */
+          /* v8 ignore if */
           if (decl.id.type !== 'Identifier') {
             // TODO destructuring
             continue
@@ -279,7 +279,7 @@ export function walkIdentifiers(
         // mark property in destructure pattern
         ;(node as any).inPattern = true
       } else if (isFunctionType(node)) {
-        /* v8 ignore if -- @preserve */
+        /* v8 ignore if */
         if (node.scopeIds) {
           node.scopeIds.forEach((id) => markKnownIds(id, knownIds))
         } else {
@@ -290,7 +290,7 @@ export function walkIdentifiers(
           )
         }
       } else if (node.type === 'BlockStatement') {
-        /* v8 ignore if -- @preserve */
+        /* v8 ignore if */
         if (node.scopeIds) {
           node.scopeIds.forEach((id) => markKnownIds(id, knownIds))
         } else {
@@ -350,7 +350,7 @@ export function walkBlockDeclarations(
       stmt.type === 'FunctionDeclaration' ||
       stmt.type === 'ClassDeclaration'
     ) {
-      /* v8 ignore if -- @preserve */
+      /* v8 ignore if */
       if (stmt.declare || !stmt.id) continue
       onIdent(stmt.id)
     } else if (isForStatement(stmt)) {
@@ -392,7 +392,7 @@ function markScopeIdentifier(
   knownIds: Record<string, number>,
 ) {
   const { name } = child
-  /* v8 ignore if -- @preserve */
+  /* v8 ignore if */
   if (node.scopeIds && node.scopeIds.has(name)) {
     return
   }

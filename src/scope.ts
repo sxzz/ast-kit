@@ -1,7 +1,7 @@
 // copied from https://github.com/rollup/plugins/blob/master/packages/pluginutils/src/attachScopes.ts
 // MIT License
 
-/* v8 ignore file -- @preserve */
+/* v8 ignore file */
 
 import { walkAST } from './walk'
 import type {
