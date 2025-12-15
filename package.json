@@ -46,24 +46,24 @@
   },
   "devDependencies": {
     "@babel/types": "^7.28.5",
-    "@sxzz/eslint-config": "^7.4.1",
+    "@sxzz/eslint-config": "^7.4.3",
     "@sxzz/prettier-config": "^2.2.6",
-    "@types/node": "^24.10.2",
-    "@typescript/native-preview": "7.0.0-dev.20251208.1",
+    "@types/node": "^24.10.4",
+    "@typescript/native-preview": "7.0.0-dev.20251214.1",
     "@vitest/coverage-v8": "^4.0.15",
     "@vitest/ui": "^4.0.15",
     "bumpp": "^10.3.2",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "estree-walker": "^3.0.3",
     "fast-glob": "^3.3.3",
     "prettier": "^3.7.4",
-    "tsdown": "^0.17.2",
+    "tsdown": "^0.17.4",
     "tsx": "^4.21.0",
     "typescript": "5.9.3",
     "vitest": "^4.0.15"
   },
   "resolutions": {
-    "vite": "^8.0.0-beta.1"
+    "vite": "^8.0.0-beta.2"
   },
   "prettier": "@sxzz/prettier-config"
 }
