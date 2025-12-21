@@ -4,4 +4,5 @@ export default defineConfig({
   entry: './src/index.ts',
   platform: 'neutral',
   exports: true,
+  inlineOnly: ['estree-walker'],
 })
