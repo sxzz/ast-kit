@@ -2,7 +2,7 @@
   "name": "ast-kit",
   "type": "module",
   "version": "2.2.0",
-  "packageManager": "pnpm@10.26.1",
+  "packageManager": "pnpm@10.26.2",
   "description": "A toolkit for easy Babel AST generation and manipulation.",
   "author": "Kevin Deng <sxzz@sxzz.moe>",
   "license": "MIT",
@@ -46,10 +46,10 @@
   },
   "devDependencies": {
     "@babel/types": "^7.28.5",
-    "@sxzz/eslint-config": "^7.4.3",
+    "@sxzz/eslint-config": "^7.4.4",
     "@sxzz/prettier-config": "^2.2.6",
     "@types/node": "^25.0.3",
-    "@typescript/native-preview": "7.0.0-dev.20251221.1",
+    "@typescript/native-preview": "7.0.0-dev.20251228.1",
     "@vitest/coverage-v8": "^4.0.16",
     "@vitest/ui": "^4.0.16",
     "bumpp": "^10.3.2",
@@ -57,13 +57,13 @@
     "estree-walker": "^3.0.3",
     "fast-glob": "^3.3.3",
     "prettier": "^3.7.4",
-    "tsdown": "^0.18.2",
+    "tsdown": "^0.18.3",
     "tsx": "^4.21.0",
     "typescript": "5.9.3",
     "vitest": "^4.0.16"
   },
   "resolutions": {
-    "vite": "^8.0.0-beta.3"
+    "vite": "^8.0.0-beta.5"
   },
   "prettier": "@sxzz/prettier-config"
 }
