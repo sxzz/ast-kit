@@ -1,8 +1,13 @@
-import { defineConfig } from 'tsdown'
+import { lib } from 'tsdown-preset-sxzz'
 
-export default defineConfig({
-  entry: './src/index.ts',
-  platform: 'neutral',
-  exports: true,
-  inlineOnly: ['estree-walker'],
-})
+export default lib(
+  {
+    inlineDeps: [],
+  },
+  {
+    external: [
+      // dts
+      '@babel/types',
+    ],
+  },
+)
