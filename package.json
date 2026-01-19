@@ -41,11 +41,11 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@babel/parser": "^7.28.6",
+    "@babel/parser": "^8.0.0-beta.4",
     "pathe": "^2.0.3"
   },
   "devDependencies": {
-    "@babel/types": "^7.28.6",
+    "@babel/types": "^8.0.0-beta.4",
     "@sxzz/eslint-config": "^7.5.0",
     "@sxzz/prettier-config": "^2.2.6",
     "@types/node": "^25.0.9",

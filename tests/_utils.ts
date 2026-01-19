@@ -12,7 +12,7 @@ export function parse<T extends t.Node>(
 ): T & { errors: null | ParseError[] }
 export function parse<T extends t.Node>(code: string, expression = false) {
   return (expression ? babelParseExpression<T> : babelParse)(code, undefined, {
-    plugins: ['typescript', 'importAttributes'],
+    plugins: ['typescript'],
     errorRecovery: true,
   })
 }

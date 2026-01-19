@@ -60,10 +60,6 @@ export function resolveLiteral(
     case 'NumericLiteral':
     case 'StringLiteral':
       return node.value
-
-    case 'DecimalLiteral':
-      /* v8 ignore next */
-      return Number(node.value)
   }
 }
 

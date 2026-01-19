@@ -89,7 +89,9 @@ describe('utils', () => {
     expect(isExpressionType({ type: 'BooleanLiteral' } as t.Expression)).toBe(
       true,
     )
-    expect(isExpressionType({ type: 'Super' } as t.Expression)).toBe(true)
+    expect(
+      isExpressionType({ type: 'Identifier', name: 'a' } as t.Expression),
+    ).toBe(true)
 
     expect(
       isExpressionType({

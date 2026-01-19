@@ -41,18 +41,6 @@ export function getBabelParserOptions(
       plugins.push('decorators-legacy')
     }
 
-    if (
-      !hasPlugin(plugins, 'importAttributes') &&
-      !hasPlugin(plugins, 'importAssertions') &&
-      !hasPlugin(plugins, 'deprecatedImportAssert')
-    ) {
-      plugins.push('importAttributes', 'deprecatedImportAssert')
-    }
-
-    if (!hasPlugin(plugins, 'explicitResourceManagement')) {
-      plugins.push('explicitResourceManagement')
-    }
-
     if (REGEX_LANG_JSX.test(lang!) && !hasPlugin(plugins, 'jsx')) {
       plugins.push('jsx')
     }

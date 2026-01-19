@@ -11,7 +11,7 @@ describe('parse', () => {
     babelParse('const a = 1')
     babelParse('const a: string = 1', 'ts')
     babelParse('const a: string = 1', 'ts', {
-      plugins: ['typescript', 'explicitResourceManagement'],
+      plugins: ['typescript'],
     })
     babelParse('const a: any = <div />', 'tsx')
     babelParse('const a: string', 'dts')
@@ -25,22 +25,12 @@ describe('parse', () => {
     expect(() => babelParse('class A { @a b }')).toThrow()
     babelParse('class A { @a b }', 'ts')
 
-    const code = `import { type A } from '../../macros' assert { type: 'macro' }`
-    const program = babelParse(code, 'ts', {
-      plugins: ['deprecatedImportAssert'],
-      cache: true,
-    })
-    const cached = babelParse(code, 'ts', {
-      plugins: ['deprecatedImportAssert'],
-      cache: true,
-    })
+    const code = `export {}`
+    const program = babelParse(code, 'ts', { cache: true })
+    const cached = babelParse(code, 'ts', { cache: true })
     expect(program.body).toBe(cached.body)
     expect(Array.from(parseCache.keys())).lengthOf(1)
     expect(() => babelParse(`import { a } from 'b' assert {}`)).toThrow()
-
-    babelParse(`using foo = useFoo()`, 'ts', {
-      plugins: ['importAssertions'],
-    })
   })
 
   test('babelParseExpression', () => {
