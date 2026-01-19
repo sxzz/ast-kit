@@ -1,7 +1,7 @@
 {
   "name": "ast-kit",
   "type": "module",
-  "version": "2.2.0",
+  "version": "3.0.0-beta.1",
   "packageManager": "pnpm@10.28.1",
   "description": "A toolkit for easy Babel AST generation and manipulation.",
   "author": "Kevin Deng <sxzz@sxzz.moe>",
