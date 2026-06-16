@@ -157,9 +157,7 @@ export function walkExportDeclaration(
             ? '*'
             : 'default'
         source = node.source ? node.source.value : null
-        exported = isExportSpecifier
-          ? resolveString(s.exported)
-          : s.exported.name
+        exported = resolveString(s.exported)
         declaration = null
         specifier = s
 
