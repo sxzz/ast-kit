@@ -4,7 +4,7 @@ import {
   createStringLiteral,
   createTSLiteralType,
   createTSUnionType,
-} from '../src'
+} from '../src/index.ts'
 
 describe('create', () => {
   test('createStringLiteral', () => {

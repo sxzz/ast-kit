@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`walk > walkExportDeclaration > ExportAllDeclaration 'type' 1`] = `
+exports[`walk > walkExportDeclaration > ExportAllDeclaration type 1`] = `
 [
   {
     "exported": "*",
@@ -11,7 +11,7 @@ exports[`walk > walkExportDeclaration > ExportAllDeclaration 'type' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportAllDeclaration 'value' 1`] = `
+exports[`walk > walkExportDeclaration > ExportAllDeclaration value 1`] = `
 [
   {
     "exported": "*",
@@ -22,7 +22,18 @@ exports[`walk > walkExportDeclaration > ExportAllDeclaration 'value' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'class with id' 1`] = `
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration class 1`] = `
+[
+  {
+    "exported": "default",
+    "isType": false,
+    "local": "default",
+    "source": null,
+  },
+]
+`;
+
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration class with id 1`] = `
 [
   {
     "exported": "default",
@@ -33,7 +44,9 @@ exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'class with id'
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'class' 1`] = `
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration empty specifier 1`] = `[]`;
+
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration expression 1`] = `
 [
   {
     "exported": "default",
@@ -44,9 +57,7 @@ exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'class' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'empty specifier' 1`] = `[]`;
-
-exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'expression with VariableDeclaration' 1`] = `
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration expression with VariableDeclaration 1`] = `
 [
   {
     "exported": "default",
@@ -57,7 +68,7 @@ exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'expression wit
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'expression' 1`] = `
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration function 1`] = `
 [
   {
     "exported": "default",
@@ -68,7 +79,7 @@ exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'expression' 1`
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'function with id' 1`] = `
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration function with id 1`] = `
 [
   {
     "exported": "default",
@@ -79,18 +90,7 @@ exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'function with 
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'function' 1`] = `
-[
-  {
-    "exported": "default",
-    "isType": false,
-    "local": "default",
-    "source": null,
-  },
-]
-`;
-
-exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'ts declaration' 1`] = `
+exports[`walk > walkExportDeclaration > ExportDefaultDeclaration ts declaration 1`] = `
 [
   {
     "exported": "default",
@@ -101,7 +101,7 @@ exports[`walk > walkExportDeclaration > ExportDefaultDeclaration 'ts declaration
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '1' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 1 1`] = `
 [
   {
     "exported": "v",
@@ -112,7 +112,7 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '1' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '2' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 2 1`] = `
 [
   {
     "exported": "default",
@@ -123,7 +123,7 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '2' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '3' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 3 1`] = `
 [
   {
     "exported": "default",
@@ -134,7 +134,7 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '3' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '4' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 4 1`] = `
 [
   {
     "exported": "default",
@@ -145,7 +145,7 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '4' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '5' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 5 1`] = `
 [
   {
     "exported": "x",
@@ -156,7 +156,7 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '5' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '6' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 6 1`] = `
 [
   {
     "exported": "x",
@@ -167,7 +167,7 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '6' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '7' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 7 1`] = `
 [
   {
     "exported": "x",
@@ -178,7 +178,7 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '7' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '8' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 8 1`] = `
 [
   {
     "exported": "x",
@@ -189,7 +189,7 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '8' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '9' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 9 1`] = `
 [
   {
     "exported": "*",
@@ -200,7 +200,7 @@ exports[`walk > walkExportDeclaration > ExportEntry record fields '9' 1`] = `
 ]
 `;
 
-exports[`walk > walkExportDeclaration > ExportEntry record fields '10' 1`] = `
+exports[`walk > walkExportDeclaration > ExportEntry record fields 10 1`] = `
 [
   {
     "exported": "ns",

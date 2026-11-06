@@ -2,7 +2,7 @@
   "name": "ast-kit",
   "type": "module",
   "version": "3.0.0",
-  "packageManager": "pnpm@12.15.0",
+  "packageManager": "pnpm@12.18.0",
   "description": "A toolkit for easy Babel AST generation and manipulation.",
   "author": "Kevin Deng <sxzz@sxzz.moe>",
   "license": "MIT",
@@ -33,35 +33,36 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "pnpm run lint --fix",
+    "format": "prettier --write .",
     "build": "tsdown",
     "test": "vitest",
     "release": "bumpp",
-    "typecheck": "tsgo --noEmit",
+    "typecheck": "tsc --noEmit",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@babel/parser": "^8.0.0",
+    "@babel/parser": "^8.1.0",
     "estree-walker": "^3.0.3",
     "pathe": "^2.0.3"
   },
   "devDependencies": {
-    "@babel/types": "^8.0.0",
-    "@sxzz/eslint-config": "^8.2.0",
-    "@sxzz/prettier-config": "^2.3.1",
-    "@types/node": "^25.9.3",
-    "@typescript/native-preview": "7.0.0-dev.20260707.2",
-    "@vitest/coverage-v8": "^4.1.9",
-    "@vitest/ui": "^4.1.9",
-    "bumpp": "^12.0.0",
-    "eslint": "^10.5.0",
-    "prettier": "^3.8.4",
-    "tsdown": "^0.23.0",
-    "tsdown-preset-sxzz": "^0.7.0",
+    "@babel/types": "^8.1.0",
+    "@sxzz/eslint-config": "^8.9.2",
+    "@sxzz/prettier-config": "^2.3.3",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "^5.1.0",
+    "@vitest/ui": "^5.1.0",
+    "bumpp": "^12.3.0",
+    "eslint": "^10.14.0",
+    "prettier": "^3.9.10",
+    "tsdown": "^0.23.5",
+    "tsdown-preset-sxzz": "^0.7.1",
     "typescript": "6.0.3",
-    "vitest": "^4.1.9"
+    "typescript-next": "npm:typescript@^7.0.2",
+    "vitest": "^5.1.0"
   },
   "resolutions": {
-    "vite": "^8.0.16"
+    "vite": "^8.3.6"
   },
   "prettier": "@sxzz/prettier-config"
 }

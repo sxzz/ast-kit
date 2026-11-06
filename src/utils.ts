@@ -1,5 +1,5 @@
 import { parseExpression } from '@babel/parser'
-import { isTypeOf } from './check'
+import { isTypeOf } from './check.ts'
 import type * as t from '@babel/types'
 
 export const TS_NODE_TYPES: readonly [

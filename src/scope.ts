@@ -3,7 +3,7 @@
 
 /* v8 ignore file */
 
-import { walkAST } from './walk'
+import { walkAST } from './walk.ts'
 import type {
   ArrayPattern,
   AssignmentPattern,
@@ -141,6 +141,10 @@ export class Scope implements AttachedScope {
   }
 }
 
+const REGEX_FUNCTION_OR_CLASS_DECLARATION = /(?:Function|Class)Declaration/
+const REGEX_FUNCTION = /Function/
+const REGEX_FOR_STATEMENT = /For(?:In|Of)?Statement/
+
 /**
  * Attaches scopes to the given AST
  *
@@ -155,7 +159,7 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
     enter(node, parent) {
       // function foo () {...}
       // class Foo {...}
-      if (/(?:Function|Class)Declaration/.test(node.type)) {
+      if (REGEX_FUNCTION_OR_CLASS_DECLARATION.test(node.type)) {
         scope.addDeclaration(node, false, false)
       }
 
@@ -171,7 +175,7 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
       let newScope: AttachedScope | undefined
 
       // create new function scope
-      if (/Function/.test(node.type)) {
+      if (REGEX_FUNCTION.test(node.type)) {
         const func = node as Function
         newScope = new Scope({
           parent: scope,
@@ -187,7 +191,7 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
       }
 
       // create new for scope
-      if (/For(?:In|Of)?Statement/.test(node.type)) {
+      if (REGEX_FOR_STATEMENT.test(node.type)) {
         newScope = new Scope({
           parent: scope,
           block: true,
@@ -195,7 +199,10 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
       }
 
       // create new block scope
-      if (node.type === 'BlockStatement' && !/Function/.test(parent!.type)) {
+      if (
+        node.type === 'BlockStatement' &&
+        !REGEX_FUNCTION.test(parent!.type)
+      ) {
         newScope = new Scope({
           parent: scope,
           block: true,
@@ -211,6 +218,7 @@ export function attachScopes(ast: Node, propertyName = 'scope'): Scope {
         })
       }
 
+      // eslint-disable-next-line unicorn/prefer-early-return
       if (newScope) {
         Object.defineProperty(node, propertyName, {
           value: newScope,

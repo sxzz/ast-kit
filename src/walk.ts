@@ -5,11 +5,11 @@ import {
   isFunctionType,
   isIdentifier,
   isReferencedIdentifier,
-} from './check'
-import { extractIdentifiers } from './extract'
-import { resolveString } from './resolve'
-import { TS_NODE_TYPES } from './utils'
-import type { LiteralUnion } from './types'
+} from './check.ts'
+import { extractIdentifiers } from './extract.ts'
+import { resolveString } from './resolve.ts'
+import { TS_NODE_TYPES } from './utils.ts'
+import type { LiteralUnion } from './types.ts'
 import type * as t from '@babel/types'
 
 interface WalkThis<T> {
@@ -63,9 +63,7 @@ export interface ImportBinding {
   imported: LiteralUnion<'*' | 'default'>
   source: string
   specifier:
-    | t.ImportSpecifier
-    | t.ImportDefaultSpecifier
-    | t.ImportNamespaceSpecifier
+    t.ImportSpecifier | t.ImportDefaultSpecifier | t.ImportNamespaceSpecifier
   isType: boolean
 }
 
@@ -152,7 +150,7 @@ export function walkExportDeclaration(
           node.exportKind === 'type' ||
           (isExportSpecifier && s.exportKind === 'type')
         local = isExportSpecifier
-          ? s.local.name
+          ? resolveString(s.local)
           : s.type === 'ExportNamespaceSpecifier'
             ? '*'
             : 'default'

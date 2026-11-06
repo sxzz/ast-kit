@@ -6,8 +6,8 @@ import {
   resolveString,
   tryResolveIdentifier,
   type ObjectPropertyLike,
-} from '../src'
-import { parse as _parse } from './_utils'
+} from '../src/index.ts'
+import { parse as _parse } from './_utils.ts'
 import type * as t from '@babel/types'
 
 describe('resolve', () => {

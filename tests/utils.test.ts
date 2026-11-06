@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { escapeKey, unwrapTSNode } from '../src'
-import { parse as _parse } from './_utils'
+import { escapeKey, unwrapTSNode } from '../src/index.ts'
+import { parse as _parse } from './_utils.ts'
 import type * as t from '@babel/types'
 
 describe('utils', () => {

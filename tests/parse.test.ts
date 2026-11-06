@@ -4,7 +4,7 @@ import {
   babelParseExpression,
   getBabelParserOptions,
   parseCache,
-} from '../src'
+} from '../src/index.ts'
 
 describe('parse', () => {
   test('babelParse', () => {

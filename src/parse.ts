@@ -6,7 +6,7 @@ import {
   type ParserOptions,
   type ParserPlugin,
 } from '@babel/parser'
-import { isTs, REGEX_LANG_JSX } from './lang'
+import { isTs, REGEX_LANG_JSX } from './lang.ts'
 import type * as t from '@babel/types'
 
 function hasPlugin(

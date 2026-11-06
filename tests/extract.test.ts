@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { babelParse, extractIdentifiers } from '../src'
+import { babelParse, extractIdentifiers } from '../src/index.ts'
 import type * as t from '@babel/types'
 
 describe('extract', () => {

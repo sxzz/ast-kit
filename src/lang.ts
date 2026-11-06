@@ -4,6 +4,9 @@ export const REGEX_DTS: RegExp = /\.d\.[cm]?ts(\?.*)?$/
 export const REGEX_LANG_TS: RegExp = /^[cm]?tsx?$/
 export const REGEX_LANG_JSX: RegExp = /^[cm]?[jt]sx$/
 
+const REGEX_LEADING_DOT = /^\./
+const REGEX_QUERY = /\?.*$/
+
 /**
  * Returns the language (extension name) of a given filename.
  * @param filename - The name of the file.
@@ -11,7 +14,9 @@ export const REGEX_LANG_JSX: RegExp = /^[cm]?[jt]sx$/
  */
 export function getLang(filename: string): string {
   if (isDts(filename)) return 'dts'
-  return extname(filename).replace(/^\./, '').replace(/\?.*$/, '')
+  return extname(filename)
+    .replace(REGEX_LEADING_DOT, '')
+    .replace(REGEX_QUERY, '')
 }
 
 /**

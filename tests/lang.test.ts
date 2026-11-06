@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { getLang, isDts, isTs } from '../src'
+import { getLang, isDts, isTs } from '../src/index.ts'
 
 describe('lang', () => {
   test('getLang', () => {

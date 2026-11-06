@@ -1,4 +1,4 @@
-import { isLiteralType, isTypeOf } from './check'
+import { isLiteralType, isTypeOf } from './check.ts'
 import type * as t from '@babel/types'
 
 /**
@@ -100,6 +100,7 @@ export function resolveIdentifier(
 
   const left = node.type === 'TSQualifiedName' ? node.left : node.object
   const right = node.type === 'TSQualifiedName' ? node.right : node.property
+  // eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
   const computed = node.type === 'TSQualifiedName' ? false : node.computed
 
   if (

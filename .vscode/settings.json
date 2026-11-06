@@ -1,6 +1,4 @@
 {
   "editor.formatOnSave": true,
-  "eslint.experimental.useFlatConfig": true,
-  "exportall.config.folderListener": ["/src"],
-  "exportall.config.semis": false
+  "autoBarrel.files.keepExtensionOnExport": true
 }

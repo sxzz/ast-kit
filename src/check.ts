@@ -1,5 +1,7 @@
 import type * as t from '@babel/types'
 
+const REGEX_FUNCTION_TYPE = /Function(?:Expression|Declaration)$|Method$/
+
 /**
  * All possible node types.
  */
@@ -116,9 +118,7 @@ export function isFunctionType(
   node: t.Node | undefined | null,
 ): node is t.Function {
   return (
-    !!node &&
-    !node.type.startsWith('TS') &&
-    /Function(?:Expression|Declaration)$|Method$/.test(node.type)
+    !!node && !node.type.startsWith('TS') && REGEX_FUNCTION_TYPE.test(node.type)
   )
 }
 

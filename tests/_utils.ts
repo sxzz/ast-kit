@@ -1,4 +1,4 @@
-import { babelParse, babelParseExpression } from '../src'
+import { babelParse, babelParseExpression } from '../src/index.ts'
 import type { ParseError } from '@babel/parser'
 import type * as t from '@babel/types'
 

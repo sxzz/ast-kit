@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["es2022"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "lib": ["es2023"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "types": [],
+    "allowImportingTsExtensions": true,
     "strict": true,
     "noUnusedLocals": true,
     "declaration": true,
     "emitDeclarationOnly": false,
+    "noEmit": true,
     "esModuleInterop": true,
     "isolatedDeclarations": true,
     "skipLibCheck": true

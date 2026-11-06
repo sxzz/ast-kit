@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { locateTrailingComma } from '../src'
+import { locateTrailingComma } from '../src/index.ts'
 
 describe('loc', () => {
   test('locateTrailingComma', () => {

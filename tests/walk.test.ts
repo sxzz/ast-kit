@@ -9,7 +9,7 @@ import {
   walkImportDeclaration,
   type ExportBinding,
   type ImportBinding,
-} from '../src'
+} from '../src/index.ts'
 import type { BlockStatement, FunctionDeclaration } from '@babel/types'
 
 describe('walk', () => {
